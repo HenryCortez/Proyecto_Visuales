@@ -44,7 +44,7 @@ public class Capture extends javax.swing.JFrame {
     //JAVACV
     VideoCapture webSource = null;
     Mat cameraImage = new Mat();
-    CascadeClassifier cascade = new CascadeClassifier("C:\\photos\\haarcascade_frontalface_alt.xml");
+    CascadeClassifier cascade = new CascadeClassifier("photos\\haarcascade_frontalface_alt.xml");
     BytePointer mem = new BytePointer();
     RectVector detectedFaces = new RectVector();
 
@@ -221,7 +221,7 @@ public class Capture extends javax.swing.JFrame {
                                     if (sample <= numSamples) {
 //                                        salva a imagem cortada [160,160]
 //                                        nome do arquivo: idpessoa + a contagem de fotos. ex: person.10(id).6(sexta foto).jpg
-                                        String cropped = "C:\\photos\\samples\\person." + firstName + "."+id+"."+sample + ".jpg";
+                                        String cropped = "photos\\samples\\person." + firstName + "."+id+"."+sample + ".jpg";
                                         imwrite(cropped, face);
 
                                         //System.out.println("Foto " + amostra + " capturada\n");
@@ -266,7 +266,7 @@ public class Capture extends javax.swing.JFrame {
     }
 
     private void generate() {
-        File directory = new File("C:\\photos\\samples");
+        File directory = new File("photos\\samples");
         FilenameFilter filter = new FilenameFilter() {
             @Override
             public boolean accept(File dir, String name) {
@@ -290,7 +290,7 @@ public class Capture extends javax.swing.JFrame {
         }
         FaceRecognizer lbph = LBPHFaceRecognizer.create();
         lbph.train(photos, labels);
-        lbph.save("C:\\photos\\clasifierLBPH.yml");
+        lbph.save("photos\\clasifierLBPH.yml");
     }
 
     private void saveUser() throws ParseException {
