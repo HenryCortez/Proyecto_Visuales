@@ -9,7 +9,6 @@ import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import javax.imageio.ImageIO;
-import javax.swing.SwingWorker;
 import org.bytedeco.javacpp.BytePointer;
 import org.bytedeco.javacpp.DoublePointer;
 import org.bytedeco.javacpp.IntPointer;
@@ -35,7 +34,7 @@ public class Recognizer extends javax.swing.JFrame {
     //JAVACV
     VideoCapture webSource = null;
     Mat cameraImage = new Mat();
-    CascadeClassifier cascade = new CascadeClassifier("C:\\photos\\haarcascade_frontalface_alt.xml");
+    CascadeClassifier cascade = new CascadeClassifier("photos\\haarcascade_frontalface_alt.xml");
     BytePointer mem = new BytePointer();
     LBPHFaceRecognizer recognizer = LBPHFaceRecognizer.create();
     RectVector detectedFaces = new RectVector();
@@ -49,7 +48,7 @@ public class Recognizer extends javax.swing.JFrame {
   
     public Recognizer() {
         initComponents();
-        recognizer.read("C:\\photos\\clasifierLBPH.yml");
+        recognizer.read("photos\\clasifierLBPH.yml");
         recognizer.setThreshold(80);
         startCamera();
     }
