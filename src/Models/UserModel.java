@@ -5,23 +5,49 @@ public class UserModel {
     private String cedula;
     private String nombre;
     private String apellido;
-    private String fec_nac;
-    private String telefono;
+    private String password;
+    private String tipo;
+    private Double sueldo_actual;
     private int ID;
+    
     
     public UserModel(){}
     
-    public UserModel(String cedula, String nombre, String apellido, String fec_nac, String telefono) {
+    public UserModel(String cedula, String nombre, String apellido, String password, String tipo) {
         this.cedula = cedula;
         this.nombre = nombre;
         this.apellido = apellido;
-        this.fec_nac = fec_nac;
-        this.telefono = telefono;
+        this.password = password;
+        this.tipo = tipo;
     }
-
+    
     public UserModel(String cedula, int ID) {
         this.cedula = cedula;
         this.ID = ID;
+    }
+    
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public Double getSueldo_actual() {
+        return sueldo_actual;
+    }
+
+    public void setSueldo_actual(Double sueldo_actual) {
+        this.sueldo_actual = sueldo_actual;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
     }
     
     public int getID() {
@@ -54,22 +80,6 @@ public class UserModel {
 
     public void setApellido(String apellido) {
         this.apellido = apellido;
-    }
-
-    public String getFec_nac() {
-        return fec_nac;
-    }
-
-    public void setFec_nac(String fec_nac) {
-        this.fec_nac = fec_nac;
-    }
-
-    public String getTelefono() {
-        return telefono;
-    }
-
-    public void setTelefono(String telefono) {
-        this.telefono = telefono;
     }
     
 }

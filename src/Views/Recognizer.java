@@ -37,14 +37,11 @@ public class Recognizer extends javax.swing.JFrame {
     CascadeClassifier cascade = new CascadeClassifier("photos\\haarcascade_frontalface_alt.xml");
     BytePointer mem = new BytePointer();
     LBPHFaceRecognizer recognizer = LBPHFaceRecognizer.create();
-    RectVector detectedFaces = new RectVector();
 
     //VARIABLES
     String root, firstName, lastName, telefono, cedula, fec_nac;
     int id;
 
-    //utils
-    Conexion con = new Conexion();
   
     public Recognizer() {
         initComponents();
@@ -95,7 +92,7 @@ public class Recognizer extends javax.swing.JFrame {
         jlblDir.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jlblDir.setForeground(new java.awt.Color(255, 255, 255));
         jlblDir.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jlblDir.setText("FIRST NAME - LASTNAME");
+        jlblDir.setText("------------------------");
         jlblDir.setOpaque(true);
         jPanel2.add(jlblDir, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 110, 400, 40));
 
@@ -103,7 +100,7 @@ public class Recognizer extends javax.swing.JFrame {
         jlblCedula.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jlblCedula.setForeground(new java.awt.Color(255, 255, 255));
         jlblCedula.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jlblCedula.setText("FIRST NAME - LASTNAME");
+        jlblCedula.setText("-------------------------");
         jlblCedula.setOpaque(true);
         jPanel2.add(jlblCedula, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 400, 40));
 
@@ -111,7 +108,7 @@ public class Recognizer extends javax.swing.JFrame {
         jlblName.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jlblName.setForeground(new java.awt.Color(255, 255, 255));
         jlblName.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jlblName.setText("FIRST NAME - LASTNAME");
+        jlblName.setText("-------------------------");
         jlblName.setOpaque(true);
         jPanel2.add(jlblName, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 60, 400, 40));
 
@@ -255,7 +252,6 @@ public class Recognizer extends javax.swing.JFrame {
                     UserModel usu = usc.getUser(String.valueOf(id));
                     jlblCedula.setText(usu.getCedula());
                     jlblName.setText("Bienbenido "+usu.getNombre()+" "+ usu.getApellido() );
-                    jlblDir.setText(usu.getFec_nac() +" - "+ usu.getTelefono());
                 } catch (Exception e) {
                 }
           
@@ -274,7 +270,7 @@ public class Recognizer extends javax.swing.JFrame {
         new Thread() {
             @Override
             public void run() {
-                webSource = new VideoCapture(0);
+                webSource = new VideoCapture(1);
 
                 myTread = new DaemonThread();
                 Thread t = new Thread(myTread);

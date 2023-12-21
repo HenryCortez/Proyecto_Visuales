@@ -16,7 +16,8 @@ public class Conexion {
     
     public Connection conectar(){
         try {
-            this.con = DriverManager.getConnection("jdbc:mysql://localhost:3306/face_recognition", "root", "");
+            this.con = DriverManager.getConnection("jdbc:mysql://localhost:3308/app_visual", "root", "salito2014");
+            System.out.println("conecto");
         } catch (SQLException e) {
             System.out.println("No se conecto"+e);
             return null;
@@ -36,6 +37,9 @@ public class Conexion {
         return con;
     }
     
-    
+    public static void main(String[] args) {
+        Conexion con = new Conexion();
+        con.conectar();
+    }
     
 }

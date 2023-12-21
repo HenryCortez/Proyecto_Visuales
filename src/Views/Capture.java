@@ -1,7 +1,6 @@
 package Views;
 
 import Controllers.UserControl;
-import Models.Conexion;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
@@ -9,15 +8,11 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.nio.IntBuffer;
-import java.sql.Date;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import javax.imageio.ImageIO;
 import org.bytedeco.javacpp.BytePointer;
-
 import static org.bytedeco.opencv.global.opencv_core.CV_32SC1;
 import static org.bytedeco.opencv.global.opencv_imgcodecs.IMREAD_GRAYSCALE;
-
 import static org.bytedeco.opencv.global.opencv_imgproc.cvtColor;
 import static org.bytedeco.opencv.global.opencv_imgcodecs.imencode;
 import static org.bytedeco.opencv.global.opencv_imgcodecs.imread;
@@ -46,23 +41,19 @@ public class Capture extends javax.swing.JFrame {
     Mat cameraImage = new Mat();
     CascadeClassifier cascade = new CascadeClassifier("photos\\haarcascade_frontalface_alt.xml");
     BytePointer mem = new BytePointer();
-    RectVector detectedFaces = new RectVector();
 
     //VARIABLES
-    String root, firstName, lastName, telefono, cedula, fec_nac;
+    String firstName, lastName, contra, cedula, tipo;
     int numSamples = 25, sample = 1, id;
 
-    //utils
-    Conexion con = new Conexion();
-
-    public Capture(String ced, String nom, String ape, String fec_nac, String tel, int id) {
+    public Capture(String ced, String nom, String ape, String contra, String tipo, int id) {
         initComponents();
         startCamera();
         this.cedula = ced;
         this.firstName = nom;
         this.lastName = ape;
-        this.fec_nac = fec_nac;
-        this.telefono = tel;
+        this.contra = contra;
+        this.tipo = tipo;
         this.id = id;
     }
 
@@ -221,7 +212,7 @@ public class Capture extends javax.swing.JFrame {
                                     if (sample <= numSamples) {
 //                                        salva a imagem cortada [160,160]
 //                                        nome do arquivo: idpessoa + a contagem de fotos. ex: person.10(id).6(sexta foto).jpg
-                                        String cropped = "photos\\samples\\person." + firstName + "."+id+"."+sample + ".jpg";
+                                        String cropped = "photos\\samples\\person." + cedula + "."+id+"."+sample + ".jpg";
                                         imwrite(cropped, face);
 
                                         //System.out.println("Foto " + amostra + " capturada\n");
@@ -267,12 +258,8 @@ public class Capture extends javax.swing.JFrame {
 
     private void generate() {
         File directory = new File("photos\\samples");
-        FilenameFilter filter = new FilenameFilter() {
-            @Override
-            public boolean accept(File dir, String name) {
-                return name.endsWith(".jpg") || name.endsWith(".png");
-            }
-        };
+        FilenameFilter filter = (File dir, String name1) -> name1.endsWith(".jpg") || name1.endsWith(".png");
+
         File[] files = directory.listFiles(filter); // solo nuestro filtro
         MatVector photos = new MatVector(files.length);
         Mat labels = new Mat(files.length, 1, CV_32SC1);
@@ -297,15 +284,13 @@ public class Capture extends javax.swing.JFrame {
         String ced = this.cedula;
         String nom = this.firstName;
         String ape = this.lastName;
-        String fec = this.fec_nac;
-        SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy");
-        java.util.Date fechaUtil = formatoFecha.parse(fec); // Convierte a java.util.Date
-        System.out.println(fechaUtil);
-        // Ahora convierte a java.sql.Date
-        Date fecsql = new Date(fechaUtil.getTime());
-        String tel = this.telefono;
-        System.out.println(fecsql);
-        usc.insertUser(ced, nom, ape, fecsql, tel);
+        String contra = this.contra;
+        String tipo = this.tipo;
+        if(contra ==""){
+            usc.insertWorker(ced, nom, ape, tipo);
+        }else{
+            usc.insertAdmin(ced, nom, ape, contra, tipo);
+        }
     }
 
     private void stopCamera() {
@@ -318,7 +303,7 @@ public class Capture extends javax.swing.JFrame {
         new Thread() {
             @Override
             public void run() {
-                webSource = new VideoCapture(0);
+                webSource = new VideoCapture(1);
 
                 myTread = new DaemonThread();
                 Thread t = new Thread(myTread);
