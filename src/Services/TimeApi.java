@@ -16,7 +16,7 @@ public class TimeApi {
 
     private String datetime;
 
-    public void setDate() {
+    private void setDate() {
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create("http://worldtimeapi.org/api/timezone/America/Guayaquil"))

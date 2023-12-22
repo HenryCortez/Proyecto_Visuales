@@ -1,22 +1,25 @@
 package Views;
 
+import Controllers.ArchivosControl;
 import Controllers.UserControl;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FilenameFilter;
+import java.io.IOException;
 import java.nio.IntBuffer;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.text.ParseException;
 import javax.imageio.ImageIO;
 import org.bytedeco.javacpp.BytePointer;
 import static org.bytedeco.opencv.global.opencv_core.CV_32SC1;
+import org.bytedeco.opencv.global.opencv_imgcodecs;
 import static org.bytedeco.opencv.global.opencv_imgcodecs.IMREAD_GRAYSCALE;
 import static org.bytedeco.opencv.global.opencv_imgproc.cvtColor;
 import static org.bytedeco.opencv.global.opencv_imgcodecs.imencode;
 import static org.bytedeco.opencv.global.opencv_imgcodecs.imread;
-import static org.bytedeco.opencv.global.opencv_imgcodecs.imwrite;
 import org.bytedeco.opencv.global.opencv_imgproc;
 import static org.bytedeco.opencv.global.opencv_imgproc.COLOR_BGRA2GRAY;
 import static org.bytedeco.opencv.global.opencv_imgproc.rectangle;
@@ -34,6 +37,7 @@ import org.bytedeco.opencv.opencv_videoio.VideoCapture;
 public class Capture extends javax.swing.JFrame {
 
     UserControl usc = new UserControl();
+    ArchivosControl arch = new ArchivosControl();
     private Capture.DaemonThread myTread = null;
 
     //JAVACV
@@ -212,14 +216,20 @@ public class Capture extends javax.swing.JFrame {
                                     if (sample <= numSamples) {
 //                                        salva a imagem cortada [160,160]
 //                                        nome do arquivo: idpessoa + a contagem de fotos. ex: person.10(id).6(sexta foto).jpg
-                                        String cropped = "photos\\samples\\person." + cedula + "."+id+"."+sample + ".jpg";
-                                        imwrite(cropped, face);
+                                        BytePointer bytePointer = new BytePointer();
+                                        opencv_imgcodecs.imencode(".jpg", face, bytePointer);
+
+                                        // Obtener el array de bytes de la imagen
+                                        byte[] imageBytes = bytePointer.getStringBytes();
+                                        String cropped = "person." + cedula + "." + id + "." + sample + ".jpg";
+                                        arch.insertFile(cropped, imageBytes);
 
                                         //System.out.println("Foto " + amostra + " capturada\n");
                                         jlblCounter.setText(String.valueOf(sample) + "/25");
                                         sample++;
+                                        bytePointer = null;
                                     }
-                                    if (sample >25) {
+                                    if (sample > 25) {
                                         generate();//se a contagem for maior que 25, termina de tirar a foto, gera o arquivo
                                         saveUser(); //inserte los datos en la base
 
@@ -244,7 +254,7 @@ public class Capture extends javax.swing.JFrame {
                                     }
                                 }
                             } catch (Exception e) {
-                                
+
                             }
                         }
 
@@ -257,10 +267,8 @@ public class Capture extends javax.swing.JFrame {
     }
 
     private void generate() {
-        File directory = new File("photos\\samples");
-        FilenameFilter filter = (File dir, String name1) -> name1.endsWith(".jpg") || name1.endsWith(".png");
-
-        File[] files = directory.listFiles(filter); // solo nuestro filtro
+        
+        File[] files =  arch.getImages().toArray(new File[0]);
         MatVector photos = new MatVector(files.length);
         Mat labels = new Mat(files.length, 1, CV_32SC1);
         IntBuffer labelsBuffer = labels.createBuffer();
@@ -277,7 +285,29 @@ public class Capture extends javax.swing.JFrame {
         }
         FaceRecognizer lbph = LBPHFaceRecognizer.create();
         lbph.train(photos, labels);
-        lbph.save("photos\\clasifierLBPH.yml");
+        String tempFileName = "tempClassifier.yml";
+        lbph.save(tempFileName);
+
+        // Leer el contenido del archivo temporal
+        byte[] ymlData;
+        try {
+            ymlData = Files.readAllBytes(Path.of(tempFileName));
+            String file_name = "clasifierLBPH.yml";
+            String aux = arch.getFileName(file_name);
+            if (!aux.equals("clasifierLBPH.yml")) {
+                // Ahora 'ymlData' contiene los datos del archivo y puedes almacenarlo en la base de datos
+                arch.insertFile(file_name, ymlData);
+            } else {
+                arch.updateFile(file_name, ymlData);
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            // Eliminar el archivo temporal
+            new File(tempFileName).delete();
+        }
+
     }
 
     private void saveUser() throws ParseException {
@@ -286,9 +316,9 @@ public class Capture extends javax.swing.JFrame {
         String ape = this.lastName;
         String contra = this.contra;
         String tipo = this.tipo;
-        if(contra ==""){
+        if (contra == "") {
             usc.insertWorker(ced, nom, ape, tipo);
-        }else{
+        } else {
             usc.insertAdmin(ced, nom, ape, contra, tipo);
         }
     }

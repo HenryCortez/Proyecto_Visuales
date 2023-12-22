@@ -1,14 +1,23 @@
-
 package Views;
 
+import Controllers.ArchivosControl;
 import Controllers.UserControl;
-import Models.Conexion;
 import Models.UserModel;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
+import javax.swing.Timer;
 import org.bytedeco.javacpp.BytePointer;
 import org.bytedeco.javacpp.DoublePointer;
 import org.bytedeco.javacpp.IntPointer;
@@ -22,12 +31,14 @@ import org.bytedeco.opencv.opencv_core.Rect;
 import org.bytedeco.opencv.opencv_core.RectVector;
 import org.bytedeco.opencv.opencv_core.Scalar;
 import org.bytedeco.opencv.opencv_core.Size;
+import org.bytedeco.opencv.opencv_face.FaceRecognizer;
 import org.bytedeco.opencv.opencv_face.LBPHFaceRecognizer;
 import org.bytedeco.opencv.opencv_objdetect.CascadeClassifier;
 import org.bytedeco.opencv.opencv_videoio.VideoCapture;
 
 public class Recognizer extends javax.swing.JFrame {
 
+    ArchivosControl arch = new ArchivosControl();
     UserControl usc = new UserControl();
     private DaemonThread myTread = null;
 
@@ -36,17 +47,20 @@ public class Recognizer extends javax.swing.JFrame {
     Mat cameraImage = new Mat();
     CascadeClassifier cascade = new CascadeClassifier("photos\\haarcascade_frontalface_alt.xml");
     BytePointer mem = new BytePointer();
-    LBPHFaceRecognizer recognizer = LBPHFaceRecognizer.create();
+    FaceRecognizer recognizer = LBPHFaceRecognizer.create();
 
     //VARIABLES
-    String root, firstName, lastName, telefono, cedula, fec_nac;
+    String firstName;
     int id;
+    Map<Integer, Integer> conteoIds = new HashMap<>();
+    ;
+    final double UMBRAL = 7;
+    final int MAX_INTENTOS = 10;
 
-  
     public Recognizer() {
         initComponents();
-        recognizer.read("photos\\clasifierLBPH.yml");
-        recognizer.setThreshold(80);
+        readClassifier();
+        recognizer.setThreshold(50);
         startCamera();
     }
 
@@ -130,10 +144,78 @@ public class Recognizer extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        stopCamera();
+        try {
+            stopCamera();
+        } catch (InterruptedException ex) {
+            Logger.getLogger(Recognizer.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_formWindowClosing
 
-   
+    private int encontrarIdMasFrecuente() {
+        return conteoIds.entrySet().stream()
+                .max(Map.Entry.comparingByValue())
+                .get().getKey();
+    }
+
+    public boolean reconocer(int idReconocido) throws InterruptedException {
+
+        conteoIds.put(idReconocido, conteoIds.getOrDefault(idReconocido, 0) + 1);
+        System.out.println(conteoIds.toString());
+        int totalIntentos = conteoIds.values().stream().mapToInt(Integer::intValue).sum();
+        if (totalIntentos >= MAX_INTENTOS) {
+
+            int idMasFrecuente = encontrarIdMasFrecuente();
+            System.out.println(idMasFrecuente);
+            if (conteoIds.get(idMasFrecuente) >= UMBRAL) {
+                System.out.println("Identificación confirmada para ID: " + idMasFrecuente);
+                stopCamera();
+
+            } else {
+                System.out.println("Identificación no concluyente.");
+                conteoIds.clear();
+                return false;
+
+            }
+            conteoIds.clear();
+            return true;
+        }
+        return false;
+    }
+
+    public void readClassifier() {
+        File tempFile = null;
+        FileOutputStream fos = null;
+        byte[] classifierBytes = arch.getFileContent("clasifierLBPH.yml");
+        try {
+            // Crear un archivo temporal para los bytes del clasificador
+            tempFile = File.createTempFile("classifier", ".yml");
+
+            // Escribir los bytes del clasificador en el archivo temporal
+            fos = new FileOutputStream(tempFile);
+            fos.write(classifierBytes);
+
+            // Leer el clasificador desde el archivo temporal
+            recognizer.read(tempFile.getAbsolutePath());
+
+            // Aquí, el clasificador está listo para usarse
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            // Cerrar el FileOutputStream si es necesario
+            if (fos != null) {
+                try {
+                    fos.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            // Borrar el archivo temporal
+            if (tempFile != null) {
+                tempFile.delete();
+            }
+        }
+    }
+
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -203,8 +285,6 @@ public class Recognizer extends javax.swing.JFrame {
                                 DoublePointer confidence = new DoublePointer(1);
                                 recognizer.predict(faceCapturada, rotulo, confidence);
                                 int prediction = rotulo.get(0);
-                                String name;
-                                name = firstName;
 
                                 if (prediction == -1) {
                                     rectangle(cameraImage, dadosFace, new Scalar(0, 0, 255, 3), 3, 0, 0);
@@ -214,10 +294,10 @@ public class Recognizer extends javax.swing.JFrame {
                                     jlblDir.setText("");
                                 } else {
                                     rectangle(cameraImage, dadosFace, new Scalar(0, 255, 0, 3), 3, 0, 0);
-                                    System.out.println(confidence.get(0));
                                     id = prediction;
                                     System.out.println("persona reconocida como: " + id);
                                     rec();
+                                    reconocer(id);
                                 }
                             }
 
@@ -230,7 +310,7 @@ public class Recognizer extends javax.swing.JFrame {
                             try {
                                 if (g.drawImage(scaledImage, 0, 0, jlblFoto.getWidth(), jlblFoto.getHeight(), null)) {
                                     if (!runnable) {
-                                        System.out.println("Guarda la foto");
+                                        System.out.println("Se termino");
                                         this.wait();
                                     }
                                 }
@@ -243,27 +323,40 @@ public class Recognizer extends javax.swing.JFrame {
             }
         }
     }
-    
-    private void rec(){
+
+    private void rec() {
+
         new Thread() {
             @Override
             public void run() {
                 try {
+
                     UserModel usu = usc.getUser(String.valueOf(id));
                     jlblCedula.setText(usu.getCedula());
-                    jlblName.setText("Bienbenido "+usu.getNombre()+" "+ usu.getApellido() );
+                    jlblName.setText("Bienbenido " + usu.getNombre() + " " + usu.getApellido());
+
                 } catch (Exception e) {
                 }
-          
+
             }
         }.start();
-                
+
     }
-    
-    private void stopCamera() {
+
+    private void stopCamera() throws InterruptedException {
+        int delay = 4000; // 4000 ms = 4 segundos
         myTread.runnable = false;
-        webSource.release();
-        dispose();
+        if (webSource != null) {
+            webSource.release(); // Detener la cámara
+        }
+        Timer timer = new Timer(delay, new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+
+                dispose(); // Cerrar la ventana
+            }
+        });
+        timer.setRepeats(false); // Solo ejecutar una vez
+        timer.start();
     }
 
     private void startCamera() {
