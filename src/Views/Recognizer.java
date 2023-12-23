@@ -1,6 +1,7 @@
 package Views;
 
 import Controllers.ArchivosControl;
+import Controllers.AsistenciaControl;
 import Controllers.UserControl;
 import Models.UserModel;
 import java.awt.Graphics;
@@ -17,6 +18,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
+import javax.swing.JOptionPane;
 import javax.swing.Timer;
 import org.bytedeco.javacpp.BytePointer;
 import org.bytedeco.javacpp.DoublePointer;
@@ -39,6 +41,7 @@ import org.bytedeco.opencv.opencv_videoio.VideoCapture;
 public class Recognizer extends javax.swing.JFrame {
 
     ArchivosControl arch = new ArchivosControl();
+    AsistenciaControl asis = new AsistenciaControl();
     UserControl usc = new UserControl();
     private DaemonThread myTread = null;
 
@@ -50,7 +53,7 @@ public class Recognizer extends javax.swing.JFrame {
     FaceRecognizer recognizer = LBPHFaceRecognizer.create();
 
     //VARIABLES
-    String firstName;
+    String cedula;
     int id;
     Map<Integer, Integer> conteoIds = new HashMap<>();
     ;
@@ -160,15 +163,27 @@ public class Recognizer extends javax.swing.JFrame {
     public boolean reconocer(int idReconocido) throws InterruptedException {
 
         conteoIds.put(idReconocido, conteoIds.getOrDefault(idReconocido, 0) + 1);
-        System.out.println(conteoIds.toString());
+    
         int totalIntentos = conteoIds.values().stream().mapToInt(Integer::intValue).sum();
         if (totalIntentos >= MAX_INTENTOS) {
 
             int idMasFrecuente = encontrarIdMasFrecuente();
-            System.out.println(idMasFrecuente);
+  
             if (conteoIds.get(idMasFrecuente) >= UMBRAL) {
                 System.out.println("Identificación confirmada para ID: " + idMasFrecuente);
-                stopCamera();
+                UserModel usu = usc.getUser(String.valueOf(idMasFrecuente));
+                cedula = usu.getCedula();
+                try {
+                    if(!asis.insertInsgreso(cedula)){
+                        if(!asis.insertSalida(cedula)){
+                            JOptionPane.showMessageDialog(null, "No puede acceder en este momento");
+                        }
+                    }
+                } catch (Exception e) {
+                } finally {
+                    stopCamera();
+                }
+                
 
             } else {
                 System.out.println("Identificación no concluyente.");
@@ -295,7 +310,6 @@ public class Recognizer extends javax.swing.JFrame {
                                 } else {
                                     rectangle(cameraImage, dadosFace, new Scalar(0, 255, 0, 3), 3, 0, 0);
                                     id = prediction;
-                                    System.out.println("persona reconocida como: " + id);
                                     rec();
                                     reconocer(id);
                                 }
