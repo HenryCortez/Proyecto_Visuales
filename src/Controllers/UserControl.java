@@ -102,5 +102,24 @@ public class UserControl {
         }
 
     }
+    
+    public boolean getStateUser(String id_user){
+        this.con.conectar();
+        int state = 0;
+        String sql = "SELECT EST_USU FROM USUARIOS WHERE CED_USU ="+id_user+";";
+        try {
+            Statement psd = con.getCon().createStatement();
+            ResultSet rs = psd.executeQuery(sql);
+     
+            while (rs.next()) {
+              state = rs.getInt(1);
+            }
+            System.out.println(state);
+        } catch (SQLException e) {
+          
+        } finally {
+            return state==1;
+        }
+    }
 
 }
