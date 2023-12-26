@@ -39,7 +39,7 @@ public class AsistenciaControl {
             con.desconectar();
             return true;
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, e);
+            JOptionPane.showMessageDialog(null, "Hora no permitida para el ingreso");
             return false;
         }
     }
@@ -66,7 +66,7 @@ public class AsistenciaControl {
             con.desconectar();
             return true;
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Hora no permitida");
+            JOptionPane.showMessageDialog(null, e);
             return false;
         }
     }

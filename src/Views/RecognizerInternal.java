@@ -1,5 +1,6 @@
 package Views;
 
+
 import Controllers.ArchivosControl;
 import Controllers.AsistenciaControl;
 import Controllers.UserControl;
@@ -15,8 +16,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
@@ -37,10 +37,9 @@ import org.bytedeco.opencv.opencv_face.FaceRecognizer;
 import org.bytedeco.opencv.opencv_face.LBPHFaceRecognizer;
 import org.bytedeco.opencv.opencv_objdetect.CascadeClassifier;
 import org.bytedeco.opencv.opencv_videoio.VideoCapture;
+public class RecognizerInternal extends javax.swing.JInternalFrame {
 
-public class Recognizer extends javax.swing.JFrame {
-
-    ArchivosControl arch = new ArchivosControl();
+   ArchivosControl arch = new ArchivosControl();
     AsistenciaControl asis = new AsistenciaControl();
     UserControl usc = new UserControl();
     private DaemonThread myTread = null;
@@ -60,99 +59,12 @@ public class Recognizer extends javax.swing.JFrame {
     final double UMBRAL = 7;
     final int MAX_INTENTOS = 10;
 
-    public Recognizer() {
+    public RecognizerInternal() {
         initComponents();
         readClassifier();
         recognizer.setThreshold(50);
         startCamera();
     }
-
-    @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
-
-        jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jlblFoto = new javax.swing.JLabel();
-        jPanel2 = new javax.swing.JPanel();
-        jlblDir = new javax.swing.JLabel();
-        jlblCedula = new javax.swing.JLabel();
-        jlblName = new javax.swing.JLabel();
-
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Recognizer");
-        addWindowListener(new java.awt.event.WindowAdapter() {
-            public void windowClosing(java.awt.event.WindowEvent evt) {
-                formWindowClosing(evt);
-            }
-        });
-
-        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Recognizer");
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 20, 330, 40));
-
-        jlblFoto.setForeground(new java.awt.Color(0, 0, 0));
-        jlblFoto.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jlblFoto.setToolTipText("");
-        jlblFoto.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        jPanel1.add(jlblFoto, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 60, 400, 370));
-
-        jPanel2.setBackground(new java.awt.Color(204, 204, 204));
-        jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jlblDir.setBackground(new java.awt.Color(51, 153, 255));
-        jlblDir.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        jlblDir.setForeground(new java.awt.Color(255, 255, 255));
-        jlblDir.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jlblDir.setText("------------------------");
-        jlblDir.setOpaque(true);
-        jPanel2.add(jlblDir, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 110, 400, 40));
-
-        jlblCedula.setBackground(new java.awt.Color(51, 153, 255));
-        jlblCedula.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        jlblCedula.setForeground(new java.awt.Color(255, 255, 255));
-        jlblCedula.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jlblCedula.setText("-------------------------");
-        jlblCedula.setOpaque(true);
-        jPanel2.add(jlblCedula, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 400, 40));
-
-        jlblName.setBackground(new java.awt.Color(51, 153, 255));
-        jlblName.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        jlblName.setForeground(new java.awt.Color(255, 255, 255));
-        jlblName.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jlblName.setText("-------------------------");
-        jlblName.setOpaque(true);
-        jPanel2.add(jlblName, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 60, 400, 40));
-
-        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 440, 420, 160));
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 442, Short.MAX_VALUE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 620, Short.MAX_VALUE)
-        );
-
-        setSize(new java.awt.Dimension(456, 630));
-        setLocationRelativeTo(null);
-    }// </editor-fold>//GEN-END:initComponents
-
-    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        try {
-            stopCamera();
-        } catch (InterruptedException ex) {
-            Logger.getLogger(Recognizer.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }//GEN-LAST:event_formWindowClosing
 
     private int encontrarIdMasFrecuente() {
         return conteoIds.entrySet().stream()
@@ -230,38 +142,79 @@ public class Recognizer extends javax.swing.JFrame {
             }
         }
     }
+    
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
 
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Recognizer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Recognizer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Recognizer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Recognizer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
+        jPanel1 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jlblFoto = new javax.swing.JLabel();
+        jPanel2 = new javax.swing.JPanel();
+        jlblDir = new javax.swing.JLabel();
+        jlblCedula = new javax.swing.JLabel();
+        jlblName = new javax.swing.JLabel();
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new Recognizer().setVisible(true);
-            }
-        });
-    }
+        setClosable(true);
+
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setText("Recognizer");
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 20, 330, 40));
+
+        jlblFoto.setForeground(new java.awt.Color(0, 0, 0));
+        jlblFoto.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jlblFoto.setToolTipText("");
+        jlblFoto.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jPanel1.add(jlblFoto, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 60, 400, 370));
+
+        jPanel2.setBackground(new java.awt.Color(204, 204, 204));
+        jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jlblDir.setBackground(new java.awt.Color(51, 153, 255));
+        jlblDir.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jlblDir.setForeground(new java.awt.Color(255, 255, 255));
+        jlblDir.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jlblDir.setText("------------------------");
+        jlblDir.setOpaque(true);
+        jPanel2.add(jlblDir, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 110, 400, 40));
+
+        jlblCedula.setBackground(new java.awt.Color(51, 153, 255));
+        jlblCedula.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jlblCedula.setForeground(new java.awt.Color(255, 255, 255));
+        jlblCedula.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jlblCedula.setText("-------------------------");
+        jlblCedula.setOpaque(true);
+        jPanel2.add(jlblCedula, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 400, 40));
+
+        jlblName.setBackground(new java.awt.Color(51, 153, 255));
+        jlblName.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jlblName.setForeground(new java.awt.Color(255, 255, 255));
+        jlblName.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jlblName.setText("-------------------------");
+        jlblName.setOpaque(true);
+        jPanel2.add(jlblName, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 60, 400, 40));
+
+        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 440, 420, 160));
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+
+        pack();
+    }// </editor-fold>//GEN-END:initComponents
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
@@ -358,19 +311,13 @@ public class Recognizer extends javax.swing.JFrame {
     }
 
     private void stopCamera() throws InterruptedException {
-        int delay = 4000; // 4000 ms = 4 segundos
+   
         myTread.runnable = false;
         if (webSource != null) {
             webSource.release(); // Detener la cámara
         }
-        Timer timer = new Timer(delay, new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-
-                dispose(); // Cerrar la ventana
-            }
-        });
-        timer.setRepeats(false); // Solo ejecutar una vez
-        timer.start();
+        this.dispose();
+        
     }
 
     private void startCamera() {
