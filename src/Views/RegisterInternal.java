@@ -1,3 +1,7 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JInternalFrame.java to edit this template
+ */
 package Views;
 
 import Controllers.UserControl;
@@ -6,46 +10,73 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JDesktopPane;
 import javax.swing.JOptionPane;
 
-public class RegisterPerson extends javax.swing.JFrame {
+/**
+ *
+ * @author henry
+ */
+public class RegisterInternal extends javax.swing.JInternalFrame {
 
     UserControl usc = new UserControl();
+    JDesktopPane Escritorio;
 
-    public RegisterPerson() {
+    public RegisterInternal(JDesktopPane Escritorio) {
         initComponents();
         desactivar();
+        this.Escritorio = Escritorio;
     }
-    
-    private boolean checkPassword(){
+
+    private void desactivar() {
+        this.jpswConfirmado.setText("");
+        this.jpswContra.setText("");
+        this.jpswConfirmado.setEnabled(false);
+        this.jpswContra.setEnabled(false);
+    }
+
+    private void activar() {
+        this.jpswConfirmado.setText("");
+        this.jpswContra.setText("");
+        this.jpswConfirmado.setEnabled(true);
+        this.jpswContra.setEnabled(true);
+    }
+
+    private boolean checkPassword() {
         return String.valueOf(jpswContra.getPassword()).equals(String.valueOf(jpswConfirmado.getPassword()));
     }
 
     private void saveUser() throws ParseException {
         ArrayList<UserModel> temporal = this.usc.getID();
-        if(!checkPassword()){
+        if (!checkPassword()) {
             JOptionPane.showMessageDialog(null, "Las contraseñas no coinciden");
             return;
         }
-        
-        for (UserModel user : temporal){
-            if(this.jtxtCedula.getText().equals(user.getCedula())){
+
+        for (UserModel user : temporal) {
+            if (this.jtxtCedula.getText().equals(user.getCedula())) {
                 return;
             }
         }
-        int id= temporal.size();
-        if(temporal.isEmpty()){
-            new Capture(jtxtCedula.getText(), jtxtNombre.getText(), jtxtApellido.getText(), 
-                    String.valueOf(jpswContra.getPassword()), String.valueOf(jcbxTipos.getSelectedItem()),1).setVisible(true);
-        }else if(id == temporal.get(id-1).getID()){
-            new Capture(jtxtCedula.getText(), jtxtNombre.getText(), jtxtApellido.getText(), 
-                    String.valueOf(jpswContra.getPassword()), String.valueOf(jcbxTipos.getSelectedItem()),id+1).setVisible(true);
-        }else{
-            System.out.println(temporal.get(id-1).getID()+"aaa");
-            new Capture(jtxtCedula.getText(), jtxtNombre.getText(), jtxtApellido.getText(), 
-                     String.valueOf(jpswContra.getPassword()), String.valueOf(jcbxTipos.getSelectedItem()),temporal.get(id-1).getID()+1).setVisible(true);
+        int id = temporal.size();
+        if (temporal.isEmpty()) {
+            CaptureInternal cap = new CaptureInternal(jtxtCedula.getText(), jtxtNombre.getText(), jtxtApellido.getText(),
+                    String.valueOf(jpswContra.getPassword()), String.valueOf(jcbxTipos.getSelectedItem()), 1);
+            Escritorio.add(cap);
+            cap.setVisible(true);
+        } else if (id == temporal.get(id - 1).getID()) {
+            CaptureInternal cap = new CaptureInternal(jtxtCedula.getText(), jtxtNombre.getText(), jtxtApellido.getText(),
+                    String.valueOf(jpswContra.getPassword()), String.valueOf(jcbxTipos.getSelectedItem()), id + 1);
+            Escritorio.add(cap);
+            cap.setVisible(true);
+        } else {
+            System.out.println(temporal.get(id - 1).getID() + "aaa");
+            CaptureInternal cap = new CaptureInternal(jtxtCedula.getText(), jtxtNombre.getText(), jtxtApellido.getText(),
+                    String.valueOf(jpswContra.getPassword()), String.valueOf(jcbxTipos.getSelectedItem()), temporal.get(id - 1).getID() + 1);
+            Escritorio.add(cap);
+            cap.setVisible(true);
         }
-        
+
     }
 
     @SuppressWarnings("unchecked")
@@ -69,9 +100,7 @@ public class RegisterPerson extends javax.swing.JFrame {
         jLabel9 = new javax.swing.JLabel();
         jbtnSave = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Register");
-        setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        setClosable(true);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -217,7 +246,7 @@ public class RegisterPerson extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 557, Short.MAX_VALUE))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
             .addGroup(layout.createSequentialGroup()
                 .addGap(161, 161, 161)
@@ -233,75 +262,30 @@ public class RegisterPerson extends javax.swing.JFrame {
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jbtnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(41, Short.MAX_VALUE))
+                .addContainerGap(20, Short.MAX_VALUE))
         );
 
-        setSize(new java.awt.Dimension(583, 500));
-        setLocationRelativeTo(null);
+        pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jcbxTiposItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jcbxTiposItemStateChanged
+        if (this.jcbxTipos.getSelectedItem().toString().equals("Trabajador")) {
+            desactivar();
+        } else if (this.jcbxTipos.getSelectedItem().toString().equals("Administrador")) {
+            activar();
+        } else {
+            desactivar();
+        }
+    }//GEN-LAST:event_jcbxTiposItemStateChanged
 
     private void jbtnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnSaveActionPerformed
         try {
             saveUser();
         } catch (ParseException ex) {
-            Logger.getLogger(RegisterPerson.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(RegisterInternal.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jbtnSaveActionPerformed
 
-    private void desactivar(){
-        this.jpswConfirmado.setText("");
-        this.jpswContra.setText("");
-        this.jpswConfirmado.setEnabled(false);
-        this.jpswContra.setEnabled(false);
-    }
-    
-    private void activar(){
-        this.jpswConfirmado.setText("");
-        this.jpswContra.setText("");
-        this.jpswConfirmado.setEnabled(true);
-        this.jpswContra.setEnabled(true);
-    }
-    
-    private void jcbxTiposItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jcbxTiposItemStateChanged
-        if(this.jcbxTipos.getSelectedItem().toString().equals("Trabajador")){
-            desactivar();
-        }else if(this.jcbxTipos.getSelectedItem().toString().equals("Administrador")){
-           activar();
-        }else{
-            desactivar();
-        }
-    }//GEN-LAST:event_jcbxTiposItemStateChanged
-
-    public static void main(String args[]) {
-
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(RegisterPerson.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(RegisterPerson.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(RegisterPerson.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(RegisterPerson.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new RegisterPerson().setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel4;
