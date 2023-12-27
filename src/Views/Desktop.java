@@ -112,7 +112,7 @@ public class Desktop extends javax.swing.JFrame {
     }//GEN-LAST:event_jbtnAdminActionPerformed
 
     private void jbtnTrabajadorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnTrabajadorActionPerformed
-        // TODO add your handling code here:
+        
     }//GEN-LAST:event_jbtnTrabajadorActionPerformed
 
     /**
