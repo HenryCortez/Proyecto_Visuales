@@ -1,6 +1,5 @@
 package Views;
 
-
 import Controllers.ArchivosControl;
 import Controllers.AsistenciaControl;
 import Controllers.UserControl;
@@ -73,41 +72,62 @@ public class RecognizerInternal extends javax.swing.JInternalFrame {
     }
 
     public boolean reconocer(int idReconocido) throws InterruptedException {
+    conteoIds.put(idReconocido, conteoIds.getOrDefault(idReconocido, 0) + 1);
 
-        conteoIds.put(idReconocido, conteoIds.getOrDefault(idReconocido, 0) + 1);
-    
-        int totalIntentos = conteoIds.values().stream().mapToInt(Integer::intValue).sum();
-        if (totalIntentos >= MAX_INTENTOS) {
+    int totalIntentos = conteoIds.values().stream().mapToInt(Integer::intValue).sum();
+    if (totalIntentos >= MAX_INTENTOS) {
 
-            int idMasFrecuente = encontrarIdMasFrecuente();
-  
-            if (conteoIds.get(idMasFrecuente) >= UMBRAL) {
-                System.out.println("Identificación confirmada para ID: " + idMasFrecuente);
-                UserModel usu = usc.getUser(String.valueOf(idMasFrecuente));
-                cedula = usu.getCedula();
-                try {
-                    if(!asis.insertInsgreso(cedula)){
-                        if(!asis.insertSalida(cedula)){
+        int idMasFrecuente = encontrarIdMasFrecuente();
+
+        if (conteoIds.get(idMasFrecuente) >= UMBRAL) {
+            System.out.println("Identificación confirmada para ID: " + idMasFrecuente);
+            UserModel usu = usc.getUser(String.valueOf(idMasFrecuente));
+            cedula = usu.getCedula();
+            try {
+                // Muestra el cuadro de diálogo para elegir entre "Registros" y "Asistencias"
+                String[] opciones = {"Registros", "Asistencias"};
+                int seleccion = JOptionPane.showOptionDialog(
+                        RecognizerInternal.this,
+                        "¿Qué acción deseas realizar?",
+                        "Selecciona una opción",
+                        JOptionPane.DEFAULT_OPTION,
+                        JOptionPane.QUESTION_MESSAGE,
+                        null,
+                        opciones,
+                        opciones[0]
+                );
+
+                // Verifica la opción seleccionada
+                if (seleccion == 0) {
+                    // Registros
+                  //  Registro registro = new Registro(idMasFrecuente);
+                    // Suponiendo que Registro.java tiene un constructor que acepta el ID
+                    // y muestra la pantalla correspondiente.
+                  //  registro.setVisible(true);
+                } else if (seleccion == 1) {
+                    // Asistencias (código existente)
+                    if (!asis.insertInsgreso(cedula)) {
+                        if (!asis.insertSalida(cedula)) {
                             JOptionPane.showMessageDialog(null, "No puede acceder en este momento");
                         }
                     }
-                } catch (Exception e) {
-                } finally {
                     stopCamera();
                 }
-                
-
-            } else {
-                System.out.println("Identificación no concluyente.");
-                conteoIds.clear();
-                return false;
-
+            } catch (Exception e) {
+            } finally {
+                stopCamera();
             }
+        } else {
+            System.out.println("Identificación no concluyente.");
             conteoIds.clear();
-            return true;
+            return false;
         }
-        return false;
+        conteoIds.clear();
+        return true;
     }
+    return false;
+}
+
 
     public void readClassifier() {
         File tempFile = null;
@@ -300,11 +320,10 @@ public class RecognizerInternal extends javax.swing.JInternalFrame {
 
                     UserModel usu = usc.getUser(String.valueOf(id));
                     jlblCedula.setText(usu.getCedula());
-                    jlblName.setText("Bienbenido " + usu.getNombre() + " " + usu.getApellido());
-
+                    jlblName.setText("Bienvenido" );
+                    jlblDir.setText( usu.getNombre() +" " + usu.getApellido());
                 } catch (Exception e) {
                 }
-
             }
         }.start();
 
