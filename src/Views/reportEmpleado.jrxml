@@ -1,98 +1,173 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="fa12b9e4-195d-4e9a-b4f6-d40135f63f1a">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="cfe0e2f9-ebbd-48aa-b2ed-fa97745ff6f7">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
-	<parameter name="fecha" class="java.util.Date">
+	<parameter name="id_user" class="java.lang.String">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
-	<parameter name="nombresC" class="java.lang.String">
+	<parameter name="fecha" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="nombreC" class="java.lang.String">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
 	<queryString>
-		<![CDATA[select * from multas]]>
+		<![CDATA[SELECT
+  i.ID_ASI,
+  i.FEC_HOR_ING,
+  s.ID_SAL,
+  s.FEC_HOR_SAL,
+  FLOOR((SELECT SUM(m2.VAL_MUL) / 0.25 FROM multas m2 WHERE m2.ID_ASI = i.ID_ASI OR m2.ID_SAL = s.ID_SAL)) AS Min_Ret
+FROM
+  ingresos i, salidas s, multas m
+WHERE
+  i.ID_USU = s.ID_USU_SAL
+  AND i.ID_USU = $P{id_user}
+  AND i.FEC_HOR_ING LIKE CONCAT($P{fecha}, "%")
+  AND s.FEC_HOR_SAL LIKE CONCAT($P{fecha}, "%")
+  AND (m.ID_ASI = i.ID_ASI or m.ID_SAL = s.ID_SAL)
+limit 1;]]>
 	</queryString>
-	<field name="NUM_MUL" class="java.lang.Integer">
+	<field name="ID_ASI" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="ID_ASI" class="java.lang.Integer">
+	<field name="FEC_HOR_ING" class="java.time.LocalDateTime">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="ID_SAL" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="VAL_MUL" class="java.math.BigDecimal">
+	<field name="FEC_HOR_SAL" class="java.time.LocalDateTime">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
+	<field name="Min_Ret" class="java.math.BigDecimal"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="50" splitType="Stretch">
+		<band height="40" splitType="Stretch">
 			<staticText>
-				<reportElement x="161" y="0" width="297" height="38" uuid="62674308-f0ad-49c7-99b9-40ab7d894c08"/>
+				<reportElement x="195" y="10" width="181" height="20" uuid="9ce18919-5b46-40fb-8975-e92ac6b88fe0"/>
 				<textElement>
-					<font size="24" isBold="true"/>
+					<font size="15" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Registros de asistencia]]></text>
+				<text><![CDATA[Reporte de Asistencia]]></text>
 			</staticText>
 		</band>
 	</title>
 	<pageHeader>
-		<band height="46" splitType="Stretch">
+		<band height="36" splitType="Stretch">
 			<staticText>
-				<reportElement x="10" y="12" width="100" height="20" uuid="7ab3ccc0-ad8c-4ef0-b552-f82099d3dddd"/>
+				<reportElement x="0" y="0" width="84" height="20" uuid="e7378942-2f05-4a07-a298-f16a937982a3"/>
 				<textElement>
 					<font size="15" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Empleado: ]]></text>
+				<text><![CDATA[Empleado:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="93" y="12" width="100" height="20" uuid="06f77898-2c05-49c1-a5b3-a5fdbed8f1d7"/>
+				<reportElement x="84" y="0" width="100" height="20" uuid="b69046eb-aea9-4c0d-ae39-937ba2dbbcbf"/>
 				<textElement>
 					<font size="15"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{nombresC}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{nombreC}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="327" y="12" width="58" height="20" uuid="98fa749d-170a-44f8-8f85-4ac5ae170cb5"/>
+				<reportElement x="376" y="0" width="58" height="20" uuid="749f2745-60ba-41ad-a144-7ea2958d6dec"/>
 				<textElement>
 					<font size="15" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Fecha:]]></text>
 			</staticText>
-			<textField pattern="EEEEE dd MMMMM yyyy">
-				<reportElement x="395" y="12" width="160" height="20" uuid="f52f585e-0aa0-4088-84e5-57b69f4219af"/>
+			<textField>
+				<reportElement x="440" y="0" width="115" height="20" uuid="47a96f03-9836-40f3-aabd-57988fb429ca"/>
 				<textElement>
 					<font size="15"/>
 				</textElement>
-				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{fecha}]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageHeader>
 	<columnHeader>
-		<band height="61" splitType="Stretch">
+		<band height="26" splitType="Stretch">
 			<staticText>
-				<reportElement x="10" y="31" width="100" height="20" uuid="77b9e167-0903-4111-86ba-9a17e1f77b88"/>
-				<text><![CDATA[NUM_MUL]]></text>
+				<reportElement x="0" y="0" width="111" height="20" uuid="a48b8c5f-fad6-4891-9dc4-a0ecf2556264"/>
+				<textElement>
+					<font size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ID ASISTENCIA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="137" y="0" width="163" height="20" uuid="ba5c7931-e8d6-40e8-829e-2dc75153a05b"/>
+				<textElement>
+					<font size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[FECHA DE INGRESO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="311" y="0" width="75" height="20" uuid="d819e7fb-a0e9-4bf2-bc8b-108d6b2f0bb6"/>
+				<textElement>
+					<font size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ID SALIDA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="422" y="0" width="133" height="20" uuid="078e722c-f80b-4a8a-a4b0-4abdf0ca78b3"/>
+				<textElement>
+					<font size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[FECHA DE SALIDA]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="125" splitType="Stretch">
+		<band height="47" splitType="Stretch">
 			<textField>
-				<reportElement x="10" y="14" width="100" height="20" uuid="d66b3508-3b2d-48fd-b3f7-69240ca2910a"/>
-				<textFieldExpression><![CDATA[$F{NUM_MUL}]]></textFieldExpression>
+				<reportElement x="10" y="11" width="100" height="20" uuid="fae4ce96-2f48-4410-b530-8ee4d335c461"/>
+				<textElement>
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ID_ASI}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="137" y="11" width="163" height="20" uuid="01825fe5-7148-4d71-a007-d120dd64be52"/>
+				<textElement>
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[""+$F{FEC_HOR_ING}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="311" y="11" width="75" height="20" uuid="a078a2a7-a854-44cb-9d4b-0e99748c7d3d"/>
+				<textElement>
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ID_SAL}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="422" y="11" width="133" height="20" uuid="6374146d-eebd-46a5-9640-d5b0ed535d7b"/>
+				<textElement>
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[""+$F{FEC_HOR_SAL}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
-	<columnFooter>
-		<band height="45" splitType="Stretch"/>
-	</columnFooter>
-	<pageFooter>
-		<band height="54" splitType="Stretch"/>
-	</pageFooter>
 	<summary>
-		<band height="42" splitType="Stretch"/>
+		<band height="20">
+			<staticText>
+				<reportElement x="311" y="0" width="133" height="20" uuid="75f10070-010e-4a51-81b8-8c02949297ac"/>
+				<textElement>
+					<font size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Minutos de retraso:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="445" y="0" width="100" height="20" uuid="dc19b39e-34d0-46b4-9fef-9a2e66df7cd3"/>
+				<textElement>
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Min_Ret}]]></textFieldExpression>
+			</textField>
+		</band>
 	</summary>
 </jasperReport>
