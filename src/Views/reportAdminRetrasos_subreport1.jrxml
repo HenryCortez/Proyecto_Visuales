@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reportAdminRetrasos_subreport1" language="groovy" pageWidth="595" pageHeight="842" columnWidth="595" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="154f8cc2-7233-4741-8e0b-fda891fe391c">
-	<property name="ireport.zoom" value="1.9487171000000019"/>
+	<property name="ireport.zoom" value="1.331000000000001"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="id_user" class="java.lang.Integer">
@@ -88,7 +88,7 @@ AND DATE_FORMAT(i.FEC_HOR_ING, '%Y-%m') = $P{fecha}]]>
 		</band>
 	</detail>
 	<summary>
-		<band height="31" splitType="Stretch">
+		<band height="131" splitType="Stretch">
 			<textField>
 				<reportElement x="480" y="11" width="64" height="20" uuid="fce5d126-bf24-489f-a391-20f9756805ef"/>
 				<textElement>
@@ -103,6 +103,22 @@ AND DATE_FORMAT(i.FEC_HOR_ING, '%Y-%m') = $P{fecha}]]>
 				</textElement>
 				<text><![CDATA[Total de minutos:]]></text>
 			</staticText>
+			<pieChart>
+				<chart>
+					<reportElement x="54" y="11" width="321" height="100" uuid="76ce8f87-6ef7-4623-bf14-2f872c9cc375"/>
+					<chartTitle/>
+					<chartSubtitle/>
+					<chartLegend/>
+				</chart>
+				<pieDataset>
+					<keyExpression><![CDATA[$F{fecha}]]></keyExpression>
+					<valueExpression><![CDATA[$F{minutos}]]></valueExpression>
+				</pieDataset>
+				<piePlot>
+					<plot/>
+					<itemLabel/>
+				</piePlot>
+			</pieChart>
 		</band>
 	</summary>
 </jasperReport>

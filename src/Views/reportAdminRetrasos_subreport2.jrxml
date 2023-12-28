@@ -88,7 +88,7 @@ AND DATE_FORMAT(s.FEC_HOR_SAL, '%Y-%m') = $P{fecha2}]]>
 		</band>
 	</detail>
 	<summary>
-		<band height="39" splitType="Stretch">
+		<band height="131" splitType="Stretch">
 			<staticText>
 				<reportElement x="368" y="10" width="112" height="20" uuid="f3fda0e4-3bf5-4013-9682-07933702dccb"/>
 				<textElement>
@@ -103,6 +103,22 @@ AND DATE_FORMAT(s.FEC_HOR_SAL, '%Y-%m') = $P{fecha2}]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{sumM}]]></textFieldExpression>
 			</textField>
+			<pieChart>
+				<chart>
+					<reportElement x="26" y="0" width="321" height="100" uuid="e6628481-f946-4552-b253-5b29f21dfc08"/>
+					<chartTitle/>
+					<chartSubtitle/>
+					<chartLegend/>
+				</chart>
+				<pieDataset>
+					<keyExpression><![CDATA[$F{fecha}]]></keyExpression>
+					<valueExpression><![CDATA[$F{minutos}]]></valueExpression>
+				</pieDataset>
+				<piePlot>
+					<plot/>
+					<itemLabel/>
+				</piePlot>
+			</pieChart>
 		</band>
 	</summary>
 </jasperReport>

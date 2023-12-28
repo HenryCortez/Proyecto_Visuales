@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="8f75a32c-85f9-4b39-b1e2-7154d1eb586c">
 	<property name="ireport.zoom" value="0.7697371773460598"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="189"/>
+	<property name="ireport.y" value="0"/>
 	<parameter name="nom_user" class="java.lang.String">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
@@ -12,14 +12,14 @@
 	<parameter name="anio" class="java.lang.String">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
-	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
-		<defaultValueExpression><![CDATA["C:\\Users\\davay\\Documents\\NetBeansProjects\\Proyecto_Visuales\\src\\Views\\"]]></defaultValueExpression>
-	</parameter>
 	<parameter name="fechaF" class="java.lang.String">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
 	<parameter name="id_user" class="java.lang.Integer">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\Users\\henry\\OneDrive\\Documentos\\NetBeansProjects\\FacialRecognition\\src\\Views\\"]]></defaultValueExpression>
 	</parameter>
 	<queryString>
 		<![CDATA[SELECT *  FROM MULTAS]]>
@@ -118,7 +118,7 @@
 		</band>
 	</pageFooter>
 	<summary>
-		<band height="509" splitType="Stretch">
+		<band height="501" splitType="Stretch">
 			<rectangle>
 				<reportElement x="0" y="227" width="555" height="264" uuid="c50c8d3e-b77f-4669-a798-48fb398d9832"/>
 			</rectangle>
@@ -126,7 +126,7 @@
 				<reportElement x="0" y="0" width="555" height="227" uuid="f3aa5696-4dd4-4667-9bad-5cf54eea7693"/>
 			</rectangle>
 			<subreport>
-				<reportElement x="0" y="0" width="555" height="227" uuid="0c0eb1c2-1ca2-4a0b-a196-d6511b1f1682"/>
+				<reportElement x="0" y="0" width="555" height="227" uuid="a77889ff-acd2-41d3-a315-d582a859d10d"/>
 				<subreportParameter name="id_user">
 					<subreportParameterExpression><![CDATA[$P{id_user}]]></subreportParameterExpression>
 				</subreportParameter>
@@ -134,10 +134,10 @@
 					<subreportParameterExpression><![CDATA[$P{fechaF}]]></subreportParameterExpression>
 				</subreportParameter>
 				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "reportAdminRetrasos_subreport1.jasper"]]></subreportExpression>
+				<subreportExpression><![CDATA["C:\\Users\\henry\\OneDrive\\Documentos\\NetBeansProjects\\FacialRecognition\\src\\Views\\reportAdminRetrasos_subreport1.jasper"]]></subreportExpression>
 			</subreport>
 			<subreport>
-				<reportElement x="0" y="227" width="555" height="264" uuid="af919b01-23db-464c-ad3e-d8e121ea4c0e"/>
+				<reportElement x="0" y="227" width="555" height="264" uuid="d88558b2-1aeb-4203-84e2-a3e9bd1996ce"/>
 				<subreportParameter name="id_user2">
 					<subreportParameterExpression><![CDATA[$P{id_user}]]></subreportParameterExpression>
 				</subreportParameter>
