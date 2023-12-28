@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.imageio.ImageIO;
+import javax.swing.JDesktopPane;
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
 import org.bytedeco.javacpp.BytePointer;
@@ -37,11 +38,13 @@ import org.bytedeco.opencv.opencv_face.LBPHFaceRecognizer;
 import org.bytedeco.opencv.opencv_objdetect.CascadeClassifier;
 import org.bytedeco.opencv.opencv_videoio.VideoCapture;
 public class RecognizerInternal extends javax.swing.JInternalFrame {
-
+    
    ArchivosControl arch = new ArchivosControl();
     AsistenciaControl asis = new AsistenciaControl();
     UserControl usc = new UserControl();
     private DaemonThread myTread = null;
+    JDesktopPane Escritorio;
+
 
     //JAVACV
     VideoCapture webSource = null;
@@ -58,11 +61,13 @@ public class RecognizerInternal extends javax.swing.JInternalFrame {
     final double UMBRAL = 7;
     final int MAX_INTENTOS = 10;
 
-    public RecognizerInternal() {
+    public RecognizerInternal(JDesktopPane Escritorio) {
         initComponents();
         readClassifier();
         recognizer.setThreshold(50);
         startCamera();
+        this.Escritorio = Escritorio;     
+
     }
 
     private int encontrarIdMasFrecuente() {
@@ -99,11 +104,16 @@ public class RecognizerInternal extends javax.swing.JInternalFrame {
 
                 // Verifica la opción seleccionada
                 if (seleccion == 0) {
-                    // Registros
-                  //  Registro registro = new Registro(idMasFrecuente);
-                    // Suponiendo que Registro.java tiene un constructor que acepta el ID
-                    // y muestra la pantalla correspondiente.
-                  //  registro.setVisible(true);
+        String cedula = usu.getCedula();
+        String nombre = usu.getNombre();
+        String apellido = usu.getApellido();
+
+        // Abrir ReportesEmpleados con los datos
+        ReportesEmpleados reportesFrame = new ReportesEmpleados(Escritorio, cedula, nombre, apellido);
+        Escritorio.add(reportesFrame);
+        reportesFrame.setVisible(true);       
+                    
+                    
                 } else if (seleccion == 1) {
                     // Asistencias (código existente)
                     if (!asis.insertInsgreso(cedula)) {
@@ -183,7 +193,7 @@ public class RecognizerInternal extends javax.swing.JInternalFrame {
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(0, 0, 0));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Recognizer");
+        jLabel1.setText("Reconocedor de Rostros");
         jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 20, 330, 40));
 
         jlblFoto.setForeground(new java.awt.Color(0, 0, 0));

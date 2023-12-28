@@ -93,7 +93,7 @@ public class LoginEmployee extends javax.swing.JInternalFrame {
         register.setVisible(true);
     }
     private void recognizeUser() {
-        RecognizerInternal recognizer = new RecognizerInternal();
+        RecognizerInternal recognizer = new RecognizerInternal(Escritorio);
         Escritorio.add(recognizer);
         recognizer.setVisible(true);
     }
@@ -101,7 +101,6 @@ public class LoginEmployee extends javax.swing.JInternalFrame {
         recognizeUser();
     }//GEN-LAST:event_jbtnRecognitionActionPerformed
 
-     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
