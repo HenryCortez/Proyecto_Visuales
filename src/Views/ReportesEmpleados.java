@@ -2,14 +2,19 @@
 package Views;
 
 import Models.Conexion;
-import java.util.HashMap;
-import java.util.Map;
+
 import javax.swing.JDesktopPane;
 import javax.swing.JOptionPane;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.view.JasperViewer;
 
 public class ReportesEmpleados extends javax.swing.JInternalFrame {
     JDesktopPane Escritorio;
@@ -112,31 +117,35 @@ public class ReportesEmpleados extends javax.swing.JInternalFrame {
 
     
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-      try {
+ 
+        System.out.println(txtCedula.getText().toString());
+         System.out.println(txtNombre.getText().toString());
+          System.out.println(jFormattedEdder1.getText().toString());
+        try {
         Conexion cc = new Conexion();
         Connection cn = cc.conectar();
         
         // Obtener los datos del formulario
         String cedula = txtCedula.getText();
-        String nombreCompleto = txtNombre.getText();
         String fecha = jFormattedEdder1.getText();
+        String nombreCompleto = txtNombre.getText();
 
         // Preparar los parámetros
         Map<String, Object> parametros = new HashMap<>();
-        parametros.put("iduser", cedula);
-        parametros.put("nombreC", nombreCompleto);
+        parametros.put("id_user", cedula);
         parametros.put("fecha", fecha);
+        parametros.put("nombreC", nombreCompleto);
 
         // Compilar y llenar el reporte
-     /*   JasperReport reporte = JasperCompileManager.compileReport("ruta/del/archivo/reportEmpleado.jrxml");
-        JasperPrint print= JasperFillManager.fillReport(reporte, parametros, cn);
+        JasperReport reporte = JasperCompileManager.compileReport("src/Views/reportEmpleado.jrxml");
+        JasperPrint print = JasperFillManager.fillReport(reporte, parametros, cn);
 
         // Mostrar el reporte
-        JasperViewer.viewReport(print, false);*/
-    } catch (Exception ex) {
-        JOptionPane.showMessageDialog(null, ex);
+        JasperViewer.viewReport(print, false);
+         }  catch (JRException ex1) {
+            System.out.println(ex1);
     } 
-         
+       
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void xdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_xdActionPerformed
