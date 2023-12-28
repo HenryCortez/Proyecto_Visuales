@@ -9,5 +9,8 @@ package Controllers;
  * @author hamil
  */
 public class UserCrud {
+    public static void main(String[] args) {
+        
+    }
     
 }
