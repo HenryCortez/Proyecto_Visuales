@@ -108,7 +108,7 @@ public class MenuInternal extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jbtnDataActionPerformed
 
     private void recognizeUser() {
-        RecognizerInternal recognizer = new RecognizerInternal();
+        RecognizerInternal recognizer = new RecognizerInternal(Escritorio);
         Escritorio.add(recognizer);
         recognizer.setVisible(true);
     }

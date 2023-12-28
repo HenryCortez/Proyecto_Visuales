@@ -314,7 +314,7 @@ public class CaptureInternal extends javax.swing.JInternalFrame {
         new Thread() {
             @Override
             public void run() {
-                webSource = new VideoCapture(1);
+                webSource = new VideoCapture(0);
 
                 myTread = new DaemonThread();
                 Thread t = new Thread(myTread);

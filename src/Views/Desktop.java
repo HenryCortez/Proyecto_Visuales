@@ -112,7 +112,9 @@ public class Desktop extends javax.swing.JFrame {
     }//GEN-LAST:event_jbtnAdminActionPerformed
 
     private void jbtnTrabajadorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnTrabajadorActionPerformed
-        // TODO add your handling code here:
+        LoginEmployee log1 = new  LoginEmployee(Escritorio);
+        Escritorio.add(log1);
+        log1.setVisible(true);
     }//GEN-LAST:event_jbtnTrabajadorActionPerformed
 
     /**
