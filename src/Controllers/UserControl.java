@@ -124,7 +124,7 @@ public class UserControl {
         }
     }
     
-     public void updateUser (String cedula, String nombre, String apellido, String contrasenia)
+    public void updateUser (String cedula, String nombre, String apellido, String contrasenia)
         {
             try 
             {
@@ -150,36 +150,31 @@ public class UserControl {
                 con.desconectar();
             }
         }
-     
-     
-     public void insertUser (String cedula, String nombre, String apellido, String contrasenia)
+    
+    public void deleteUser (String cedula)
         {
             try 
             {
                 con.conectar();
-                String sql= "INSERT INTO USUARIOS (CED_USU,NOM_USU, APE_USU, CON_USU) VALUES (?,?,?,?);";
+                String sql = "UPDATE USUARIOS SET EST_USU=3 WHERE ID_USU=?";
                 PreparedStatement ps = con.getCon().prepareStatement(sql);
                 ps.setString(1, cedula);
-                ps.setString(2, nombre);
-                ps.setString(3, apellido);
-                ps.setString(4, contrasenia);
-                int insercion = ps.executeUpdate();
-                if(insercion > 0)
-                {
-                    JOptionPane.showMessageDialog(null, "Usuario creado correactemente");
-                }
-                else
-                {
-                    JOptionPane.showMessageDialog(null, "Error al crear. Verifica los datos e intenta nuevamente.");
+                int eliminacion = ps.executeUpdate();
+                if (eliminacion > 0) {
+                    JOptionPane.showMessageDialog(null, "Usuario eliminado correctamente");
+                } else {
+                    JOptionPane.showMessageDialog(null, "Error al eliminar. Verifica los datos e intenta nuevamente.");
                 }
             } catch (SQLException ex) 
-                {
-                    Logger.getLogger(UserControl.class.getName()).log(Level.SEVERE, null, ex);
-                    JOptionPane.showMessageDialog(null, "Error al guardar. Consulta los registros del sistema para obtener más detalles.");
-                } finally
-                    {
-                        con.desconectar();
-                    }
+            {
+                Logger.getLogger(UserControl.class.getName()).log(Level.SEVERE, null, ex);
+                JOptionPane.showMessageDialog(null, "Error al eliminar. Consulta los registros del sistema para obtener más detalles.");
+            }finally
+            {
+                con.desconectar();
+            }
         }
+    
+     
 
 }
