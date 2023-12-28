@@ -3,3 +3,7 @@ src/Models/Conexion.java
 build/
 test/
 /nbproject/private/
+<<<<<<< HEAD
+=======
+/dist/
+>>>>>>> 150d7d2286d5bb12249cf7d00d20cce7d15c7587
