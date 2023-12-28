@@ -1,18 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="8f75a32c-85f9-4b39-b1e2-7154d1eb586c">
-	<property name="ireport.zoom" value="1.1269722013523664"/>
+	<property name="ireport.zoom" value="0.7697371773460598"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="93"/>
 	<parameter name="nom_user" class="java.lang.String">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
 	<parameter name="mes" class="java.lang.String">
-		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
-	</parameter>
-	<parameter name="fecha" class="java.lang.String">
-		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
-	</parameter>
-	<parameter name="id_user" class="java.lang.String">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
 	<parameter name="anio" class="java.lang.String">
@@ -21,26 +15,27 @@
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["C:\\Users\\davay\\Documents\\NetBeansProjects\\Proyecto_Visuales\\src\\Views\\"]]></defaultValueExpression>
 	</parameter>
+	<parameter name="fechaF" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="id_user" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
 	<queryString>
-		<![CDATA[SELECT
-  m.NUM_MUL,
-  m.VAL_MUL,
-  COALESCE(i.FEC_HOR_ING, s.FEC_HOR_SAL) AS FECHA_MULTA
-FROM
-  multas m
-LEFT JOIN ingresos i ON m.ID_ASI = i.ID_ASI
-LEFT JOIN salidas s ON m.ID_SAL = s.ID_SAL
-WHERE
-  (i.ID_USU = $P{id_user} OR s.ID_USU_SAL = $P{id_user})
-  AND (DATE_FORMAT(i.FEC_HOR_ING, '%Y-%m') = $P{fecha} OR DATE_FORMAT(s.FEC_HOR_SAL, '%Y-%m') = $P{fecha});]]>
+		<![CDATA[SELECT *  FROM MULTAS]]>
 	</queryString>
 	<field name="NUM_MUL" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="ID_ASI" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="ID_SAL" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="VAL_MUL" class="java.math.BigDecimal">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="FECHA_MULTA" class="java.time.LocalDateTime"/>
 	<variable name="totalMultas" class="java.math.BigDecimal" calculation="Sum">
 		<variableExpression><![CDATA[$F{VAL_MUL}]]></variableExpression>
 	</variable>
@@ -48,9 +43,9 @@ WHERE
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="48" splitType="Stretch">
+		<band height="34" splitType="Stretch">
 			<staticText>
-				<reportElement x="211" y="13" width="152" height="20" uuid="23c8e5c6-7b2a-4127-8a3c-12368768603e"/>
+				<reportElement x="226" y="0" width="152" height="20" uuid="23c8e5c6-7b2a-4127-8a3c-12368768603e"/>
 				<textElement>
 					<font size="15" isBold="true"/>
 				</textElement>
@@ -96,7 +91,7 @@ WHERE
 				<textFieldExpression><![CDATA[$P{anio}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="67" y="58" width="81" height="20" uuid="036fd507-05d2-47ff-812a-87abe61e1833"/>
+				<reportElement x="67" y="58" width="111" height="20" uuid="036fd507-05d2-47ff-812a-87abe61e1833"/>
 				<textElement>
 					<font size="15"/>
 				</textElement>
@@ -104,90 +99,51 @@ WHERE
 			</textField>
 		</band>
 	</pageHeader>
-	<columnHeader>
-		<band height="25" splitType="Stretch">
-			<staticText>
-				<reportElement x="28" y="0" width="100" height="20" uuid="eff2df2c-355e-4db5-b140-d2cf8b769fc0"/>
-				<textElement>
-					<font size="13" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Nº MULTA]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="184" y="0" width="147" height="20" uuid="efc1a3c2-4e31-446e-b17d-62d6b5775999"/>
-				<textElement>
-					<font size="13" isBold="true"/>
-				</textElement>
-				<text><![CDATA[FECHA DE LA MULTA]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="382" y="0" width="147" height="20" uuid="9e8e2c74-9a84-43dc-8b3e-346f3315e69e"/>
-				<textElement>
-					<font size="13" isBold="true"/>
-				</textElement>
-				<text><![CDATA[MINUTOS DE ATRASO]]></text>
-			</staticText>
-		</band>
-	</columnHeader>
-	<detail>
-		<band height="24" splitType="Stretch">
-			<textField>
-				<reportElement x="184" y="0" width="166" height="20" uuid="ede6bdca-f45f-410d-bc06-4d7a0ef88f2c"/>
-				<textElement>
-					<font size="13"/>
-				</textElement>
-				<textFieldExpression><![CDATA[""+$F{FECHA_MULTA}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="425" y="0" width="104" height="20" uuid="9eaf8568-4c89-4a0f-b3cb-9cba75489ff6"/>
-				<textElement>
-					<font size="13"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{VAL_MUL}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="28" y="0" width="100" height="20" uuid="7b3ff35b-871b-4d1f-8544-13d5d7fd0983"/>
-				<textElement>
-					<font size="13"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{NUM_MUL}]]></textFieldExpression>
-			</textField>
-		</band>
-	</detail>
 	<pageFooter>
 		<band height="22" splitType="Stretch">
 			<staticText>
-				<reportElement x="262" y="0" width="101" height="20" uuid="765882a0-2f31-4570-8fce-9d807219caba"/>
+				<reportElement x="258" y="0" width="120" height="20" uuid="61ef8322-ae2e-4cf9-a3ea-eb276c3dd6ab"/>
 				<textElement>
-					<font size="11" isBold="true"/>
+					<font size="13" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Fecha de emisión:]]></text>
 			</staticText>
 			<textField pattern="EEEEE dd MMMMM yyyy">
-				<reportElement x="363" y="0" width="192" height="20" uuid="45e11d61-8125-4b8d-a5d7-0741b0f9b3a7"/>
+				<reportElement x="378" y="0" width="177" height="20" uuid="9da3ee7c-e7bc-45c2-9430-c829ebfcc869"/>
 				<textElement>
-					<font size="11"/>
+					<font size="13"/>
 				</textElement>
 				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageFooter>
 	<summary>
-		<band height="32" splitType="Stretch">
-			<textField>
-				<reportElement x="439" y="5" width="100" height="20" uuid="df4d0737-b433-47f6-97ff-adfd83665afa"/>
-				<textElement>
-					<font size="13"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$V{totalMultas}]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement x="259" y="5" width="166" height="20" uuid="a0250f9a-077f-49ed-94ea-3bb03e053dd7"/>
-				<textElement>
-					<font size="13" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Total minutos de atraso:]]></text>
-			</staticText>
+		<band height="509" splitType="Stretch">
+			<rectangle>
+				<reportElement x="0" y="0" width="555" height="227" uuid="f3aa5696-4dd4-4667-9bad-5cf54eea7693"/>
+			</rectangle>
+			<subreport>
+				<reportElement x="0" y="0" width="555" height="227" uuid="0c0eb1c2-1ca2-4a0b-a196-d6511b1f1682"/>
+				<subreportParameter name="id_user">
+					<subreportParameterExpression><![CDATA[$P{id_user}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="fecha">
+					<subreportParameterExpression><![CDATA[$P{fechaF}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "reportAdminRetrasos_subreport1.jasper"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement x="0" y="227" width="555" height="264" uuid="af919b01-23db-464c-ad3e-d8e121ea4c0e"/>
+				<subreportParameter name="id_user2">
+					<subreportParameterExpression><![CDATA[$P{id_user}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="fecha2">
+					<subreportParameterExpression><![CDATA[$P{fechaF}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "reportAdminRetrasos_subreport2.jasper"]]></subreportExpression>
+			</subreport>
 		</band>
 	</summary>
 </jasperReport>
