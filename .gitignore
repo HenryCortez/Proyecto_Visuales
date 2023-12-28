@@ -2,3 +2,4 @@ src/Models/Conexion.java
 
 build/
 test/
+/nbproject/private/
