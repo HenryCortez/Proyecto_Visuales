@@ -16,8 +16,7 @@ public class Conexion {
     
     public Connection conectar(){
         try {
-            this.con = DriverManager.getConnection("jdbc:mysql://localhost:3308/app_visual", "root", "salito2014");
-          
+            this.con = DriverManager.getConnection("jdbc:mysql://localhost:3308/app_visual", "root", "root");
         } catch (SQLException e) {
             System.out.println("No se conecto"+e);
             return null;
