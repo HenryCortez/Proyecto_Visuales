@@ -1,13 +1,15 @@
 
 package Views;
 
-import javax.swing.JDesktopPane;
-
-import net.sf.jasperreports.engine.*;
-import net.sf.jasperreports.view.JasperViewer;
-
+import Models.Conexion;
 import java.util.HashMap;
 import java.util.Map;
+import javax.swing.JDesktopPane;
+import javax.swing.JOptionPane;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 
 public class ReportesEmpleados extends javax.swing.JInternalFrame {
     JDesktopPane Escritorio;
@@ -110,28 +112,30 @@ public class ReportesEmpleados extends javax.swing.JInternalFrame {
 
     
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-    try {
-        // Ruta del archivo .jrxml
-        String reportPath = "src/Views/reportEmpleado.jrxml";
+      try {
+        Conexion cc = new Conexion();
+        Connection cn = cc.conectar();
+        
+        // Obtener los datos del formulario
+        String cedula = txtCedula.getText();
+        String nombreCompleto = txtNombre.getText();
+        String fecha = jFormattedEdder1.getText();
 
-        // Compilar el reporte
-        JasperReport jasperReport = JasperCompileManager.compileReport(reportPath);
+        // Preparar los parámetros
+        Map<String, Object> parametros = new HashMap<>();
+        parametros.put("iduser", cedula);
+        parametros.put("nombreC", nombreCompleto);
+        parametros.put("fecha", fecha);
 
-        // Crear los parámetros
-        Map<String, Object> parameters = new HashMap<>();
-        parameters.put("cedula", txtCedula.getText());
-        parameters.put("nombre", txtNombre.getText());
-        parameters.put("fecha", jFormattedEdder1.getText());
-
-        // Llenar el reporte (asumiendo que no necesitas una conexión a la base de datos)
-        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, new JREmptyDataSource());
+        // Compilar y llenar el reporte
+     /*   JasperReport reporte = JasperCompileManager.compileReport("ruta/del/archivo/reportEmpleado.jrxml");
+        JasperPrint print= JasperFillManager.fillReport(reporte, parametros, cn);
 
         // Mostrar el reporte
-        JasperViewer.viewReport(jasperPrint, false);
-
-    } catch (JRException ex) {
-        ex.printStackTrace();
-    }   
+        JasperViewer.viewReport(print, false);*/
+    } catch (Exception ex) {
+        JOptionPane.showMessageDialog(null, ex);
+    } 
          
     }//GEN-LAST:event_jButton1ActionPerformed
 
