@@ -7,6 +7,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 public class UserControl {
@@ -121,5 +123,63 @@ public class UserControl {
             return state==1;
         }
     }
+    
+     public void updateUser (String cedula, String nombre, String apellido, String contrasenia)
+        {
+            try 
+            {
+                con.conectar();
+                String sql = "UPDATE USUARIOS SET NOM_USU=?, APE_USU=?, CON_USU=? WHERE ID_USU=?";
+                PreparedStatement ps = con.getCon().prepareStatement(sql);
+                ps.setString(1, nombre);
+                ps.setString(2, apellido);
+                ps.setString(3, contrasenia);
+                ps.setString(4, cedula);
+                int actualizacion = ps.executeUpdate();
+                if (actualizacion > 0) {
+                    JOptionPane.showMessageDialog(null, "Usuario actualizado correctamente");
+                } else {
+                    JOptionPane.showMessageDialog(null, "Error al actualizar. Verifica los datos e intenta nuevamente.");
+                }
+            } catch (SQLException ex) 
+            {
+                Logger.getLogger(UserControl.class.getName()).log(Level.SEVERE, null, ex);
+                JOptionPane.showMessageDialog(null, "Error al actualizar. Consulta los registros del sistema para obtener más detalles.");
+            }finally
+            {
+                con.desconectar();
+            }
+        }
+     
+     
+     public void insertUser (String cedula, String nombre, String apellido, String contrasenia)
+        {
+            try 
+            {
+                con.conectar();
+                String sql= "INSERT INTO USUARIOS (CED_USU,NOM_USU, APE_USU, CON_USU) VALUES (?,?,?,?);";
+                PreparedStatement ps = con.getCon().prepareStatement(sql);
+                ps.setString(1, cedula);
+                ps.setString(2, nombre);
+                ps.setString(3, apellido);
+                ps.setString(4, contrasenia);
+                int insercion = ps.executeUpdate();
+                if(insercion > 0)
+                {
+                    JOptionPane.showMessageDialog(null, "Usuario creado correactemente");
+                }
+                else
+                {
+                    JOptionPane.showMessageDialog(null, "Error al crear. Verifica los datos e intenta nuevamente.");
+                }
+            } catch (SQLException ex) 
+                {
+                    Logger.getLogger(UserControl.class.getName()).log(Level.SEVERE, null, ex);
+                    JOptionPane.showMessageDialog(null, "Error al guardar. Consulta los registros del sistema para obtener más detalles.");
+                } finally
+                    {
+                        con.desconectar();
+                    }
+        }
 
 }
