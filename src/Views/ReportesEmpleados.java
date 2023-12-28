@@ -1,7 +1,7 @@
-
 package Views;
 
 import Models.Conexion;
+import java.awt.Dimension;
 
 import javax.swing.JDesktopPane;
 import javax.swing.JOptionPane;
@@ -17,16 +17,27 @@ import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.view.JasperViewer;
 
 public class ReportesEmpleados extends javax.swing.JInternalFrame {
+
     JDesktopPane Escritorio;
+
     public ReportesEmpleados(JDesktopPane Escritorio, String cedula, String nombre, String apellido) {
         initComponents();
         this.Escritorio = Escritorio;
-        System.out.println( cedula);  
-        System.out.println( nombre + " " + apellido);  
+        System.out.println(cedula);
+        System.out.println(nombre + " " + apellido);
         txtCedula.setText(cedula);
         txtNombre.setText(nombre + " " + apellido);
         System.out.println("HOLA PAPU");
+        this.centrarVentana();
         // Asumiendo que tienes campos para nombre y apellido o un campo para ambos
+    }
+
+    private void centrarVentana() {
+        Dimension desktopSize = Escritorio.getSize();
+        Dimension jInternalFrameSize = this.getSize();
+        int width = (desktopSize.width - jInternalFrameSize.width) / 2;
+        int height = (desktopSize.height - jInternalFrameSize.height) / 2;
+        this.setLocation(width, height);
     }
 
     @SuppressWarnings("unchecked")
@@ -115,43 +126,43 @@ public class ReportesEmpleados extends javax.swing.JInternalFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    
+
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
- 
+
         System.out.println(txtCedula.getText().toString());
-         System.out.println(txtNombre.getText().toString());
-          System.out.println(jFormattedEdder1.getText().toString());
+        System.out.println(txtNombre.getText().toString());
+        System.out.println(jFormattedEdder1.getText().toString());
         try {
-        Conexion cc = new Conexion();
-        Connection cn = cc.conectar();
-        
-        // Obtener los datos del formulario
-        String cedula = txtCedula.getText();
-        String fecha = jFormattedEdder1.getText();
-        String nombreCompleto = txtNombre.getText();
+            Conexion cc = new Conexion();
+            Connection cn = cc.conectar();
 
-        // Preparar los parámetros
-        Map<String, Object> parametros = new HashMap<>();
-        parametros.put("id_user", cedula);
-        parametros.put("fecha", fecha);
-        parametros.put("nombreC", nombreCompleto);
+            // Obtener los datos del formulario
+            String cedula = txtCedula.getText();
+            String fecha = jFormattedEdder1.getText();
+            String nombreCompleto = txtNombre.getText();
 
-        // Compilar y llenar el reporte
-        JasperReport reporte = JasperCompileManager.compileReport("src/Views/reportEmpleado.jrxml");
-        JasperPrint print = JasperFillManager.fillReport(reporte, parametros, cn);
+            // Preparar los parámetros
+            Map<String, Object> parametros = new HashMap<>();
+            parametros.put("id_user", cedula);
+            parametros.put("fecha", fecha);
+            parametros.put("nombreC", nombreCompleto);
 
-        // Mostrar el reporte
-        JasperViewer.viewReport(print, false);
-         }  catch (JRException ex1) {
+            // Compilar y llenar el reporte
+            JasperReport reporte = JasperCompileManager.compileReport("src/Views/reportEmpleado.jrxml");
+            JasperPrint print = JasperFillManager.fillReport(reporte, parametros, cn);
+
+            // Mostrar el reporte
+            JasperViewer.viewReport(print, false);
+        } catch (JRException ex1) {
             System.out.println(ex1);
-    } 
-       
+        }
+
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void xdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_xdActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_xdActionPerformed
-    
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;

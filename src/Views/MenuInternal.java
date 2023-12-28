@@ -4,6 +4,7 @@
  */
 package Views;
 
+import java.awt.Dimension;
 import javax.swing.JDesktopPane;
 
 /**
@@ -18,6 +19,7 @@ public class MenuInternal extends javax.swing.JInternalFrame {
         initComponents();
         jlblTitle.setText("Bienvenido " + name);
         this.Escritorio = Escritorio;
+        this.centrarVentana();
     }
 
     @SuppressWarnings("unchecked")
@@ -104,6 +106,15 @@ public class MenuInternal extends javax.swing.JInternalFrame {
         Escritorio.add(register);
         register.setVisible(true);
     }
+
+    private void centrarVentana() {
+        Dimension desktopSize = Escritorio.getSize();
+        Dimension jInternalFrameSize = this.getSize();
+        int width = (desktopSize.width - jInternalFrameSize.width) / 2;
+        int height = (desktopSize.height - jInternalFrameSize.height) / 2;
+        this.setLocation(width, height);
+    }
+
     private void jbtnDataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnDataActionPerformed
 
     }//GEN-LAST:event_jbtnDataActionPerformed

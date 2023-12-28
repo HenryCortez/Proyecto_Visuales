@@ -1,5 +1,6 @@
 package Views;
 
+import java.awt.Dimension;
 import javax.swing.JDesktopPane;
 
 public class LoginEmployee extends javax.swing.JInternalFrame {
@@ -8,7 +9,8 @@ public class LoginEmployee extends javax.swing.JInternalFrame {
 
     public LoginEmployee(JDesktopPane Escritorio) {
         initComponents();
-        this.Escritorio = Escritorio; 
+        this.Escritorio = Escritorio;
+        this.centrarVentana();
     }
 
     @SuppressWarnings("unchecked")
@@ -92,6 +94,15 @@ public class LoginEmployee extends javax.swing.JInternalFrame {
         Escritorio.add(register);
         register.setVisible(true);
     }
+
+    private void centrarVentana() {
+        Dimension desktopSize = Escritorio.getSize();
+        Dimension jInternalFrameSize = this.getSize();
+        int width = (desktopSize.width - jInternalFrameSize.width) / 2;
+        int height = (desktopSize.height - jInternalFrameSize.height) / 2;
+        this.setLocation(width, height);
+    }
+
     private void recognizeUser() {
         RecognizerInternal recognizer = new RecognizerInternal(Escritorio);
         Escritorio.add(recognizer);

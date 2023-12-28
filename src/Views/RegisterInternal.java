@@ -6,6 +6,7 @@ package Views;
 
 import Controllers.UserControl;
 import Models.UserModel;
+import java.awt.Dimension;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -26,6 +27,7 @@ public class RegisterInternal extends javax.swing.JInternalFrame {
         initComponents();
         desactivar();
         this.Escritorio = Escritorio;
+        this.centrarVentana();
     }
 
     private void desactivar() {
@@ -77,6 +79,14 @@ public class RegisterInternal extends javax.swing.JInternalFrame {
             cap.setVisible(true);
         }
 
+    }
+
+    private void centrarVentana() {
+        Dimension desktopSize = Escritorio.getSize();
+        Dimension jInternalFrameSize = this.getSize();
+        int width = (desktopSize.width - jInternalFrameSize.width) / 2;
+        int height = (desktopSize.height - jInternalFrameSize.height) / 2;
+        this.setLocation(width, height);
     }
 
     @SuppressWarnings("unchecked")

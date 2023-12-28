@@ -4,6 +4,7 @@ import Controllers.ArchivosControl;
 import Controllers.AsistenciaControl;
 import Controllers.UserControl;
 import Models.UserModel;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
@@ -66,7 +67,8 @@ public class RecognizerInternal extends javax.swing.JInternalFrame {
         readClassifier();
         recognizer.setThreshold(50);
         startCamera();
-        this.Escritorio = Escritorio;     
+        this.Escritorio = Escritorio; 
+        this.centrarVentana();
 
     }
 
@@ -171,6 +173,14 @@ public class RecognizerInternal extends javax.swing.JInternalFrame {
                 tempFile.delete();
             }
         }
+    }
+    
+    private void centrarVentana() {
+        Dimension desktopSize = Escritorio.getSize();
+        Dimension jInternalFrameSize = this.getSize();
+        int width = (desktopSize.width - jInternalFrameSize.width) / 2;
+        int height = (desktopSize.height - jInternalFrameSize.height) / 2;
+        this.setLocation(width, height);
     }
     
     @SuppressWarnings("unchecked")

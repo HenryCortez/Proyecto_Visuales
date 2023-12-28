@@ -4,6 +4,7 @@
  */
 package Views;
 
+import java.awt.Dimension;
 import javax.swing.JDesktopPane;
 import javax.swing.JOptionPane;
 
@@ -17,6 +18,7 @@ public class LoginInternal extends javax.swing.JInternalFrame {
     public LoginInternal(JDesktopPane Escritorio) {
         initComponents();
         this.Escritorio = Escritorio;
+        centrarVentana();
     }
 
     private void log_in() {
@@ -31,6 +33,14 @@ public class LoginInternal extends javax.swing.JInternalFrame {
             return;
         }
         JOptionPane.showMessageDialog(this, "El usuario no esta registrado");
+    }
+    
+    private void centrarVentana() {
+        Dimension desktopSize = Escritorio.getSize();
+        Dimension jInternalFrameSize = this.getSize();
+        int width = (desktopSize.width - jInternalFrameSize.width) / 2;
+        int height = (desktopSize.height - jInternalFrameSize.height) / 2;
+        this.setLocation(width, height);
     }
  
     @SuppressWarnings("unchecked")
