@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="8f75a32c-85f9-4b39-b1e2-7154d1eb586c">
+	<property name="ireport.zoom" value="0.7697371773460598"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="nom_user" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="mes" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="anio" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="fechaF" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="id_user" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\Users\\henry\\OneDrive\\Documentos\\NetBeansProjects\\FacialRecognition\\src\\Views\\"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT *  FROM MULTAS]]>
+	</queryString>
+	<field name="NUM_MUL" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="ID_ASI" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="ID_SAL" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="VAL_MUL" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<variable name="totalMultas" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{VAL_MUL}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="34" splitType="Stretch">
+			<staticText>
+				<reportElement x="226" y="0" width="152" height="20" uuid="23c8e5c6-7b2a-4127-8a3c-12368768603e"/>
+				<textElement>
+					<font size="15" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Reporte de multas]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="92" splitType="Stretch">
+			<staticText>
+				<reportElement x="28" y="0" width="84" height="20" uuid="8c6a76bf-f379-43db-a50d-52b3b8825c53"/>
+				<textElement>
+					<font size="15" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Empleado:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="112" y="0" width="146" height="20" uuid="983a201b-5372-49a7-b38b-4f6158c42acd"/>
+				<textElement>
+					<font size="15"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{nom_user}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="28" y="58" width="39" height="20" uuid="88a48e3c-ff77-4d39-bf93-9371923c4d75"/>
+				<textElement>
+					<font size="15" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Mes:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="28" y="28" width="39" height="20" uuid="9b47fc76-c1f8-40fd-a98d-4c9a84d9708a"/>
+				<textElement>
+					<font size="15" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Año: ]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="67" y="28" width="81" height="20" uuid="53968a7c-9eec-4f81-8032-f9764d51a5d7"/>
+				<textElement>
+					<font size="15"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{anio}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="67" y="58" width="111" height="20" uuid="036fd507-05d2-47ff-812a-87abe61e1833"/>
+				<textElement>
+					<font size="15"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{mes}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<pageFooter>
+		<band height="22" splitType="Stretch">
+			<staticText>
+				<reportElement x="258" y="0" width="120" height="20" uuid="61ef8322-ae2e-4cf9-a3ea-eb276c3dd6ab"/>
+				<textElement>
+					<font size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha de emisión:]]></text>
+			</staticText>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement x="378" y="0" width="177" height="20" uuid="9da3ee7c-e7bc-45c2-9430-c829ebfcc869"/>
+				<textElement>
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="501" splitType="Stretch">
+			<rectangle>
+				<reportElement x="0" y="227" width="555" height="264" uuid="c50c8d3e-b77f-4669-a798-48fb398d9832"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="0" y="0" width="555" height="227" uuid="f3aa5696-4dd4-4667-9bad-5cf54eea7693"/>
+			</rectangle>
+			<subreport>
+				<reportElement x="0" y="0" width="555" height="227" uuid="a77889ff-acd2-41d3-a315-d582a859d10d"/>
+				<subreportParameter name="id_user">
+					<subreportParameterExpression><![CDATA[$P{id_user}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="fecha">
+					<subreportParameterExpression><![CDATA[$P{fechaF}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA["C:\\Users\\henry\\OneDrive\\Documentos\\NetBeansProjects\\FacialRecognition\\src\\Views\\reportAdminRetrasos_subreport1.jasper"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement x="0" y="227" width="555" height="264" uuid="d88558b2-1aeb-4203-84e2-a3e9bd1996ce"/>
+				<subreportParameter name="id_user2">
+					<subreportParameterExpression><![CDATA[$P{id_user}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="fecha2">
+					<subreportParameterExpression><![CDATA[$P{fechaF}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "reportAdminRetrasos_subreport2.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</summary>
+</jasperReport>

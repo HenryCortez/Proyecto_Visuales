@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="95375e74-6303-4127-8691-0c175090d1d7">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="3"/>
+	<parameter name="nomC" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="mesT" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="anio" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="id_user" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="fechaC" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+  u.SUE_USU,
+  FLOOR((SELECT SUM(m2.VAL_MUL) FROM multas m2 WHERE m2.ID_ASI = i.ID_ASI OR m2.ID_SAL = s.ID_SAL)) AS MULTA,
+FLOOR((SELECT SUM(m2.VAL_MUL) / 0.25 FROM multas m2 WHERE m2.ID_ASI = i.ID_ASI OR m2.ID_SAL = s.ID_SAL)) AS Min_Ret,
+ (800-FLOOR((SELECT SUM(m2.VAL_MUL) / 0.25 FROM multas m2 WHERE m2.ID_ASI = i.ID_ASI OR m2.ID_SAL = s.ID_SAL))*0.25) AS PAGA
+FROM
+  ingresos i, salidas s, multas m, usuarios u
+WHERE
+  i.ID_USU = s.ID_USU_SAL
+  AND i.ID_USU = $P{id_user}
+  AND i.FEC_HOR_ING LIKE CONCAT($P{fechaC}, "%")
+  AND s.FEC_HOR_SAL LIKE CONCAT($P{fechaC}, "%")
+  AND (m.ID_ASI = i.ID_ASI or m.ID_SAL = s.ID_SAL)
+limit 1;]]>
+	</queryString>
+	<field name="SUE_USU" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="MULTA" class="java.math.BigDecimal"/>
+	<field name="Min_Ret" class="java.math.BigDecimal"/>
+	<field name="PAGA" class="java.math.BigDecimal"/>
+	<variable name="sueldo" class="java.lang.Double"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="32" splitType="Stretch">
+			<staticText>
+				<reportElement x="248" y="0" width="62" height="20" uuid="4c836c37-d705-4ce4-931e-aa959a1e4236"/>
+				<textElement>
+					<font size="15" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Sueldo]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="62" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="74" height="20" uuid="cab557d3-60cb-4afe-acdf-7c858c1664a0"/>
+				<textElement>
+					<font size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Empleado: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="362" y="0" width="36" height="20" uuid="e67a642e-0039-47b1-9ce2-892a23a038dc"/>
+				<textElement>
+					<font size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Año:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="362" y="31" width="36" height="20" uuid="c212cf3b-0db8-4265-bbce-9432a8b9d982"/>
+				<textElement>
+					<font size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Mes:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="74" y="0" width="149" height="20" uuid="8464320b-585f-435e-b8af-00c9de85c451"/>
+				<textElement>
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{nomC}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="418" y="0" width="100" height="20" uuid="fc62b6cd-6e8a-4338-9db7-4bfbf1f1dde9"/>
+				<textElement>
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{anio}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="418" y="31" width="100" height="20" uuid="026184e0-19b1-474c-9758-699ab46d0a4c"/>
+				<textElement>
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{mesT}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="23" splitType="Stretch">
+			<rectangle>
+				<reportElement x="362" y="0" width="187" height="23" uuid="9d24a26c-f70d-4213-8cfd-cdde56946059"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="175" y="0" width="187" height="23" uuid="5123b782-329b-4f99-93d9-6617b448af59"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="11" y="0" width="164" height="23" uuid="5a98e3eb-29d1-4312-917c-21e3b296f1dd"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="401" y="2" width="140" height="20" uuid="bf984f8c-d629-4b52-8290-0941cc2c071c"/>
+				<textElement>
+					<font size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[SUELDO A RECIBIR]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="210" y="2" width="133" height="20" uuid="f7add900-b843-41e5-b1d9-eca02706e82b"/>
+				<textElement>
+					<font size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[VALOR DE MULTAS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="60" y="2" width="62" height="20" uuid="6b51ac72-cb79-4c5c-8152-f86c988820fc"/>
+				<textElement>
+					<font size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[SUELDO]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="23" splitType="Stretch">
+			<rectangle>
+				<reportElement x="362" y="0" width="187" height="23" uuid="cf83f3d6-18ae-413e-ad5c-486c50276c8b"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="175" y="0" width="187" height="23" uuid="e0010b01-cb4d-4e8d-b575-0662a2756ea3"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="11" y="0" width="164" height="23" uuid="16736976-f436-423a-a97d-77523d3cd800"/>
+			</rectangle>
+			<textField>
+				<reportElement x="418" y="0" width="100" height="20" uuid="13390b9c-3287-4e97-bb96-f776741512fb"/>
+				<textElement>
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{PAGA}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="233" y="0" width="100" height="20" uuid="6ce8a383-05c5-49af-9a69-6dad27e6afcc"/>
+				<textElement>
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{MULTA}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="60" y="0" width="100" height="20" uuid="b2547cf2-439c-4483-bb2d-d0d6406d30cb"/>
+				<textElement>
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SUE_USU}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<summary>
+		<band height="159" splitType="Stretch"/>
+	</summary>
+</jasperReport>
