@@ -9,6 +9,7 @@ import javax.swing.JOptionPane;
 import java.util.HashMap;
 import java.util.Map;
 import java.sql.Connection;
+import javax.swing.JInternalFrame;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperFillManager;
@@ -109,8 +110,8 @@ public class ReportesEmpleados extends javax.swing.JInternalFrame {
 
     
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
- 
-        System.out.println(txtCedula.getText().toString());
+ mostrarIReport();
+    /*    System.out.println(txtCedula.getText().toString());
          System.out.println(txtNombre.getText().toString());
           System.out.println(jFormattedEdder1.getText().toString());
         try {
@@ -136,11 +137,49 @@ public class ReportesEmpleados extends javax.swing.JInternalFrame {
         JasperViewer.viewReport(print, false);
          }  catch (JRException ex1) {
             System.out.println(ex1);
-    } 
+    } */
        
     }//GEN-LAST:event_jButton1ActionPerformed
     
 
+    public void mostrarIReport(){
+     try {
+        Conexion cc = new Conexion();
+        Connection cn = cc.conectar();
+
+        // Obtener los datos del formulario
+        String cedula = txtCedula.getText();
+        String fecha = jFormattedEdder1.getText();
+        String nombreCompleto = txtNombre.getText();
+
+        // Preparar los parámetros
+        Map<String, Object> parametros = new HashMap<>();
+        parametros.put("id_user", cedula);
+        parametros.put("fecha", fecha);
+        parametros.put("nombreC", nombreCompleto);
+
+        // Compilar y llenar el reporte
+        JasperReport reporte = JasperCompileManager.compileReport("src/Views/reportEmpleado.jrxml");
+        JasperPrint print = JasperFillManager.fillReport(reporte, parametros, cn);
+
+        // Mostrar el reporte en un InternalFrame
+        JInternalFrame internalFrame = new JInternalFrame("Informe del Empleado", true, true, true, true);
+        internalFrame.setSize(600, 400);
+
+        // Agregar el visor del informe al InternalFrame
+        JasperViewer viewer = new JasperViewer(print, false);
+        internalFrame.getContentPane().add(viewer.getContentPane());
+
+        // Agregar el InternalFrame al JDesktopPane
+        Escritorio.add(internalFrame);
+        internalFrame.setVisible(true);
+    } catch (JRException ex1) {
+        System.out.println(ex1);
+    }
+    }
+    
+    
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private Views.JFormattedEdder jFormattedEdder1;
