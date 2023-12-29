@@ -69,6 +69,8 @@ public class RecognizerInternal extends javax.swing.JInternalFrame {
         readClassifier();
         recognizer.setThreshold(62);
         startCamera();
+        this.Escritorio = Escritorio;
+
     }
 
     private int encontrarIdMasFrecuente() {
@@ -76,8 +78,43 @@ public class RecognizerInternal extends javax.swing.JInternalFrame {
                 .max(Map.Entry.comparingByValue())
                 .get().getKey();
     }
+    
+    public boolean encontrarUsuario (int idReconocido) throws InterruptedException {
+    conteoIds.put(idReconocido, conteoIds.getOrDefault(idReconocido, 0) + 1);
 
-public int reconocer(int idReconocido) throws InterruptedException {
+    int totalIntentos = conteoIds.values().stream().mapToInt(Integer::intValue).sum();
+    if (totalIntentos >= MAX_INTENTOS) {
+
+        int idMasFrecuente = encontrarIdMasFrecuente();
+
+        if (conteoIds.get(idMasFrecuente) >= UMBRAL) {
+            System.out.println("Identificación confirmada para ID: " + idMasFrecuente);
+            UserModel usu = usc.getUser(String.valueOf(idMasFrecuente));
+            cedula = usu.getCedula();
+            try {
+                // Muestra el cuadro principal de Trabajador"
+              MenuTrabajador menu = new MenuTrabajador(idMasFrecuente);
+              Escritorio.add(menu);
+              menu.setVisible(true);
+                
+           
+            } catch (Exception e) {
+            } finally {
+                stopCamera();
+            }
+        } else {
+            System.out.println("Identificación no concluyente.");
+            conteoIds.clear();
+            return false;
+        }
+        conteoIds.clear();
+        return true;
+    }
+    return false;
+}
+    
+   //metodo para asistencia y ver registros//
+    /* public boolean reconocer(int idReconocido) throws InterruptedException {
     conteoIds.put(idReconocido, conteoIds.getOrDefault(idReconocido, 0) + 1);
 
         int totalIntentos = conteoIds.values().stream().mapToInt(Integer::intValue).sum();
@@ -153,9 +190,7 @@ public int reconocer(int idReconocido) throws InterruptedException {
     }
     return -2; // No se ha alcanzado el límite de intentos
 }
-
-
-
+    */
     public void readClassifier() {
         File tempFile = null;
         FileOutputStream fos = null;
@@ -341,7 +376,8 @@ public int reconocer(int idReconocido) throws InterruptedException {
                                     rectangle(cameraImage, dadosFace, new Scalar(0, 255, 0, 3), 3, 0, 0);
                                     id = prediction;
                                     rec();
-                                    reconocer(id);
+                                    encontrarUsuario(id);
+                                    //reconocer(id);
                                 }
                             }
 

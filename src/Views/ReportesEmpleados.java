@@ -54,7 +54,7 @@ public class ReportesEmpleados extends javax.swing.JInternalFrame {
         txtCedula = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         txtNombre = new javax.swing.JTextField();
-        jLabel6 = new javax.swing.JLabel();
+        xd = new javax.swing.JFormattedTextField();
         jFormattedEdder1 = new Views.JFormattedEdder();
 
         setClosable(true);
@@ -157,6 +157,9 @@ public class ReportesEmpleados extends javax.swing.JInternalFrame {
 
         jPanel2.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 90, 450, 240));
 
+        jFormattedEdder1.setText("jFormattedEdder1");
+        jPanel2.add(jFormattedEdder1, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 210, 240, -1));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -178,7 +181,7 @@ public class ReportesEmpleados extends javax.swing.JInternalFrame {
  mostrarIReport();
     /*    System.out.println(txtCedula.getText().toString());
          System.out.println(txtNombre.getText().toString());
-          System.out.println(jFormattedEdder1.getText().toString());
+         System.out.println(jFormattedEdder1.getText().toString());
         try {
             Conexion cc = new Conexion();
             Connection cn = cc.conectar();
