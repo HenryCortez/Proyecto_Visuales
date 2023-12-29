@@ -42,7 +42,6 @@ public class ReportesEmpleados extends javax.swing.JInternalFrame {
         txtCedula = new javax.swing.JTextField();
         txtNombre = new javax.swing.JTextField();
         jFormattedEdder1 = new Views.JFormattedEdder();
-        xd = new javax.swing.JFormattedTextField();
 
         setClosable(true);
         setResizable(true);
@@ -65,7 +64,7 @@ public class ReportesEmpleados extends javax.swing.JInternalFrame {
                 jButton1ActionPerformed(evt);
             }
         });
-        jPanel2.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 330, 200, 50));
+        jPanel2.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 290, 200, 50));
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(0, 0, 0));
@@ -92,14 +91,7 @@ public class ReportesEmpleados extends javax.swing.JInternalFrame {
         jPanel2.add(txtNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 140, 240, 40));
 
         jFormattedEdder1.setText("jFormattedEdder1");
-        jPanel2.add(jFormattedEdder1, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 200, 240, 40));
-
-        xd.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                xdActionPerformed(evt);
-            }
-        });
-        jPanel2.add(xd, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 250, 250, 60));
+        jPanel2.add(jFormattedEdder1, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 200, 230, 40));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -147,10 +139,6 @@ public class ReportesEmpleados extends javax.swing.JInternalFrame {
     } 
        
     }//GEN-LAST:event_jButton1ActionPerformed
-
-    private void xdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_xdActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_xdActionPerformed
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -163,6 +151,5 @@ public class ReportesEmpleados extends javax.swing.JInternalFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JTextField txtCedula;
     private javax.swing.JTextField txtNombre;
-    private javax.swing.JFormattedTextField xd;
     // End of variables declaration//GEN-END:variables
 }
