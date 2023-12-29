@@ -41,8 +41,8 @@ public class ReportesEmpleados extends javax.swing.JInternalFrame {
         jLabel6 = new javax.swing.JLabel();
         txtCedula = new javax.swing.JTextField();
         txtNombre = new javax.swing.JTextField();
-        jFormattedEdder1 = new Views.JFormattedEdder();
         xd = new javax.swing.JFormattedTextField();
+        jFormattedEdder1 = new Views.JFormattedEdder();
 
         setClosable(true);
         setResizable(true);
@@ -51,13 +51,11 @@ public class ReportesEmpleados extends javax.swing.JInternalFrame {
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel3.setForeground(new java.awt.Color(0, 0, 0));
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel3.setText("CEDULA");
         jPanel2.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 80, 120, 40));
 
         jButton1.setBackground(new java.awt.Color(51, 255, 102));
-        jButton1.setForeground(new java.awt.Color(0, 0, 0));
         jButton1.setText("Entrar");
         jButton1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -68,19 +66,16 @@ public class ReportesEmpleados extends javax.swing.JInternalFrame {
         jPanel2.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 330, 200, 50));
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel4.setForeground(new java.awt.Color(0, 0, 0));
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel4.setText("REPORTES EMPLEADOS");
         jPanel2.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 10, 290, 40));
 
         jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel5.setForeground(new java.awt.Color(0, 0, 0));
         jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel5.setText("NOMBRE");
         jPanel2.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 140, 120, 40));
 
         jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel6.setForeground(new java.awt.Color(0, 0, 0));
         jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel6.setText("FECHA");
         jPanel2.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 200, 120, 40));
@@ -91,15 +86,15 @@ public class ReportesEmpleados extends javax.swing.JInternalFrame {
         txtNombre.setEditable(false);
         jPanel2.add(txtNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 140, 240, 40));
 
-        jFormattedEdder1.setText("jFormattedEdder1");
-        jPanel2.add(jFormattedEdder1, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 200, 240, 40));
-
         xd.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 xdActionPerformed(evt);
             }
         });
         jPanel2.add(xd, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 250, 250, 60));
+
+        jFormattedEdder1.setText("jFormattedEdder1");
+        jPanel2.add(jFormattedEdder1, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 210, 240, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -120,7 +115,7 @@ public class ReportesEmpleados extends javax.swing.JInternalFrame {
  
         System.out.println(txtCedula.getText().toString());
          System.out.println(txtNombre.getText().toString());
-          System.out.println(jFormattedEdder1.getText().toString());
+         System.out.println(jFormattedEdder1.getText().toString());
         try {
         Conexion cc = new Conexion();
         Connection cn = cc.conectar();
