@@ -64,7 +64,7 @@ public class RecognizerInternal extends javax.swing.JInternalFrame {
     public RecognizerInternal(JDesktopPane Escritorio) {
         initComponents();
         readClassifier();
-        recognizer.setThreshold(50);
+        recognizer.setThreshold(62);
         startCamera();
         this.Escritorio = Escritorio;     
 
