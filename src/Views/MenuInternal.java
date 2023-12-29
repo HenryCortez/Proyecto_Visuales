@@ -47,7 +47,7 @@ public class MenuInternal extends javax.swing.JInternalFrame {
         jPanel1.add(jlblTitle, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 20, 740, 80));
 
         jbtnData.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jbtnData.setText("Data");
+        jbtnData.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Views/basura.png"))); // NOI18N
         jbtnData.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
         jbtnData.setContentAreaFilled(false);
         jbtnData.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -59,7 +59,7 @@ public class MenuInternal extends javax.swing.JInternalFrame {
         jPanel1.add(jbtnData, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 270, 230, 170));
 
         jbtnCapture.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jbtnCapture.setText("Capture");
+        jbtnCapture.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Views/agregar-usuario.png"))); // NOI18N
         jbtnCapture.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
         jbtnCapture.setContentAreaFilled(false);
         jbtnCapture.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -71,7 +71,7 @@ public class MenuInternal extends javax.swing.JInternalFrame {
         jPanel1.add(jbtnCapture, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 270, 230, 170));
 
         jbtnRecognition.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jbtnRecognition.setText("Recognize");
+        jbtnRecognition.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Views/editar.png"))); // NOI18N
         jbtnRecognition.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
         jbtnRecognition.setContentAreaFilled(false);
         jbtnRecognition.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -144,7 +144,7 @@ public class MenuInternal extends javax.swing.JInternalFrame {
     }
 
     private void jbtnDataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnDataActionPerformed
-
+        deleteUser();
     }//GEN-LAST:event_jbtnDataActionPerformed
 
     private void updateUser() {
@@ -152,6 +152,13 @@ public class MenuInternal extends javax.swing.JInternalFrame {
         Escritorio.add(update);
         update.setVisible(true);
     }
+
+    private void deleteUser() {
+        DeleteInternal delete = new DeleteInternal(Escritorio);
+        Escritorio.add(delete);
+        delete.setVisible(true);
+    }
+
     private void jbtnCaptureActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnCaptureActionPerformed
         createUser();
     }//GEN-LAST:event_jbtnCaptureActionPerformed
