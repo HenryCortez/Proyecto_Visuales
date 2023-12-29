@@ -77,66 +77,84 @@ public class RecognizerInternal extends javax.swing.JInternalFrame {
                 .get().getKey();
     }
 
-    public boolean reconocer(int idReconocido) throws InterruptedException {
-        conteoIds.put(idReconocido, conteoIds.getOrDefault(idReconocido, 0) + 1);
+public int reconocer(int idReconocido) throws InterruptedException {
+    conteoIds.put(idReconocido, conteoIds.getOrDefault(idReconocido, 0) + 1);
 
         int totalIntentos = conteoIds.values().stream().mapToInt(Integer::intValue).sum();
         if (totalIntentos >= MAX_INTENTOS) {
 
             int idMasFrecuente = encontrarIdMasFrecuente();
 
-            if (conteoIds.get(idMasFrecuente) >= UMBRAL) {
-                System.out.println("Identificación confirmada para ID: " + idMasFrecuente);
-                UserModel usu = usc.getUser(String.valueOf(idMasFrecuente));
-                cedula = usu.getCedula();
-                try {
-                    // Muestra el cuadro de diálogo para elegir entre "Registros" y "Asistencias"
-                    String[] opciones = {"Registros", "Asistencias"};
-                    int seleccion = JOptionPane.showOptionDialog(
-                            RecognizerInternal.this,
-                            "¿Qué acción deseas realizar?",
-                            "Selecciona una opción",
-                            JOptionPane.DEFAULT_OPTION,
-                            JOptionPane.QUESTION_MESSAGE,
-                            null,
-                            opciones,
-                            opciones[0]
-                    );
+        if (conteoIds.get(idMasFrecuente) >= UMBRAL) {
+            System.out.println("Identificación confirmada para ID: " + idMasFrecuente);
+            UserModel usu = usc.getUser(String.valueOf(idMasFrecuente));
+            int estadoUsuario = usc.getStateUser(String.valueOf(idMasFrecuente));
 
-                    // Verifica la opción seleccionada
-                    if (seleccion == 0) {
-                        String cedula = usu.getCedula();
-                        String nombre = usu.getNombre();
-                        String apellido = usu.getApellido();
+            // Agregar lógica basada en el estado del usuario
+            if (estadoUsuario == 3) {
+                System.out.println("El trabajador ya no está disponible");
+                conteoIds.clear();
+                return -1; // Trabajador no disponible
+            }
 
-                        // Abrir ReportesEmpleados con los datos
-                        ReportesEmpleados reportesFrame = new ReportesEmpleados(Escritorio, cedula, nombre, apellido);
-                        Escritorio.add(reportesFrame);
-                        reportesFrame.setVisible(true);
+            try {
+                // Muestra el cuadro de diálogo para elegir entre "Registros" y "Asistencias"
+                String[] opciones = {"Registros", "Asistencias"};
+                int seleccion = JOptionPane.showOptionDialog(
+                        RecognizerInternal.this,
+                        "¿Qué acción deseas realizar?",
+                        "Selecciona una opción",
+                        JOptionPane.DEFAULT_OPTION,
+                        JOptionPane.QUESTION_MESSAGE,
+                        null,
+                        opciones,
+                        opciones[0]
+                );
 
-                    } else if (seleccion == 1) {
-                        // Asistencias (código existente)
-                        if (!asis.insertInsgreso(cedula)) {
-                            if (!asis.insertSalida(cedula)) {
-                                JOptionPane.showMessageDialog(null, "No puede acceder en este momento");
-                            }
-                        }
-                        stopCamera();
+                // Verifica la opción seleccionada
+                if (seleccion == 0) {
+                    String cedula = usu.getCedula();
+                    String nombre = usu.getNombre();
+                    String apellido = usu.getApellido();
+
+                    // Abrir ReportesEmpleados con los datos
+                    ReportesEmpleados reportesFrame = new ReportesEmpleados(Escritorio, cedula, nombre, apellido);
+                    Escritorio.add(reportesFrame);
+                    reportesFrame.setVisible(true);
+
+                } else if (seleccion == 1) {
+                    // Asistencias (código existente)
+                    int resultadoIngreso = asis.insertIngreso(cedula);
+                    if (resultadoIngreso == 0) {
+                        JOptionPane.showMessageDialog(null, "Ya ingresó");
+                    } else if (resultadoIngreso == -1) {
+                        JOptionPane.showMessageDialog(null, "No puede acceder en este momento");
                     }
-                } catch (Exception e) {
-                } finally {
+
+                    int resultadoSalida = asis.insertSalida(cedula);
+                    if (resultadoSalida == 0) {
+                        JOptionPane.showMessageDialog(null, "Ya salió");
+                    } else if (resultadoSalida == -1) {
+                        JOptionPane.showMessageDialog(null, "No puede acceder en este momento");
+                    }
+
                     stopCamera();
                 }
-            } else {
-                System.out.println("Identificación no concluyente.");
-                conteoIds.clear();
-                return false;
+            } catch (Exception e) {
+                // Manejar la excepción
+            } finally {
+                stopCamera();
             }
             conteoIds.clear();
-            return true;
+            return 0; // Identificación no concluyente
         }
-        return false;
+        conteoIds.clear();
+        return 1; // Identificación exitosa
     }
+    return -2; // No se ha alcanzado el límite de intentos
+}
+
+
 
     public void readClassifier() {
         File tempFile = null;
