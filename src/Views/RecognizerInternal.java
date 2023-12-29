@@ -38,14 +38,14 @@ import org.bytedeco.opencv.opencv_face.FaceRecognizer;
 import org.bytedeco.opencv.opencv_face.LBPHFaceRecognizer;
 import org.bytedeco.opencv.opencv_objdetect.CascadeClassifier;
 import org.bytedeco.opencv.opencv_videoio.VideoCapture;
+
 public class RecognizerInternal extends javax.swing.JInternalFrame {
-    
-   ArchivosControl arch = new ArchivosControl();
+
+    ArchivosControl arch = new ArchivosControl();
     AsistenciaControl asis = new AsistenciaControl();
     UserControl usc = new UserControl();
     private DaemonThread myTread = null;
     JDesktopPane Escritorio;
-
 
     //JAVACV
     VideoCapture webSource = null;
@@ -64,12 +64,11 @@ public class RecognizerInternal extends javax.swing.JInternalFrame {
 
     public RecognizerInternal(JDesktopPane Escritorio) {
         initComponents();
+        this.Escritorio = Escritorio;
+        this.centrarVentana();
         readClassifier();
         recognizer.setThreshold(50);
         startCamera();
-        this.Escritorio = Escritorio; 
-        this.centrarVentana();
-
     }
 
     private int encontrarIdMasFrecuente() {
@@ -79,67 +78,65 @@ public class RecognizerInternal extends javax.swing.JInternalFrame {
     }
 
     public boolean reconocer(int idReconocido) throws InterruptedException {
-    conteoIds.put(idReconocido, conteoIds.getOrDefault(idReconocido, 0) + 1);
+        conteoIds.put(idReconocido, conteoIds.getOrDefault(idReconocido, 0) + 1);
 
-    int totalIntentos = conteoIds.values().stream().mapToInt(Integer::intValue).sum();
-    if (totalIntentos >= MAX_INTENTOS) {
+        int totalIntentos = conteoIds.values().stream().mapToInt(Integer::intValue).sum();
+        if (totalIntentos >= MAX_INTENTOS) {
 
-        int idMasFrecuente = encontrarIdMasFrecuente();
+            int idMasFrecuente = encontrarIdMasFrecuente();
 
-        if (conteoIds.get(idMasFrecuente) >= UMBRAL) {
-            System.out.println("Identificación confirmada para ID: " + idMasFrecuente);
-            UserModel usu = usc.getUser(String.valueOf(idMasFrecuente));
-            cedula = usu.getCedula();
-            try {
-                // Muestra el cuadro de diálogo para elegir entre "Registros" y "Asistencias"
-                String[] opciones = {"Registros", "Asistencias"};
-                int seleccion = JOptionPane.showOptionDialog(
-                        RecognizerInternal.this,
-                        "¿Qué acción deseas realizar?",
-                        "Selecciona una opción",
-                        JOptionPane.DEFAULT_OPTION,
-                        JOptionPane.QUESTION_MESSAGE,
-                        null,
-                        opciones,
-                        opciones[0]
-                );
+            if (conteoIds.get(idMasFrecuente) >= UMBRAL) {
+                System.out.println("Identificación confirmada para ID: " + idMasFrecuente);
+                UserModel usu = usc.getUser(String.valueOf(idMasFrecuente));
+                cedula = usu.getCedula();
+                try {
+                    // Muestra el cuadro de diálogo para elegir entre "Registros" y "Asistencias"
+                    String[] opciones = {"Registros", "Asistencias"};
+                    int seleccion = JOptionPane.showOptionDialog(
+                            RecognizerInternal.this,
+                            "¿Qué acción deseas realizar?",
+                            "Selecciona una opción",
+                            JOptionPane.DEFAULT_OPTION,
+                            JOptionPane.QUESTION_MESSAGE,
+                            null,
+                            opciones,
+                            opciones[0]
+                    );
 
-                // Verifica la opción seleccionada
-                if (seleccion == 0) {
-        String cedula = usu.getCedula();
-        String nombre = usu.getNombre();
-        String apellido = usu.getApellido();
+                    // Verifica la opción seleccionada
+                    if (seleccion == 0) {
+                        String cedula = usu.getCedula();
+                        String nombre = usu.getNombre();
+                        String apellido = usu.getApellido();
 
-        // Abrir ReportesEmpleados con los datos
-        ReportesEmpleados reportesFrame = new ReportesEmpleados(Escritorio, cedula, nombre, apellido);
-        Escritorio.add(reportesFrame);
-        reportesFrame.setVisible(true);       
-                    
-                    
-                } else if (seleccion == 1) {
-                    // Asistencias (código existente)
-                    if (!asis.insertInsgreso(cedula)) {
-                        if (!asis.insertSalida(cedula)) {
-                            JOptionPane.showMessageDialog(null, "No puede acceder en este momento");
+                        // Abrir ReportesEmpleados con los datos
+                        ReportesEmpleados reportesFrame = new ReportesEmpleados(Escritorio, cedula, nombre, apellido);
+                        Escritorio.add(reportesFrame);
+                        reportesFrame.setVisible(true);
+
+                    } else if (seleccion == 1) {
+                        // Asistencias (código existente)
+                        if (!asis.insertInsgreso(cedula)) {
+                            if (!asis.insertSalida(cedula)) {
+                                JOptionPane.showMessageDialog(null, "No puede acceder en este momento");
+                            }
                         }
+                        stopCamera();
                     }
+                } catch (Exception e) {
+                } finally {
                     stopCamera();
                 }
-            } catch (Exception e) {
-            } finally {
-                stopCamera();
+            } else {
+                System.out.println("Identificación no concluyente.");
+                conteoIds.clear();
+                return false;
             }
-        } else {
-            System.out.println("Identificación no concluyente.");
             conteoIds.clear();
-            return false;
+            return true;
         }
-        conteoIds.clear();
-        return true;
+        return false;
     }
-    return false;
-}
-
 
     public void readClassifier() {
         File tempFile = null;
@@ -174,7 +171,7 @@ public class RecognizerInternal extends javax.swing.JInternalFrame {
             }
         }
     }
-    
+
     private void centrarVentana() {
         Dimension desktopSize = Escritorio.getSize();
         Dimension jInternalFrameSize = this.getSize();
@@ -182,57 +179,52 @@ public class RecognizerInternal extends javax.swing.JInternalFrame {
         int height = (desktopSize.height - jInternalFrameSize.height) / 2;
         this.setLocation(width, height);
     }
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
         jlblFoto = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jlblDir = new javax.swing.JLabel();
         jlblCedula = new javax.swing.JLabel();
         jlblName = new javax.swing.JLabel();
+        jPanel3 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
 
         setClosable(true);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Reconocedor de Rostros");
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 20, 330, 40));
-
-        jlblFoto.setForeground(new java.awt.Color(0, 0, 0));
         jlblFoto.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jlblFoto.setToolTipText("");
-        jlblFoto.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        jPanel1.add(jlblFoto, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 60, 400, 370));
+        jlblFoto.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
+        jPanel1.add(jlblFoto, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 80, 400, 350));
 
-        jPanel2.setBackground(new java.awt.Color(204, 204, 204));
+        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel2.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jlblDir.setBackground(new java.awt.Color(51, 153, 255));
-        jlblDir.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jlblDir.setBackground(new java.awt.Color(0, 0, 0));
+        jlblDir.setFont(new java.awt.Font("Segoe UI Semilight", 2, 24)); // NOI18N
         jlblDir.setForeground(new java.awt.Color(255, 255, 255));
         jlblDir.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jlblDir.setText("------------------------");
         jlblDir.setOpaque(true);
         jPanel2.add(jlblDir, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 110, 400, 40));
 
-        jlblCedula.setBackground(new java.awt.Color(51, 153, 255));
-        jlblCedula.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jlblCedula.setBackground(new java.awt.Color(0, 0, 0));
+        jlblCedula.setFont(new java.awt.Font("Segoe UI Semilight", 2, 24)); // NOI18N
         jlblCedula.setForeground(new java.awt.Color(255, 255, 255));
         jlblCedula.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jlblCedula.setText("-------------------------");
         jlblCedula.setOpaque(true);
         jPanel2.add(jlblCedula, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 400, 40));
 
-        jlblName.setBackground(new java.awt.Color(51, 153, 255));
-        jlblName.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jlblName.setBackground(new java.awt.Color(0, 0, 0));
+        jlblName.setFont(new java.awt.Font("Segoe UI Semilight", 2, 24)); // NOI18N
         jlblName.setForeground(new java.awt.Color(255, 255, 255));
         jlblName.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jlblName.setText("-------------------------");
@@ -241,15 +233,41 @@ public class RecognizerInternal extends javax.swing.JInternalFrame {
 
         jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 440, 420, 160));
 
+        jPanel3.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel3.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
+
+        jLabel1.setFont(new java.awt.Font("Segoe UI Semilight", 2, 24)); // NOI18N
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setText("Reconocedor de Rostros");
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(78, 78, 78)
+                .addComponent(jLabel1)
+                .addContainerGap(78, Short.MAX_VALUE))
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(10, Short.MAX_VALUE))
+        );
+
+        jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, 400, 60));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 442, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 613, Short.MAX_VALUE)
         );
 
         pack();
@@ -260,6 +278,7 @@ public class RecognizerInternal extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JLabel jlblCedula;
     private javax.swing.JLabel jlblDir;
     private javax.swing.JLabel jlblFoto;
@@ -340,8 +359,8 @@ public class RecognizerInternal extends javax.swing.JInternalFrame {
 
                     UserModel usu = usc.getUser(String.valueOf(id));
                     jlblCedula.setText(usu.getCedula());
-                    jlblName.setText("Bienvenido" );
-                    jlblDir.setText( usu.getNombre() +" " + usu.getApellido());
+                    jlblName.setText("Bienvenido");
+                    jlblDir.setText(usu.getNombre() + " " + usu.getApellido());
                 } catch (Exception e) {
                 }
             }
@@ -350,13 +369,13 @@ public class RecognizerInternal extends javax.swing.JInternalFrame {
     }
 
     private void stopCamera() throws InterruptedException {
-   
+
         myTread.runnable = false;
         if (webSource != null) {
             webSource.release(); // Detener la cámara
         }
         this.dispose();
-        
+
     }
 
     private void startCamera() {
