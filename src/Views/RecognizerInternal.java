@@ -76,7 +76,7 @@ public class RecognizerInternal extends javax.swing.JInternalFrame {
                 .get().getKey();
     }
 
-    public boolean reconocer(int idReconocido) throws InterruptedException {
+public int reconocer(int idReconocido) throws InterruptedException {
     conteoIds.put(idReconocido, conteoIds.getOrDefault(idReconocido, 0) + 1);
 
     int totalIntentos = conteoIds.values().stream().mapToInt(Integer::intValue).sum();
@@ -87,7 +87,15 @@ public class RecognizerInternal extends javax.swing.JInternalFrame {
         if (conteoIds.get(idMasFrecuente) >= UMBRAL) {
             System.out.println("Identificación confirmada para ID: " + idMasFrecuente);
             UserModel usu = usc.getUser(String.valueOf(idMasFrecuente));
-            cedula = usu.getCedula();
+            int estadoUsuario = usc.getStateUser(String.valueOf(idMasFrecuente));
+
+            // Agregar lógica basada en el estado del usuario
+            if (estadoUsuario == 3) {
+                System.out.println("El trabajador ya no está disponible");
+                conteoIds.clear();
+                return -1; // Trabajador no disponible
+            }
+
             try {
                 // Muestra el cuadro de diálogo para elegir entre "Registros" y "Asistencias"
                 String[] opciones = {"Registros", "Asistencias"};
@@ -104,39 +112,49 @@ public class RecognizerInternal extends javax.swing.JInternalFrame {
 
                 // Verifica la opción seleccionada
                 if (seleccion == 0) {
-        String cedula = usu.getCedula();
-        String nombre = usu.getNombre();
-        String apellido = usu.getApellido();
+                    String cedula = usu.getCedula();
+                    String nombre = usu.getNombre();
+                    String apellido = usu.getApellido();
 
-        // Abrir ReportesEmpleados con los datos
-        ReportesEmpleados reportesFrame = new ReportesEmpleados(Escritorio, cedula, nombre, apellido);
-        Escritorio.add(reportesFrame);
-        reportesFrame.setVisible(true);       
-                    
-                    
+                    // Abrir ReportesEmpleados con los datos
+                    ReportesEmpleados reportesFrame = new ReportesEmpleados(Escritorio, cedula, nombre, apellido);
+                    Escritorio.add(reportesFrame);
+                    reportesFrame.setVisible(true);
+
                 } else if (seleccion == 1) {
                     // Asistencias (código existente)
-                    if (!asis.insertInsgreso(cedula)) {
-                        if (!asis.insertSalida(cedula)) {
-                            JOptionPane.showMessageDialog(null, "No puede acceder en este momento");
-                        }
+                    int resultadoIngreso = asis.insertIngreso(cedula);
+                    if (resultadoIngreso == 0) {
+                        JOptionPane.showMessageDialog(null, "Ya ingresó");
+                    } else if (resultadoIngreso == -1) {
+                        JOptionPane.showMessageDialog(null, "No puede acceder en este momento");
                     }
+
+                    int resultadoSalida = asis.insertSalida(cedula);
+                    if (resultadoSalida == 0) {
+                        JOptionPane.showMessageDialog(null, "Ya salió");
+                    } else if (resultadoSalida == -1) {
+                        JOptionPane.showMessageDialog(null, "No puede acceder en este momento");
+                    }
+
                     stopCamera();
                 }
             } catch (Exception e) {
+                // Manejar la excepción
             } finally {
                 stopCamera();
             }
         } else {
             System.out.println("Identificación no concluyente.");
             conteoIds.clear();
-            return false;
+            return 0; // Identificación no concluyente
         }
         conteoIds.clear();
-        return true;
+        return 1; // Identificación exitosa
     }
-    return false;
+    return -2; // No se ha alcanzado el límite de intentos
 }
+
 
 
     public void readClassifier() {

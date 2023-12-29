@@ -14,62 +14,79 @@ public class AsistenciaControl {
 
     Conexion con = new Conexion();
 
-    public boolean insertInsgreso(String id_usu) {
-        UserControl est = new UserControl();
-        if (est.getStateUser(id_usu)){
-            System.out.println("Ya ingreso");
-            return false;
-        }
-        try {
-            
-            
-            String horario = this.compareTime();
-            System.out.println(horario);
-            con.conectar();
-            String sql = "INSERT INTO INGRESOS(ID_USU, FEC_HOR_ING, HOR_ASI) "
-                    + "VALUES(?, NOW(), ?)";
+    public int insertIngreso(String id_usu) {
+    UserControl est = new UserControl();
+    int userState = est.getStateUser(id_usu);
 
-            PreparedStatement ps = con.getCon().prepareStatement(sql);
-            ps.setString(1, id_usu);
-            ps.setString(2, horario);
-            int i = ps.executeUpdate();
-            if (i > 0) {
-                JOptionPane.showMessageDialog(null, "SE REGISTRO SU INGRESO");
-            }
-            con.desconectar();
-            return true;
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Hora no permitida para el ingreso");
-            return false;
-        }
+    if (userState == 1) {
+        System.out.println("Ya ingresó");
+        return 0; // Usuario ya ingresó
+    } else if (userState == 3) {
+        System.out.println("El trabajador ya no está disponible");
+        return -1; // Trabajador no disponible
     }
 
-    public boolean insertSalida(String id_usu) {
-        UserControl est = new UserControl();
-        if (!est.getStateUser(id_usu)){
-            System.out.println("Ya salio");
-            return false;
-        }
-        String horario = getHorario(id_usu);
-        try {
-            con.conectar();
-            String sql = "INSERT INTO SALIDAS(ID_USU_SAL, FEC_HOR_SAL, HOR_ASI) "
-                    + "VALUES(?, NOW(),?)";
+    try {
+        String horario = this.compareTime();
+        System.out.println(horario);
+        con.conectar();
+        String sql = "INSERT INTO INGRESOS(ID_USU, FEC_HOR_ING, HOR_ASI) "
+                + "VALUES(?, NOW(), ?)";
 
-            PreparedStatement ps = con.getCon().prepareStatement(sql);
-            ps.setString(1, id_usu);
-            ps.setString(2, horario);
-            int i = ps.executeUpdate();
-            if (i > 0) {
-                JOptionPane.showMessageDialog(null, "SE REGISTRO SU SALIDA");
-            }
-            con.desconectar();
-            return true;
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, e);
-            return false;
+        PreparedStatement ps = con.getCon().prepareStatement(sql);
+        ps.setString(1, id_usu);
+        ps.setString(2, horario);
+        int i = ps.executeUpdate();
+
+        if (i > 0) {
+            JOptionPane.showMessageDialog(null, "SE REGISTRÓ SU INGRESO");
         }
+
+        con.desconectar();
+        return 1; // Ingreso exitoso
+
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(null, "Hora no permitida para el ingreso");
+        return -2; // Hora no permitida para el ingreso
     }
+}
+
+   public int insertSalida(String id_usu) {
+    UserControl est = new UserControl();
+    int userState = est.getStateUser(id_usu);
+
+    if (userState == 0) {
+        System.out.println("No puede salir");
+        return 0; // Usuario no puede salir
+    } else if (userState == 3) {
+        System.out.println("El trabajador ya no está disponible");
+        return -1; // Trabajador no disponible
+    }
+
+    String horario = getHorario(id_usu);
+
+    try {
+        con.conectar();
+        String sql = "INSERT INTO SALIDAS(ID_USU_SAL, FEC_HOR_SAL, HOR_ASI) "
+                + "VALUES(?, NOW(), ?)";
+
+        PreparedStatement ps = con.getCon().prepareStatement(sql);
+        ps.setString(1, id_usu);
+        ps.setString(2, horario);
+        int i = ps.executeUpdate();
+
+        if (i > 0) {
+            JOptionPane.showMessageDialog(null, "SE REGISTRÓ SU SALIDA");
+        }
+
+        con.desconectar();
+        return 1; // Salida exitosa
+
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(null, e);
+        return -2; // Error en la salida
+    }
+}
     
     public String getHorario(String id_usu){
         this.con.conectar();
