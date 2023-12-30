@@ -238,7 +238,6 @@ public class RecognizerInternal extends javax.swing.JInternalFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
         jlblFoto = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jlblDir = new javax.swing.JLabel();
@@ -251,11 +250,6 @@ public class RecognizerInternal extends javax.swing.JInternalFrame {
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Reconocedor de Rostros");
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 20, 330, 40));
 
         jlblFoto.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jlblFoto.setToolTipText("");
@@ -334,7 +328,6 @@ public class RecognizerInternal extends javax.swing.JInternalFrame {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
