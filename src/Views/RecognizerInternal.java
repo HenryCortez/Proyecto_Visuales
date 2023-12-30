@@ -409,6 +409,8 @@ public class RecognizerInternal extends javax.swing.JInternalFrame {
             @Override
             public void run() {
                 try {
+                    UserModel usu = usc.getUser(String.valueOf(id));
+                    jlblCedula.setText(usu.getCedula());
                     jlblDir.setText(usu.getNombre() + " " + usu.getApellido());
                 } catch (Exception e) {
                 }
