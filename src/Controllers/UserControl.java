@@ -155,6 +155,8 @@ public class UserControl {
         }
 
     }
+    
+    
 
     public int getStateUser(String id_user) {
         this.con.conectar();
@@ -266,6 +268,28 @@ public class UserControl {
         } catch (Exception e) {
             System.out.println("ERROR AL DESENCRIPTAR LA CONTRASEÑA   " + e);
             return textoADesencriptar;
+        }
+    }
+    public ArrayList<UserModel> getTableUser() {
+        this.con.conectar();
+        ArrayList<UserModel> userList = new ArrayList<>();
+        String sql = "SELECT CED_USU, NOM_USU, APE_USU, SUE_PAG_USU FROM USUARIOS;";
+        try {
+            Statement statement = con.getCon().createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            while (resultSet.next()) {
+                UserModel user = new UserModel();
+                user.setCedula(resultSet.getString("CED_USU"));
+                user.setNombre(resultSet.getString("NOM_USU"));
+                user.setApellido(resultSet.getString("APE_USU"));
+                user.setSueldo_actual(resultSet.getDouble("SUE_PAG_USU"));
+                userList.add(user);
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        } finally {
+            con.desconectar();
+            return userList;
         }
     }
     

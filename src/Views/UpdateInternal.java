@@ -31,6 +31,7 @@ public class UpdateInternal extends javax.swing.JInternalFrame {
 
     public UpdateInternal(JDesktopPane Escritorio) {
         initComponents();
+        
         this.Escritorio = Escritorio;
         this.centrarVentana();
     }
@@ -63,7 +64,7 @@ public class UpdateInternal extends javax.swing.JInternalFrame {
         jLabel9 = new javax.swing.JLabel();
         jbtnSave = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jtblUsers = new javax.swing.JTable();
+        tablaUsers = new javax.swing.JTable();
 
         setClosable(true);
 
@@ -180,7 +181,7 @@ public class UpdateInternal extends javax.swing.JInternalFrame {
             }
         });
 
-        jtblUsers.setModel(new javax.swing.table.DefaultTableModel(
+        tablaUsers.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {},
                 {},
@@ -191,7 +192,7 @@ public class UpdateInternal extends javax.swing.JInternalFrame {
 
             }
         ));
-        jScrollPane1.setViewportView(jtblUsers);
+        jScrollPane1.setViewportView(tablaUsers);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -207,10 +208,10 @@ public class UpdateInternal extends javax.swing.JInternalFrame {
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 409, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(130, 130, 130)
                 .addComponent(jbtnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(132, 132, 132))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -220,7 +221,7 @@ public class UpdateInternal extends javax.swing.JInternalFrame {
                 .addGap(18, 18, 18)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 360, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jbtnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(14, Short.MAX_VALUE))
@@ -261,9 +262,9 @@ public class UpdateInternal extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jlblTitle;
     private javax.swing.JPasswordField jpswConfirmado;
     private javax.swing.JPasswordField jpswContra;
-    private javax.swing.JTable jtblUsers;
     private javax.swing.JTextField jtxtApellido;
     private javax.swing.JTextField jtxtCedula;
     private javax.swing.JTextField jtxtNombre;
+    private javax.swing.JTable tablaUsers;
     // End of variables declaration//GEN-END:variables
 }
