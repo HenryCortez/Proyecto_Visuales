@@ -225,6 +225,26 @@ public class UserControl {
             con.desconectar();
         }
     }
+    
+    public void deleteTrue(String cedula){
+        try {
+            con.conectar();
+            String sql = "DELETE USUARIOS WHERE ID_USU=?";
+            PreparedStatement ps = con.getCon().prepareStatement(sql);
+            ps.setString(1, cedula);
+            int eliminacion = ps.executeUpdate();
+            if (eliminacion > 0) {
+                JOptionPane.showMessageDialog(null, "Usuario eliminado correctamente");
+            } else {
+                JOptionPane.showMessageDialog(null, "Error al eliminar. Verifica los datos e intenta nuevamente.");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(UserControl.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "Error al eliminar. Consulta los registros del sistema para obtener más detalles.");
+        } finally {
+            con.desconectar();
+        }
+    }
 
     public SecretKeySpec crearClave(String llave) {
         try {

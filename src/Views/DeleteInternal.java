@@ -19,6 +19,8 @@ import java.util.logging.Logger;
 import javax.swing.JDesktopPane;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -35,7 +37,31 @@ public class DeleteInternal extends javax.swing.JInternalFrame {
         this.Escritorio = Escritorio;
         this.centrarVentana();
         llenarTablaUsuarios(jtable);
+        jtable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                if (jtable.getSelectedRow()!= -1) {
+                    jtxtCedula.setText(jtable.getValueAt(jtable.getSelectedRow(), 0).toString());
+                    jtxtNombre.setText(jtable.getValueAt(jtable.getSelectedRow(), 1).toString());
+                    jtxtApellido.setText(jtable.getValueAt(jtable.getSelectedRow(), 2).toString());
+                }
+            }
+        });
 
+    }
+    
+    public void clear(){
+        jtxtCedula.setText("");
+        jtxtApellido.setText("");
+        jtxtNombre.setText("");
+    }
+    
+    public void Deleliminar (){
+        if (jtxtCedula!=null) {
+            usc.deleteUser(jtxtCedula.getText());
+            clear();
+            llenarTablaUsuarios(jtable);
+        }
     }
 
     public void llenarTablaUsuarios(JTable tabla) {
@@ -244,7 +270,7 @@ public class DeleteInternal extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jbtnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnSaveActionPerformed
-
+        Deleliminar();
     }//GEN-LAST:event_jbtnSaveActionPerformed
 
 
