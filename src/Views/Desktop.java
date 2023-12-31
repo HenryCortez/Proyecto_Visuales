@@ -14,7 +14,7 @@ import javax.swing.ImageIcon;
 
 /**
  *
- * @author henry
+ * @author henry y otros jeje
  */
 public class Desktop extends javax.swing.JFrame {
 

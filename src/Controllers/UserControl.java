@@ -212,6 +212,7 @@ public class UserControl {
             String sql = "UPDATE USUARIOS SET EST_USU=3 WHERE CED_USU=?";
             PreparedStatement ps = con.getCon().prepareStatement(sql);
             ps.setString(1, cedula);
+            System.out.println(sql);
             int eliminacion = ps.executeUpdate();
             if (eliminacion > 0) {
                 JOptionPane.showMessageDialog(null, "Usuario eliminado correctamente");
@@ -293,7 +294,7 @@ public class UserControl {
     public ArrayList<UserModel> getTableUser() {
         this.con.conectar();
         ArrayList<UserModel> userList = new ArrayList<>();
-        String sql = "SELECT CED_USU, NOM_USU, APE_USU, SUE_PAG_USU FROM USUARIOS;";
+        String sql = "SELECT CED_USU, NOM_USU, APE_USU, SUE_PAG_USU FROM USUARIOS WHERE NOT EST_USU=3;";
         try {
             Statement statement = con.getCon().createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
