@@ -112,7 +112,7 @@
                       <EmptySpace min="-2" pref="35" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="jLabel2" min="-2" pref="90" max="-2" attributes="0"/>
-                          <Component id="jtxtNombre" min="-2" pref="250" max="-2" attributes="0"/>
+                          <Component id="jtxtCedula" min="-2" pref="250" max="-2" attributes="0"/>
                           <Component id="jLabel1" min="-2" pref="110" max="-2" attributes="0"/>
                           <Component id="jpswPassword" min="-2" pref="250" max="-2" attributes="0"/>
                       </Group>
@@ -125,9 +125,11 @@
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
                       <Component id="jLabel2" min="-2" pref="30" max="-2" attributes="0"/>
-                      <Component id="jtxtNombre" min="-2" pref="35" max="-2" attributes="0"/>
+                      <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
+                      <Component id="jtxtCedula" min="-2" pref="35" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="23" max="-2" attributes="0"/>
                       <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                       <Component id="jpswPassword" min="-2" pref="35" max="-2" attributes="0"/>
                       <EmptySpace pref="28" max="32767" attributes="0"/>
                   </Group>
@@ -140,10 +142,10 @@
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Segoe UI Semilight" size="14" style="2"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Nombre"/>
+                <Property name="text" type="java.lang.String" value="Cedula"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JTextField" name="jtxtNombre">
+            <Component class="javax.swing.JTextField" name="jtxtCedula">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Segoe UI" size="18" style="0"/>
