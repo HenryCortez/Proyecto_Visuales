@@ -178,10 +178,13 @@ public class ReportesAdmin extends javax.swing.JInternalFrame {
         this.fechaF = this.anio+"-"+ this.mesNum;
         Map<String, Object> parametros = new HashMap<>();
         parametros.put("nom_user", this.nomUser);
-        parametros.put("id_user", this.idUser);
         parametros.put("mes", this.mesTexto);
         parametros.put("anio", this.anio);
         parametros.put("fechaF", this.fechaF);
+        parametros.put("id_user", this.idUser);
+        
+        
+        
 
         JasperReport reporte = JasperCompileManager.compileReport("src/Views/reportAdminRetrasos.jrxml");
         JasperPrint print = JasperFillManager.fillReport(reporte, parametros, cn);
