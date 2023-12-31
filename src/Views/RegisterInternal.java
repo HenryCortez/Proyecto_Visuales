@@ -7,6 +7,8 @@ package Views;
 import Controllers.UserControl;
 import Models.UserModel;
 import java.awt.Dimension;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -28,6 +30,14 @@ public class RegisterInternal extends javax.swing.JInternalFrame {
         this.Escritorio = Escritorio;
         desactivar();
         this.centrarVentana();
+        jtxtCedula.addKeyListener(new KeyAdapter() {
+            public void keyTyped(KeyEvent e) {
+                char c = e.getKeyChar();
+                if (!Character.isDigit(c)) {
+                    e.consume(); // Ignora el evento de teclado si no es un dígito
+                }
+            }
+        });
     }
 
     private void desactivar() {
@@ -54,12 +64,11 @@ public class RegisterInternal extends javax.swing.JInternalFrame {
             JOptionPane.showMessageDialog(null, "Las contraseñas no coinciden");
             return;
         }
-        if(true){
-            
-        }
+
         for (UserModel user : temporal) {
             if (this.jtxtCedula.getText().equals(user.getCedula())) {
-                JOptionPane.showMessageDialog(null,"Usuario ya resgistrado en la base de datos");
+                JOptionPane.showMessageDialog(null, "Usuario ya resgistrado en la base de datos");
+                JOptionPane.showMessageDialog(null, "Usuario ya resgistrado en la base de datos");
                 return;
             }
         }
@@ -92,6 +101,40 @@ public class RegisterInternal extends javax.swing.JInternalFrame {
         this.setLocation(width, height);
     }
 
+    public boolean checkId(String cedula) {
+        if (cedula == null || cedula.length() != 10) {
+            return false;
+        }
+
+        try {
+            int provincia = Integer.parseInt(cedula.substring(0, 2));
+            if (provincia < 1 || provincia > 24) {
+                return false;
+            }
+
+            int tercerDigito = Integer.parseInt(cedula.substring(2, 3));
+            if (tercerDigito > 5) {
+                return false;
+            }
+
+            int suma = 0;
+            for (int i = 0; i < 9; i++) {
+                int digito = Integer.parseInt(cedula.substring(i, i + 1));
+                if (i % 2 == 0) {
+                    digito = digito * 2;
+                    if (digito > 9) {
+                        digito -= 9;
+                    }
+                }
+                suma += digito;
+            }
+
+            int ultimoDigito = (suma % 10) == 0 ? 0 : 10 - (suma % 10);
+            return ultimoDigito == Integer.parseInt(cedula.substring(9));
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -161,6 +204,11 @@ public class RegisterInternal extends javax.swing.JInternalFrame {
         jtxtCedula.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jtxtCedula.setForeground(new java.awt.Color(51, 51, 51));
         jtxtCedula.setSelectionColor(new java.awt.Color(0, 0, 0));
+        jtxtCedula.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jtxtCedulaActionPerformed(evt);
+            }
+        });
 
         jcbxTipos.setFont(new java.awt.Font("Segoe UI Semilight", 2, 18)); // NOI18N
         jcbxTipos.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "-----", "Trabajador", "Administrador" }));
@@ -217,9 +265,11 @@ public class RegisterInternal extends javax.swing.JInternalFrame {
                 .addComponent(jcbxTipos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
                 .addComponent(jtxtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
                 .addComponent(jtxtApellido, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -300,9 +350,13 @@ public class RegisterInternal extends javax.swing.JInternalFrame {
 
     private void jbtnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnSaveActionPerformed
         try {
-            if (this.jtxtCedula.getText().equals("") || this.jtxtNombre.getText().equals("") || this.jtxtApellido.getText().equals("")){
-                JOptionPane.showMessageDialog(null,"NO SE PERMITEN CAMPOS PRIMORDIALES EN NULO");
-            }else{
+            if (this.jtxtCedula.getText().equals("") || this.jtxtNombre.getText().equals("") || this.jtxtApellido.getText().equals("")) {
+                JOptionPane.showMessageDialog(null, "NO SE PERMITEN CAMPOS PRIMORDIALES EN NULO");
+            } else if (this.jcbxTipos.getSelectedItem().toString().equals("-----")) {
+                JOptionPane.showMessageDialog(null, "SELECCIONE UN ROL PARA INGRESAR A LA BASE DE DATOS");
+            } else if (!checkId(jtxtCedula.getText())) {
+                JOptionPane.showMessageDialog(null, "Número de cédula no válido");
+            } else {
                 saveUser();
             }
         } catch (ParseException ex) {
@@ -310,6 +364,9 @@ public class RegisterInternal extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_jbtnSaveActionPerformed
 
+    private void jtxtCedulaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtxtCedulaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jtxtCedulaActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel4;
