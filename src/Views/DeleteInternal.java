@@ -18,6 +18,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JDesktopPane;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -33,8 +34,33 @@ public class DeleteInternal extends javax.swing.JInternalFrame {
         initComponents();
         this.Escritorio = Escritorio;
         this.centrarVentana();
+        llenarTablaUsuarios(jtable);
+
     }
 
+    public void llenarTablaUsuarios(JTable tabla) {
+        ArrayList<UserModel> userList = usc.getTableUser();
+
+        if (tabla.getModel() == null) {
+            DefaultTableModel model = new DefaultTableModel();
+            tabla.setModel(model);
+
+            model.addColumn("Cédula");
+            model.addColumn("Nombre");
+            model.addColumn("Apellido");
+            model.addColumn("Sueldo Actual");
+        }
+
+        DefaultTableModel model = (DefaultTableModel) tabla.getModel();
+
+        model.setRowCount(0);
+
+        for (UserModel user : userList) {
+            Object[] rowData = {user.getCedula(), user.getNombre(), user.getApellido(), user.getSueldo_actual()};
+            model.addRow(rowData);
+        }
+    }
+    
     private void centrarVentana() {
         Dimension desktopSize = Escritorio.getSize();
         Dimension jInternalFrameSize = this.getSize();
