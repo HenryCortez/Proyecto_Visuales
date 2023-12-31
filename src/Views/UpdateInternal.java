@@ -19,6 +19,8 @@ import java.util.logging.Logger;
 import javax.swing.JDesktopPane;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -36,6 +38,16 @@ public class UpdateInternal extends javax.swing.JInternalFrame {
         this.Escritorio = Escritorio;
         this.centrarVentana();
         llenarTablaUsuarios(tablaUpdatUsers);
+        tablaUpdatUsers.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                if (tablaUpdatUsers.getSelectedRow()!= -1) {
+                    jtxtCedula.setText(tablaUpdatUsers.getValueAt(tablaUpdatUsers.getSelectedRow(), 0).toString());
+                    jtxtNombre.setText(tablaUpdatUsers.getValueAt(tablaUpdatUsers.getSelectedRow(), 1).toString());
+                    jtxtApellido.setText(tablaUpdatUsers.getValueAt(tablaUpdatUsers.getSelectedRow(), 2).toString());
+                }
+            }
+        });
     }
 
     private void centrarVentana() {
@@ -75,7 +87,24 @@ public class UpdateInternal extends javax.swing.JInternalFrame {
             model.addRow(rowData);
         }
     }
+    
+        public void clear(){
+        jtxtCedula.setText("");
+        jtxtApellido.setText("");
+        jtxtNombre.setText("");
+        jpswConfirmado.setText("");
+        jpswContra.setText("");
 
+    }
+    
+    public void actualizarUser(){
+        char[] passwordChars = jpswContra.getPassword();
+        String contrasenia = new String(passwordChars);
+
+        usc.updateUser(jtxtCedula.getText(), jtxtNombre.getText(), jtxtApellido.getText(), contrasenia);
+        System.out.println(jtxtCedula.getText() + jtxtNombre.getText() + jtxtApellido.getText() + contrasenia);
+    }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -221,7 +250,7 @@ public class UpdateInternal extends javax.swing.JInternalFrame {
                 {null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "CEDULA", "NOMBRE", "APELLIDO", "SUELDO"
             }
         ));
         jScrollPane2.setViewportView(tablaUpdatUsers);
@@ -281,7 +310,9 @@ public class UpdateInternal extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jbtnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnSaveActionPerformed
-
+        actualizarUser();
+        llenarTablaUsuarios(tablaUpdatUsers);
+        
     }//GEN-LAST:event_jbtnSaveActionPerformed
 
 

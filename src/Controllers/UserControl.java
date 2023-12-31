@@ -186,7 +186,7 @@ public class UserControl {
     public void updateUser(String cedula, String nombre, String apellido, String contrasenia) {
         try {
             con.conectar();
-            String sql = "UPDATE USUARIOS SET NOM_USU=?, APE_USU=?, CON_USU=? WHERE ID_USU=?";
+            String sql = "UPDATE USUARIOS SET NOM_USU=?, APE_USU=?, CON_USU=? WHERE CED_USU=?";
             PreparedStatement ps = con.getCon().prepareStatement(sql);
             ps.setString(1, nombre);
             ps.setString(2, apellido);
@@ -200,7 +200,7 @@ public class UserControl {
             }
         } catch (SQLException ex) {
             Logger.getLogger(UserControl.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(null, "Error al actualizar. Consulta los registros del sistema para obtener más detalles.");
+            JOptionPane.showMessageDialog(null, "Error al actualizar. Consulta los registros del sistema para obtener más detalles."+ex);
         } finally {
             con.desconectar();
         }
@@ -309,4 +309,5 @@ public class UserControl {
         
         return users;
     }
+    
 }
