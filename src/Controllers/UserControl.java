@@ -265,7 +265,24 @@ public class UserControl {
             return cadena_desencriptada;
         } catch (Exception e) {
             System.out.println("ERROR AL DESENCRIPTAR LA CONTRASEÑA   " + e);
-            return "";
+            return textoADesencriptar;
         }
+    }
+    
+    public ResultSet getUsers(){
+       
+        ResultSet users = null;
+        try {
+            
+            con.conectar();
+            String sql = "select * from usuarios";
+            Statement stmt = con.getCon().createStatement();
+            users = stmt.executeQuery(sql);
+
+        } catch (SQLException ex) {
+            System.out.println("aa" + ex);
+        }
+        
+        return users;
     }
 }
