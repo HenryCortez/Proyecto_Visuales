@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JInternalFrame.java to edit this template
- */
 package Views;
 
 import Controllers.UserControl;
@@ -25,7 +21,7 @@ import javax.swing.table.DefaultTableModel;
 
 /**
  *
- * @author henry
+ * @author Santhiag0
  */
 public class DeleteInternal extends javax.swing.JInternalFrame {
 
@@ -273,7 +269,14 @@ public class DeleteInternal extends javax.swing.JInternalFrame {
         Deleliminar();
     }//GEN-LAST:event_jbtnSaveActionPerformed
 
-
+//    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, "
+//    + "sed do eiusmod tempor incididunt ut labore et dolore magna"
+//    + " aliqua. Ut enim ad minim veniam, quis nostrud exercitation ul"
+//    + "lamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute "
+//    + "irure dolor in reprehenderit in voluptate velit esse cillum dolore e"
+//    + "u fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident"
+//    + ", sunt in culpa qui officia deserunt mollit anim id est laborum."
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
