@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JInternalFrame.java to edit this template
- */
 package Views;
 
 import Controllers.UserControl;
@@ -18,11 +14,14 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JDesktopPane;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
 /**
  *
- * @author henry
+ * @author Santhiag0
  */
 public class DeleteInternal extends javax.swing.JInternalFrame {
 
@@ -33,8 +32,57 @@ public class DeleteInternal extends javax.swing.JInternalFrame {
         initComponents();
         this.Escritorio = Escritorio;
         this.centrarVentana();
+        llenarTablaUsuarios(jtable);
+        jtable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                if (jtable.getSelectedRow()!= -1) {
+                    jtxtCedula.setText(jtable.getValueAt(jtable.getSelectedRow(), 0).toString());
+                    jtxtNombre.setText(jtable.getValueAt(jtable.getSelectedRow(), 1).toString());
+                    jtxtApellido.setText(jtable.getValueAt(jtable.getSelectedRow(), 2).toString());
+                }
+            }
+        });
+
+    }
+    
+    public void clear(){
+        jtxtCedula.setText("");
+        jtxtApellido.setText("");
+        jtxtNombre.setText("");
+    }
+    
+    public void Deleliminar (){
+        if (jtxtCedula!=null) {
+            usc.deleteUser(jtxtCedula.getText());
+            clear();
+            llenarTablaUsuarios(jtable);
+        }
     }
 
+    public void llenarTablaUsuarios(JTable tabla) {
+        ArrayList<UserModel> userList = usc.getTableUser();
+
+        if (tabla.getModel() == null) {
+            DefaultTableModel model = new DefaultTableModel();
+            tabla.setModel(model);
+
+            model.addColumn("Cédula");
+            model.addColumn("Nombre");
+            model.addColumn("Apellido");
+            model.addColumn("Sueldo Actual");
+        }
+
+        DefaultTableModel model = (DefaultTableModel) tabla.getModel();
+
+        model.setRowCount(0);
+
+        for (UserModel user : userList) {
+            Object[] rowData = {user.getCedula(), user.getNombre(), user.getApellido(), user.getSueldo_actual()};
+            model.addRow(rowData);
+        }
+    }
+    
     private void centrarVentana() {
         Dimension desktopSize = Escritorio.getSize();
         Dimension jInternalFrameSize = this.getSize();
@@ -58,8 +106,8 @@ public class DeleteInternal extends javax.swing.JInternalFrame {
         jLabel8 = new javax.swing.JLabel();
         jtxtCedula = new javax.swing.JTextField();
         jbtnSave = new javax.swing.JButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jtblUsers = new javax.swing.JTable();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jtable = new javax.swing.JTable();
 
         setClosable(true);
 
@@ -153,18 +201,18 @@ public class DeleteInternal extends javax.swing.JInternalFrame {
             }
         });
 
-        jtblUsers.setModel(new javax.swing.table.DefaultTableModel(
+        jtable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {},
-                {},
-                {},
-                {}
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
             },
             new String [] {
-
+                "CEDULA", "NOMBRE", "APELLIDO", "SUELDO"
             }
         ));
-        jScrollPane1.setViewportView(jtblUsers);
+        jScrollPane2.setViewportView(jtable);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -174,6 +222,10 @@ public class DeleteInternal extends javax.swing.JInternalFrame {
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(6, 6, 6)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 395, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(jPanel3Layout.createSequentialGroup()
@@ -182,13 +234,8 @@ public class DeleteInternal extends javax.swing.JInternalFrame {
                         .addContainerGap())
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 409, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addContainerGap())
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                                .addComponent(jbtnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(134, 134, 134))))))
+                        .addComponent(jbtnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(134, 134, 134))))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -198,8 +245,8 @@ public class DeleteInternal extends javax.swing.JInternalFrame {
                 .addGap(18, 18, 18)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jbtnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(14, Short.MAX_VALUE))
         );
@@ -219,10 +266,17 @@ public class DeleteInternal extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jbtnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnSaveActionPerformed
-
+        Deleliminar();
     }//GEN-LAST:event_jbtnSaveActionPerformed
 
-
+//    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, "
+//    + "sed do eiusmod tempor incididunt ut labore et dolore magna"
+//    + " aliqua. Ut enim ad minim veniam, quis nostrud exercitation ul"
+//    + "lamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute "
+//    + "irure dolor in reprehenderit in voluptate velit esse cillum dolore e"
+//    + "u fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident"
+//    + ", sunt in culpa qui officia deserunt mollit anim id est laborum."
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -230,10 +284,10 @@ public class DeleteInternal extends javax.swing.JInternalFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JButton jbtnSave;
     private javax.swing.JLabel jlblTitle;
-    private javax.swing.JTable jtblUsers;
+    private javax.swing.JTable jtable;
     private javax.swing.JTextField jtxtApellido;
     private javax.swing.JTextField jtxtCedula;
     private javax.swing.JTextField jtxtNombre;

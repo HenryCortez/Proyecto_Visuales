@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JInternalFrame.java to edit this template
- */
 package Views;
 
 import Controllers.UserControl;
@@ -25,7 +21,7 @@ import javax.swing.table.DefaultTableModel;
 
 /**
  *
- * @author henry
+ * @author Santhiag0
  */
 public class UpdateInternal extends javax.swing.JInternalFrame {
         
@@ -59,29 +55,22 @@ public class UpdateInternal extends javax.swing.JInternalFrame {
     }
     
     public void llenarTablaUsuarios(JTable tabla) {
-        // Obtener los datos de la base de datos
         ArrayList<UserModel> userList = usc.getTableUser();
 
-        // Verificar si la tabla tiene un modelo
         if (tabla.getModel() == null) {
-            // Si no tiene un modelo, creamos uno
             DefaultTableModel model = new DefaultTableModel();
             tabla.setModel(model);
 
-            // Agregar columnas al modelo (puedes ajustar esto según tus necesidades)
             model.addColumn("Cédula");
             model.addColumn("Nombre");
             model.addColumn("Apellido");
             model.addColumn("Sueldo Actual");
         }
 
-        // Obtener el modelo de la tabla
         DefaultTableModel model = (DefaultTableModel) tabla.getModel();
 
-        // Limpiar el modelo (en caso de que haya datos anteriores)
         model.setRowCount(0);
 
-        // Agregar filas al modelo con los datos de usuarios
         for (UserModel user : userList) {
             Object[] rowData = {user.getCedula(), user.getNombre(), user.getApellido(), user.getSueldo_actual()};
             model.addRow(rowData);
