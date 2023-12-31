@@ -4,11 +4,16 @@
  */
 package Views;
 
+import Controllers.AsistenciaControl;
+import Controllers.UserControl;
 import Models.Conexion;
 import Services.Clock;
+import java.awt.Dimension;
 import java.lang.System.Logger;
 import java.lang.System.Logger.Level;
 import java.sql.*;
+import javax.swing.JDesktopPane;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
@@ -18,12 +23,20 @@ import javax.swing.table.DefaultTableModel;
  */
 public class MenuTrabajador extends javax.swing.JInternalFrame {
 
-   int idTrabajador;
-  
-     public MenuTrabajador(int id) {
+    int idTrabajador;
+    String nombre;
+    String apellido;
+    String cedula;
+    JDesktopPane Escritorio;
+    AsistenciaControl asis = new AsistenciaControl();
+
+    public MenuTrabajador(int id, JDesktopPane Escritorio, String nombre, String apellido, String cedula) {
         initComponents();
         idTrabajador = id;
-
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.cedula = cedula;
+        this.Escritorio = Escritorio;
         runClock();
         saludarUsuario(id);
         cargarJornada("Matutino", jtblMatutina);
@@ -41,9 +54,8 @@ public class MenuTrabajador extends javax.swing.JInternalFrame {
         this.closable = true;
         this.resizable = true;
     }
-     
-     
-     public void runClock() {
+
+    public void runClock() {
         Conexion con = new Conexion();
         Clock relog = new Clock(con.conectar(), jLabel1);
         Thread hiloReloj = new Thread(relog);
@@ -64,7 +76,7 @@ public class MenuTrabajador extends javax.swing.JInternalFrame {
             }
             return nombre;
         } catch (SQLException ex) {
-            System.out.println("error: "+ ex);
+            System.out.println("error: " + ex);
         }
         return null;
     }
@@ -84,7 +96,7 @@ public class MenuTrabajador extends javax.swing.JInternalFrame {
             }
 
         } catch (SQLException ex) {
-             System.out.println("error: "+ ex);
+            System.out.println("error: " + ex);
         }
 
     }
@@ -95,12 +107,12 @@ public class MenuTrabajador extends javax.swing.JInternalFrame {
         try (Connection cn = cc.conectar()) {
             String[] nombres = {"Cedula", "Entrada Jornada", "Salida Jornada"};
             DefaultTableModel modelo = new DefaultTableModel(nombres, 0) {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                // Hacer que todas las celdas no sean editables
-                return false;
-            }
-        };
+                @Override
+                public boolean isCellEditable(int row, int column) {
+                    // Hacer que todas las celdas no sean editables
+                    return false;
+                }
+            };
             jtblTablaUsuario.setModel(modelo);
             String sql = "SELECT ced_usu, sue_usu from usuarios where id_usu=? ";
 
@@ -116,11 +128,11 @@ public class MenuTrabajador extends javax.swing.JInternalFrame {
                     }
                 }
             } catch (SQLException ex) {
-                 System.out.println("error: "+ ex);
+                System.out.println("error: " + ex);
             }
 
         } catch (SQLException ex) {
-             System.out.println("error: "+ ex);
+            System.out.println("error: " + ex);
         } // La conexión se cerrará automáticamente al salir del bloque try-with-resources
     }
 
@@ -149,19 +161,15 @@ public class MenuTrabajador extends javax.swing.JInternalFrame {
                 + "AND DATE(i.fec_hor_ing) = CURRENT_DATE";
 
         try (PreparedStatement st = cn.prepareStatement(sql)) {
-            // Impresiones de depuración
-            System.out.println("idTrabajador: " + obtenerCedula(idTrabajador));
-            System.out.println("Horario: " + Horario);
-
             st.setInt(1, idTrabajador);
             st.setString(2, Horario);
             st.setString(3, Horario);
 
             try (ResultSet resultSet = st.executeQuery()) {
                 while (resultSet.next()) {
-                    int cedula = resultSet.getInt("ced_usu");
-                    String nombre = resultSet.getString("nom_usu");
-                    String apellido = resultSet.getString("ape_usu");
+                    cedula = resultSet.getString("ced_usu");
+                    nombre = resultSet.getString("nom_usu");
+                    apellido = resultSet.getString("ape_usu");
                     String ingreso = resultSet.getString("fec_hor_ing");
                     String salida = resultSet.getString("fec_hor_sal");
 
@@ -169,13 +177,47 @@ public class MenuTrabajador extends javax.swing.JInternalFrame {
                 }
             }
         } catch (SQLException ex) {
-             System.out.println("error: "+ ex);
+            System.out.println("error: " + ex);
         }
     }
 
-   public void registros (){
-       
-   }
+    public void mostrarRegistros() {
+
+        ReportesEmpleados reportesFrame = new ReportesEmpleados(Escritorio, cedula, nombre, apellido);
+        System.out.println(cedula + nombre + apellido);
+        Escritorio.add(reportesFrame);
+        reportesFrame.setVisible(true);
+
+    }
+
+    public void registrarAsistencia() {
+        UserControl est = new UserControl();
+        int userState = est.getStateUser(cedula);
+
+        if (userState == 0) {
+            // Usuario no ha ingresado, registra entrada
+            int resultadoIngreso = asis.insertIngreso(cedula);
+            if (resultadoIngreso == 0) {
+                JOptionPane.showMessageDialog(null, "Ya ingresó");
+            } else if (resultadoIngreso == -1) {
+                JOptionPane.showMessageDialog(null, "No puede acceder en este momento");
+            }
+            return;
+        } else if (userState == 1) {
+            // Usuario ya ingresó, registra salida
+            int resultadoSalida = asis.insertSalida(cedula);
+            if (resultadoSalida == 0) {
+                JOptionPane.showMessageDialog(null, "Ya salió");
+            } else if (resultadoSalida == -1) {
+                JOptionPane.showMessageDialog(null, "No puede acceder en este momento");
+            }
+            return;
+        } else if (userState == 3) {
+            JOptionPane.showMessageDialog(null, "El trabajador ya no está disponible");
+            return;
+        }
+        
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -209,8 +251,18 @@ public class MenuTrabajador extends javax.swing.JInternalFrame {
         jLabel2.setText("----");
 
         jButton1.setText("Registrar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jButton2.setText("Ver reportes");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jtblTablaUsuario.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -321,6 +373,16 @@ public class MenuTrabajador extends javax.swing.JInternalFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        mostrarRegistros();
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        registrarAsistencia();
+        cargarJornada("Matutino", jtblMatutina);
+        cargarJornada("Vespertino", jtblVespertina);
+    }//GEN-LAST:event_jButton1ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

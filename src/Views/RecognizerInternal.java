@@ -93,7 +93,7 @@ public class RecognizerInternal extends javax.swing.JInternalFrame {
             cedula = usu.getCedula();
             try {
                 // Muestra el cuadro principal de Trabajador"
-              MenuTrabajador menu = new MenuTrabajador(idMasFrecuente);
+              MenuTrabajador menu = new MenuTrabajador(idMasFrecuente,Escritorio,usu.getNombre(),usu.getApellido(),cedula);
               Escritorio.add(menu);
               menu.setVisible(true);
                 
@@ -114,7 +114,7 @@ public class RecognizerInternal extends javax.swing.JInternalFrame {
 }
     
    //metodo para asistencia y ver registros//
-    /* public boolean reconocer(int idReconocido) throws InterruptedException {
+    /*public boolean reconocer(int idReconocido) throws InterruptedException {
     conteoIds.put(idReconocido, conteoIds.getOrDefault(idReconocido, 0) + 1);
 
         int totalIntentos = conteoIds.values().stream().mapToInt(Integer::intValue).sum();
