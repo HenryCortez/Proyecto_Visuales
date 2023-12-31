@@ -182,6 +182,21 @@ public class UserControl {
             }
         }
     
-     
+    public ResultSet getUsers(){
+       
+        ResultSet users = null;
+        try {
+            
+            con.conectar();
+            String sql = "select * from usuarios";
+            Statement stmt = con.getCon().createStatement();
+            users = stmt.executeQuery(sql);
+
+        } catch (SQLException ex) {
+            System.out.println("aa" + ex);
+        }
+        
+        return users;
+    }
 
 }

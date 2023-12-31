@@ -126,8 +126,6 @@ public class ReportesEmpleados extends javax.swing.JInternalFrame {
         jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel6.setText("FECHA");
 
-        jFormattedEdder1.setText("jFormattedEdder1");
-
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -253,7 +251,7 @@ public class ReportesEmpleados extends javax.swing.JInternalFrame {
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
-    private Views.JFormattedEdder jFormattedEdder1;
+    private org.netbeans.modules.form.InvalidComponent jFormattedEdder1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
