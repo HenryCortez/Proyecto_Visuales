@@ -2,30 +2,37 @@ package Controllers;
 
 import Models.Conexion;
 import Models.UserModel;
+import java.security.MessageDigest;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Base64;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.crypto.Cipher;
+import javax.crypto.spec.SecretKeySpec;
 import javax.swing.JOptionPane;
 
 public class UserControl {
 
     Conexion con = new Conexion();
+    String LLAVEENCRIP = "app_visual";
 
     public void insertAdmin(String ced, String nom, String ape, String passw, String tipo) {
         try {
             con.conectar();
             String sql = "INSERT INTO USUARIOS(CED_USU, NOM_USU, APE_USU, CON_USU, TIP_USU) "
                     + "VALUES(?, ?, ?, ?, ?)";
-
+            String passwencryp = encriptar(passw);
+            
             PreparedStatement ps = con.getCon().prepareStatement(sql);
             ps.setString(1, ced);
             ps.setString(2, nom);
             ps.setString(3, ape);
-            ps.setString(4, passw);
+            ps.setString(4, passwencryp);
             ps.setString(5, tipo);
             int i = ps.executeUpdate();
             if (i > 0) {
@@ -183,5 +190,54 @@ public class UserControl {
         }
     
      
+    public SecretKeySpec crearClave (String llave)
+    {
+        try 
+        {
+            byte[] cadena= llave.getBytes("UTF-8");
+            MessageDigest md = MessageDigest.getInstance("SHA-1");
+            cadena = md.digest(cadena);
+            cadena = Arrays.copyOf(cadena,16);
+            SecretKeySpec secretKeySpec = new SecretKeySpec(cadena, "AES");
+            return secretKeySpec;
+        } catch (Exception e) {
+            System.out.println("ERROR AL CREAR LA LLAVE CENTRAR DE LA CONTRASEÑA" +e);
+            return null;
+        }
+    }
 
+    public String encriptar(String textoAEncriptar)
+    {
+        try 
+        {
+            SecretKeySpec secretKeySpec = crearClave(LLAVEENCRIP);
+            Cipher cypher = Cipher.getInstance("AES");
+            cypher.init(Cipher.ENCRYPT_MODE, secretKeySpec);
+            
+            byte[] cadena = textoAEncriptar.getBytes("UTF-8");
+            byte[] textoEncriptado = cypher.doFinal(cadena);
+            return Base64.getEncoder().encodeToString(textoEncriptado);
+        } catch (Exception e) {
+            System.out.println("ERROR AL ENCRIPTAR LA CONTRASEÑA" +e);
+            return "";
+        }
+    }
+    
+    public String desencriptar(String textoADesencriptar)
+    {
+        try 
+        {
+            SecretKeySpec secretKeySpec = crearClave(LLAVEENCRIP);
+            Cipher cypher = Cipher.getInstance("AES");
+            cypher.init(Cipher.DECRYPT_MODE, secretKeySpec);
+            
+            byte[] cadena = Base64.getDecoder().decode(textoADesencriptar);
+            byte[] desencriptacion = cypher.doFinal(cadena);
+            String cadena_desencriptada = new String(desencriptacion);
+            return cadena_desencriptada;
+        } catch (Exception e) {
+            System.out.println("ERROR AL ENCRIPTAR LA CONTRASEÑA" +e);
+            return "";
+        }
+    }
 }

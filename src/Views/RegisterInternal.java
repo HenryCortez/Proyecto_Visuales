@@ -54,9 +54,12 @@ public class RegisterInternal extends javax.swing.JInternalFrame {
             JOptionPane.showMessageDialog(null, "Las contraseñas no coinciden");
             return;
         }
-
+        if(true){
+            
+        }
         for (UserModel user : temporal) {
             if (this.jtxtCedula.getText().equals(user.getCedula())) {
+                JOptionPane.showMessageDialog(null,"Usuario ya resgistrado en la base de datos");
                 return;
             }
         }
@@ -297,7 +300,11 @@ public class RegisterInternal extends javax.swing.JInternalFrame {
 
     private void jbtnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnSaveActionPerformed
         try {
-            saveUser();
+            if (this.jtxtCedula.getText().equals("") || this.jtxtNombre.getText().equals("") || this.jtxtApellido.getText().equals("")){
+                JOptionPane.showMessageDialog(null,"NO SE PERMITEN CAMPOS PRIMORDIALES EN NULO");
+            }else{
+                saveUser();
+            }
         } catch (ParseException ex) {
             Logger.getLogger(RegisterInternal.class.getName()).log(Level.SEVERE, null, ex);
         }
