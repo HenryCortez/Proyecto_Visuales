@@ -310,9 +310,20 @@ public class UpdateInternal extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jbtnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnSaveActionPerformed
-        actualizarUser();
-        llenarTablaUsuarios(tablaUpdatUsers);
+        char[] passwordChars = jpswContra.getPassword();
+        String contrasenia = new String(passwordChars);
         
+        char[] confirmpasswordChars = jpswConfirmado.getPassword();
+        String confirmcontrasenia = new String(confirmpasswordChars);
+        
+        if (confirmcontrasenia == contrasenia) {
+            actualizarUser();
+            llenarTablaUsuarios(tablaUpdatUsers);
+            clear();
+        }else
+        {
+            JOptionPane.showMessageDialog(null, "La confirmación de contraseñas no coinciden");
+        }
     }//GEN-LAST:event_jbtnSaveActionPerformed
 
 
