@@ -209,7 +209,7 @@ public class UserControl {
     public void deleteUser(String cedula) {
         try {
             con.conectar();
-            String sql = "UPDATE USUARIOS SET EST_USU=3 WHERE ID_USU=?";
+            String sql = "UPDATE USUARIOS SET EST_USU=3 WHERE CED_USU=?";
             PreparedStatement ps = con.getCon().prepareStatement(sql);
             ps.setString(1, cedula);
             int eliminacion = ps.executeUpdate();
