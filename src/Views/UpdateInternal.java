@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JInternalFrame.java to edit this template
- */
 package Views;
 
 import Controllers.UserControl;
@@ -18,21 +14,36 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JDesktopPane;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
 /**
  *
- * @author henry
+ * @author Santhiag0
  */
 public class UpdateInternal extends javax.swing.JInternalFrame {
-
+        
     UserControl usc = new UserControl();
     JDesktopPane Escritorio;
+    
 
     public UpdateInternal(JDesktopPane Escritorio) {
         initComponents();
         this.Escritorio = Escritorio;
         this.centrarVentana();
+        llenarTablaUsuarios(tablaUpdatUsers);
+        tablaUpdatUsers.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                if (tablaUpdatUsers.getSelectedRow()!= -1) {
+                    jtxtCedula.setText(tablaUpdatUsers.getValueAt(tablaUpdatUsers.getSelectedRow(), 0).toString());
+                    jtxtNombre.setText(tablaUpdatUsers.getValueAt(tablaUpdatUsers.getSelectedRow(), 1).toString());
+                    jtxtApellido.setText(tablaUpdatUsers.getValueAt(tablaUpdatUsers.getSelectedRow(), 2).toString());
+                }
+            }
+        });
     }
 
     private void centrarVentana() {
@@ -42,7 +53,47 @@ public class UpdateInternal extends javax.swing.JInternalFrame {
         int height = (desktopSize.height - jInternalFrameSize.height) / 2;
         this.setLocation(width, height);
     }
+    
+    public void llenarTablaUsuarios(JTable tabla) {
+        ArrayList<UserModel> userList = usc.getTableUser();
 
+        if (tabla.getModel() == null) {
+            DefaultTableModel model = new DefaultTableModel();
+            tabla.setModel(model);
+
+            model.addColumn("Cédula");
+            model.addColumn("Nombre");
+            model.addColumn("Apellido");
+            model.addColumn("Sueldo Actual");
+        }
+
+        DefaultTableModel model = (DefaultTableModel) tabla.getModel();
+
+        model.setRowCount(0);
+
+        for (UserModel user : userList) {
+            Object[] rowData = {user.getCedula(), user.getNombre(), user.getApellido(), user.getSueldo_actual()};
+            model.addRow(rowData);
+        }
+    }
+    
+        public void clear(){
+        jtxtCedula.setText("");
+        jtxtApellido.setText("");
+        jtxtNombre.setText("");
+        jpswConfirmado.setText("");
+        jpswContra.setText("");
+
+    }
+    
+    public void actualizarUser(){
+        char[] passwordChars = jpswContra.getPassword();
+        String contrasenia = new String(passwordChars);
+
+        usc.updateUser(jtxtCedula.getText(), jtxtNombre.getText(), jtxtApellido.getText(), contrasenia);
+        System.out.println(jtxtCedula.getText() + jtxtNombre.getText() + jtxtApellido.getText() + contrasenia);
+    }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -62,8 +113,8 @@ public class UpdateInternal extends javax.swing.JInternalFrame {
         jpswConfirmado = new javax.swing.JPasswordField();
         jLabel9 = new javax.swing.JLabel();
         jbtnSave = new javax.swing.JButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jtblUsers = new javax.swing.JTable();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tablaUpdatUsers = new javax.swing.JTable();
 
         setClosable(true);
 
@@ -180,37 +231,42 @@ public class UpdateInternal extends javax.swing.JInternalFrame {
             }
         });
 
-        jtblUsers.setModel(new javax.swing.table.DefaultTableModel(
+        tablaUpdatUsers.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {},
-                {},
-                {},
-                {}
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
             },
             new String [] {
-
+                "CEDULA", "NOMBRE", "APELLIDO", "SUELDO"
             }
         ));
-        jScrollPane1.setViewportView(jtblUsers);
+        jScrollPane2.setViewportView(tablaUpdatUsers);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 409, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addGap(130, 130, 130)
+                                .addComponent(jbtnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addGap(12, 12, 12)
+                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 395, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jbtnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(132, 132, 132))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -219,9 +275,9 @@ public class UpdateInternal extends javax.swing.JInternalFrame {
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 360, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jbtnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(14, Short.MAX_VALUE))
         );
@@ -243,7 +299,20 @@ public class UpdateInternal extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jbtnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnSaveActionPerformed
-
+        char[] passwordChars = jpswContra.getPassword();
+        String contrasenia = new String(passwordChars);
+        
+        char[] confirmpasswordChars = jpswConfirmado.getPassword();
+        String confirmcontrasenia = new String(confirmpasswordChars);
+        
+        if (confirmcontrasenia == contrasenia) {
+            actualizarUser();
+            llenarTablaUsuarios(tablaUpdatUsers);
+            clear();
+        }else
+        {
+            JOptionPane.showMessageDialog(null, "La confirmación de contraseñas no coinciden");
+        }
     }//GEN-LAST:event_jbtnSaveActionPerformed
 
 
@@ -256,14 +325,14 @@ public class UpdateInternal extends javax.swing.JInternalFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JButton jbtnSave;
     private javax.swing.JLabel jlblTitle;
     private javax.swing.JPasswordField jpswConfirmado;
     private javax.swing.JPasswordField jpswContra;
-    private javax.swing.JTable jtblUsers;
     private javax.swing.JTextField jtxtApellido;
     private javax.swing.JTextField jtxtCedula;
     private javax.swing.JTextField jtxtNombre;
+    private javax.swing.JTable tablaUpdatUsers;
     // End of variables declaration//GEN-END:variables
 }
