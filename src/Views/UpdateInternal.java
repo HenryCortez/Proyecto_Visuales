@@ -4,14 +4,9 @@ import Controllers.UserControl;
 import Models.Conexion;
 import Models.UserModel;
 import java.awt.Dimension;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.text.ParseException;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JDesktopPane;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
@@ -41,6 +36,35 @@ public class UpdateInternal extends javax.swing.JInternalFrame {
                     jtxtCedula.setText(tablaUpdatUsers.getValueAt(tablaUpdatUsers.getSelectedRow(), 0).toString());
                     jtxtNombre.setText(tablaUpdatUsers.getValueAt(tablaUpdatUsers.getSelectedRow(), 1).toString());
                     jtxtApellido.setText(tablaUpdatUsers.getValueAt(tablaUpdatUsers.getSelectedRow(), 2).toString());
+                    if(!tablaUpdatUsers.getValueAt(tablaUpdatUsers.getSelectedRow(), 4).toString().equals("Administrador")){
+                        blockPassword();
+                    }else{
+                        desblockPassword();
+                    }
+                }
+            }
+        });
+        jtxtCedula.addKeyListener(new KeyAdapter() {
+            public void keyTyped(KeyEvent e) {
+                char c = e.getKeyChar();
+                if (!Character.isDigit(c)) {
+                    e.consume(); // Ignora el evento de teclado si no es un dígito
+                }
+            }
+        });
+        jtxtNombre.addKeyListener(new KeyAdapter() {
+            public void keyTyped(KeyEvent e) {
+                char c = e.getKeyChar();
+                if (!Character.isLetter(c) && c != KeyEvent.VK_BACK_SPACE ) {
+                    e.consume(); // Ignora el evento de teclado si no es una letra
+                }
+            }
+        });
+        jtxtApellido.addKeyListener(new KeyAdapter() {
+            public void keyTyped(KeyEvent e) {
+                char c = e.getKeyChar();
+                if (!Character.isLetter(c) && c != KeyEvent.VK_BACK_SPACE ) {
+                    e.consume(); // Ignora el evento de teclado si no es una letra
                 }
             }
         });
@@ -54,6 +78,14 @@ public class UpdateInternal extends javax.swing.JInternalFrame {
         this.setLocation(width, height);
     }
     
+    private void blockPassword(){
+        jpswContra.setEnabled(false);
+        jpswConfirmado.setEnabled(false);
+    }
+    private void desblockPassword(){
+        jpswContra.setEnabled(true);
+        jpswConfirmado.setEnabled(true);
+    }
     public void llenarTablaUsuarios(JTable tabla) {
         ArrayList<UserModel> userList = usc.getTableUser();
 
@@ -65,6 +97,7 @@ public class UpdateInternal extends javax.swing.JInternalFrame {
             model.addColumn("Nombre");
             model.addColumn("Apellido");
             model.addColumn("Sueldo Actual");
+            model.addColumn("Tipo usuario");
         }
 
         DefaultTableModel model = (DefaultTableModel) tabla.getModel();
@@ -72,7 +105,7 @@ public class UpdateInternal extends javax.swing.JInternalFrame {
         model.setRowCount(0);
 
         for (UserModel user : userList) {
-            Object[] rowData = {user.getCedula(), user.getNombre(), user.getApellido(), user.getSueldo_actual()};
+            Object[] rowData = {user.getCedula(), user.getNombre(), user.getApellido(), user.getSueldo_actual(), user.getTipo()};
             model.addRow(rowData);
         }
     }
@@ -87,11 +120,11 @@ public class UpdateInternal extends javax.swing.JInternalFrame {
     }
     
     public void actualizarUser(){
-        char[] passwordChars = jpswContra.getPassword();
-        String contrasenia = new String(passwordChars);
+     
+        String contrasenia = String.valueOf(jpswContra.getPassword());
 
         usc.updateUser(jtxtCedula.getText(), jtxtNombre.getText(), jtxtApellido.getText(), contrasenia);
-        System.out.println(jtxtCedula.getText() + jtxtNombre.getText() + jtxtApellido.getText() + contrasenia);
+        
     }
     
     @SuppressWarnings("unchecked")
@@ -233,13 +266,13 @@ public class UpdateInternal extends javax.swing.JInternalFrame {
 
         tablaUpdatUsers.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
             },
             new String [] {
-                "CEDULA", "NOMBRE", "APELLIDO", "SUELDO"
+                "CEDULA", "NOMBRE", "APELLIDO", "SUELDO", "TIPO"
             }
         ));
         jScrollPane2.setViewportView(tablaUpdatUsers);
@@ -299,13 +332,12 @@ public class UpdateInternal extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jbtnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnSaveActionPerformed
-        char[] passwordChars = jpswContra.getPassword();
-        String contrasenia = new String(passwordChars);
-        
-        char[] confirmpasswordChars = jpswConfirmado.getPassword();
-        String confirmcontrasenia = new String(confirmpasswordChars);
-        
-        if (confirmcontrasenia == contrasenia) {
+
+        if(this.jtxtNombre.getText().isBlank() || this.jtxtApellido.getText().isBlank() || this.jtxtCedula.getText().isBlank()){
+            JOptionPane.showMessageDialog(null, "Los campos no deben estar vacios");
+            return;
+        }
+        if (String.valueOf(jpswContra.getPassword()).equals(String.valueOf(jpswConfirmado.getPassword())) || !jpswContra.isEnabled()) {
             actualizarUser();
             llenarTablaUsuarios(tablaUpdatUsers);
             clear();

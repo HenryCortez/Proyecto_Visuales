@@ -16,7 +16,7 @@ public class Conexion {
     
     public Connection conectar(){
         try {
-            this.con = DriverManager.getConnection("jdbc:mysql://localhost:3308/app_visual", "root", "root");
+            this.con = DriverManager.getConnection("jdbc:mysql://viaduct.proxy.rlwy.net:13119/railway", "root", "gE4h51HaD-5AE1B-CEh1G2gEBF-5HEeb");
         } catch (SQLException e) {
             System.out.println("No se conecto"+e);
             return null;

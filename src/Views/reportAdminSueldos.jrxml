@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="95375e74-6303-4127-8691-0c175090d1d7">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="3"/>
+	<property name="ireport.y" value="0"/>
 	<parameter name="nomC" class="java.lang.String">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
@@ -21,18 +21,25 @@
 	<queryString>
 		<![CDATA[SELECT
   u.SUE_USU,
-  FLOOR((SELECT SUM(m2.VAL_MUL) FROM multas m2 WHERE m2.ID_ASI = i.ID_ASI OR m2.ID_SAL = s.ID_SAL)) AS MULTA,
-FLOOR((SELECT SUM(m2.VAL_MUL) / 0.25 FROM multas m2 WHERE m2.ID_ASI = i.ID_ASI OR m2.ID_SAL = s.ID_SAL)) AS Min_Ret,
- (800-FLOOR((SELECT SUM(m2.VAL_MUL) / 0.25 FROM multas m2 WHERE m2.ID_ASI = i.ID_ASI OR m2.ID_SAL = s.ID_SAL))*0.25) AS PAGA
+  COALESCE(SUM(m.val_mul), 0) AS MULTA,
+  COALESCE(SUM(m.val_mul)/ 0.25, 0) AS Min_Ret,
+  (800 - COALESCE(SUM(m.val_mul), 0)) AS PAGA
 FROM
-  ingresos i, salidas s, multas m, usuarios u
+  usuarios u
+LEFT JOIN (
+    SELECT id_usu AS id_usu, id_asi AS num, 'ingreso' AS tipo
+    FROM ingresos
+    WHERE FEC_HOR_ING LIKE CONCAT($P{fechaC}, "%")
+    UNION ALL
+    SELECT id_usu_sal AS id_usu, id_sal AS num, 'salida' AS tipo
+    FROM salidas
+    WHERE FEC_HOR_SAL LIKE CONCAT($P{fechaC}, "%")
+  ) a_s ON u.CED_USU = a_s.id_usu
+  LEFT JOIN multas m ON 
+    (m.ID_ASI = a_s.num AND a_s.tipo = 'ingreso') OR 
+    (m.ID_SAL = a_s.num AND a_s.tipo = 'salida')
 WHERE
-  i.ID_USU = s.ID_USU_SAL
-  AND i.ID_USU = $P{id_user}
-  AND i.FEC_HOR_ING LIKE CONCAT($P{fechaC}, "%")
-  AND s.FEC_HOR_SAL LIKE CONCAT($P{fechaC}, "%")
-  AND (m.ID_ASI = i.ID_ASI or m.ID_SAL = s.ID_SAL)
-limit 1;]]>
+  u.CED_USU = $P{id_user};]]>
 	</queryString>
 	<field name="SUE_USU" class="java.math.BigDecimal">
 		<fieldDescription><![CDATA[]]></fieldDescription>

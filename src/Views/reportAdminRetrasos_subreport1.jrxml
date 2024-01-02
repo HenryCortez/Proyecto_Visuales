@@ -103,22 +103,6 @@ AND DATE_FORMAT(i.FEC_HOR_ING, '%Y-%m') = $P{fecha}]]>
 				</textElement>
 				<text><![CDATA[Total de minutos:]]></text>
 			</staticText>
-			<pieChart>
-				<chart>
-					<reportElement x="54" y="11" width="321" height="100" uuid="76ce8f87-6ef7-4623-bf14-2f872c9cc375"/>
-					<chartTitle/>
-					<chartSubtitle/>
-					<chartLegend/>
-				</chart>
-				<pieDataset>
-					<keyExpression><![CDATA[$F{fecha}]]></keyExpression>
-					<valueExpression><![CDATA[$F{minutos}]]></valueExpression>
-				</pieDataset>
-				<piePlot>
-					<plot/>
-					<itemLabel/>
-				</piePlot>
-			</pieChart>
 		</band>
 	</summary>
 </jasperReport>

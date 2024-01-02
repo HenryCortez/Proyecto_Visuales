@@ -38,6 +38,22 @@ public class RegisterInternal extends javax.swing.JInternalFrame {
                 }
             }
         });
+        jtxtNombre.addKeyListener(new KeyAdapter() {
+            public void keyTyped(KeyEvent e) {
+                char c = e.getKeyChar();
+                if (!Character.isLetter(c) && c != KeyEvent.VK_BACK_SPACE ) {
+                    e.consume(); // Ignora el evento de teclado si no es una letra
+                }
+            }
+        });
+        jtxtApellido.addKeyListener(new KeyAdapter() {
+            public void keyTyped(KeyEvent e) {
+                char c = e.getKeyChar();
+                if (!Character.isLetter(c) && c != KeyEvent.VK_BACK_SPACE) {
+                    e.consume(); // Ignora el evento de teclado si no es una letra
+                }
+            }
+        });
     }
 
     private void desactivar() {
@@ -135,6 +151,7 @@ public class RegisterInternal extends javax.swing.JInternalFrame {
             return false;
         }
     }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
