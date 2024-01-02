@@ -1,26 +1,18 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JInternalFrame.java to edit this template
- */
+
 package Views;
 
 import Controllers.AsistenciaControl;
 import Controllers.UserControl;
 import Models.Conexion;
 import Services.Clock;
-import java.awt.Dimension;
-import java.lang.System.Logger;
-import java.lang.System.Logger.Level;
+
 import java.sql.*;
 import javax.swing.JDesktopPane;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
-/**
- *
- * @author sebas_j2dhfxw
- */
+
 public class MenuTrabajador extends javax.swing.JInternalFrame {
 
     int idTrabajador;
@@ -56,8 +48,8 @@ public class MenuTrabajador extends javax.swing.JInternalFrame {
     }
 
     public void runClock() {
-        Conexion con = new Conexion();
-        Clock relog = new Clock(con.conectar(), jLabel1);
+       
+        Clock relog = new Clock(jLabel1);
         Thread hiloReloj = new Thread(relog);
         hiloReloj.start();
     }
@@ -151,9 +143,9 @@ public class MenuTrabajador extends javax.swing.JInternalFrame {
         tabla.setModel(modelo2);
 
         String sql = "SELECT u.ced_usu, u.nom_usu, u.ape_usu, i.fec_hor_ing, s.fec_hor_sal\n"
-                + "FROM app_visual.usuarios u\n"
-                + "LEFT JOIN app_visual.ingresos i ON u.ced_usu = i.id_usu\n"
-                + "LEFT JOIN app_visual.salidas s ON u.ced_usu = s.id_usu_sal\n"
+                + "FROM usuarios u\n"
+                + "LEFT JOIN ingresos i ON u.ced_usu = i.id_usu\n"
+                + "LEFT JOIN salidas s ON u.ced_usu = s.id_usu_sal\n"
                 + "WHERE u.id_usu = ?\n"
                 + "AND DATE(i.fec_hor_ing) = DATE(s.fec_hor_sal)\n"
                 + "AND i.HOR_ASI = ?\n"

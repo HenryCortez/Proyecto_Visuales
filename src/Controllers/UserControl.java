@@ -1,4 +1,3 @@
-
 package Controllers;
 
 import Models.Conexion;
@@ -83,8 +82,9 @@ public class UserControl {
             }
 
         } catch (SQLException e) {
-            System.out.println(e);
+            System.out.println("ERROR GET ID" + e);
         } finally {
+            con.desconectar();
             return listUsers;
         }
 
@@ -103,14 +103,18 @@ public class UserControl {
             }
             adminCredentials = this.desencriptar(adminCredentials);
             if (adminCredentials.equals("")) {
+                con.desconectar();
                 return "-------------------------------------";
             } else {
+                con.desconectar();
                 return adminCredentials;
             }
 
         } catch (SQLException e) {
             // Manejar o registrar la excepción adecuadamente
+
             System.out.println("Error al obtener las credenciales del usuario: " + e.getMessage());
+            con.desconectar();
             return null;
         }
     }
@@ -126,35 +130,39 @@ public class UserControl {
             if (rs.next()) {
                 name = rs.getString("NOM_USU".toLowerCase());
             }
+            con.desconectar();
             return name;
         } catch (SQLException e) {
             // Manejar o registrar la excepción adecuadamente
+            con.desconectar();
             System.out.println("Error al obtener el nombre del Administrador: " + e.getMessage());
             return name;
         }
     }
 
     public UserModel getUser(String id_user) {
-        this.con.conectar();
-        String sql = "SELECT CED_USU, NOM_USU, APE_USU, SUE_PAG_USU FROM USUARIOS "
-                + "WHERE ID_USU =" + id_user + ";".toLowerCase();
+        String sql = "SELECT CED_USU, NOM_USU, APE_USU, SUE_PAG_USU FROM USUARIOS WHERE ID_USU = ?;";
         UserModel user = new UserModel();
-        try {
-            Statement psd = con.getCon().createStatement();
-            ResultSet rs = psd.executeQuery(sql);
-            while (rs.next()) {
-                user.setCedula(rs.getString("CED_USU".toLowerCase()));
-                user.setNombre(rs.getString("NOM_USU".toLowerCase()));
-                user.setApellido(rs.getString("APE_USU".toLowerCase()));
-                user.setSueldo_actual(rs.getDouble("SUE_PAG_USU".toLowerCase()));
-            }
 
+        this.con.conectar();
+        try (PreparedStatement psd = con.getCon().prepareStatement(sql.toLowerCase())) {
+            psd.setString(1, id_user); // Uso de PreparedStatement para prevenir inyección SQL
+
+            try (ResultSet rs = psd.executeQuery()) {
+                while (rs.next()) {
+                    user.setCedula(rs.getString("CED_USU"));
+                    user.setNombre(rs.getString("NOM_USU"));
+                    user.setApellido(rs.getString("APE_USU"));
+                    user.setSueldo_actual(rs.getDouble("SUE_PAG_USU"));
+                }
+            }
         } catch (SQLException e) {
-            System.out.println(e);
+            System.out.println("ERROR GET elgetuser" + e);
         } finally {
-            return user;
+            con.desconectar();
         }
 
+        return user;
     }
 
     public int getStateUser(String id_user) {
@@ -176,6 +184,7 @@ public class UserControl {
 
         } catch (SQLException e) {
         } finally {
+            con.desconectar();
             return state;
         }
     }
@@ -318,7 +327,7 @@ public class UserControl {
                 userList.add(user);
             }
         } catch (SQLException e) {
-            System.out.println(e);
+            System.out.println("ERROR getTable" + e);
         } finally {
             con.desconectar();
             return userList;
@@ -338,7 +347,7 @@ public class UserControl {
         } catch (SQLException ex) {
             System.out.println("aa" + ex);
         }
-
+        con.desconectar();
         return users;
     }
 

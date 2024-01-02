@@ -31,7 +31,7 @@ public class Desktop extends javax.swing.JFrame {
 
     public void runClock(){
         Conexion con = new Conexion();
-        Clock relog = new Clock(con.conectar(), jLabel1);
+        Clock relog = new Clock( jLabel1);
         Thread hiloReloj = new Thread(relog);
             hiloReloj.start();
     }

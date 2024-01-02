@@ -30,6 +30,7 @@ public class ArchivosControl {
             }
             con.desconectar();
         } catch (SQLException e) {
+            System.out.println("error aca");
             JOptionPane.showMessageDialog(null, e);
         }
     }
@@ -49,6 +50,7 @@ public class ArchivosControl {
             }
             con.desconectar();
         } catch (SQLException e) {
+            System.out.println("error en el update");
             JOptionPane.showMessageDialog(null, e);
         }
     }
@@ -63,10 +65,13 @@ public class ArchivosControl {
             while (rs.next()) {
                 name = rs.getString("file_name");
             }
-
+            
         } catch (SQLException e) {
+            System.out.println("error en el getname");
             System.out.println(e);
         } finally {
+            
+            con.desconectar();
             return name;
         }
 
@@ -82,10 +87,13 @@ public class ArchivosControl {
             while (rs.next()) {
                 content = rs.getBytes("file_content");
             }
-
+            
         } catch (SQLException e) {
+            System.out.println("error en el get content");
             System.out.println(e);
         } finally {
+            
+            con.desconectar();
             return content;
         }
 
@@ -109,10 +117,12 @@ public class ArchivosControl {
                 // Añadir el archivo a la lista
                 fileList.add(tempFile);
             }
-
+            
         } catch (SQLException e) {
+            System.out.println("error en el getImage");
             System.out.println(e);
         } finally {
+            con.desconectar();
             return fileList;
         }
 
