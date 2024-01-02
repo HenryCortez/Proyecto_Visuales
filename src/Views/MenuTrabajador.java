@@ -66,7 +66,7 @@ public class MenuTrabajador extends javax.swing.JInternalFrame {
         try {
             Conexion cx = new Conexion();
             Connection cn = cx.conectar();
-            String sql = "Select ced_usu from usuarios where id_usu = ? ";
+            String sql = "Select ced_usu from usuarios where id_usu = ? ".toLowerCase();
             PreparedStatement st = cn.prepareStatement(sql);
             st.setInt(1, id);
             ResultSet rs = st.executeQuery();
@@ -85,7 +85,7 @@ public class MenuTrabajador extends javax.swing.JInternalFrame {
         try {
             Conexion cx = new Conexion();
             Connection cn = cx.conectar();
-            String sql = "Select nom_usu ,ape_usu from usuarios where id_usu = ? ";
+            String sql = "Select nom_usu ,ape_usu from usuarios where id_usu = ? ".toLowerCase();
             PreparedStatement st = cn.prepareStatement(sql);
             st.setInt(1, id);
             ResultSet rs = st.executeQuery();
@@ -114,7 +114,7 @@ public class MenuTrabajador extends javax.swing.JInternalFrame {
                 }
             };
             jtblTablaUsuario.setModel(modelo);
-            String sql = "SELECT ced_usu, sue_usu from usuarios where id_usu=? ";
+            String sql = "SELECT ced_usu, sue_usu from usuarios where id_usu=? ".toLowerCase();
 
             try (PreparedStatement st = cn.prepareStatement(sql)) {
                 // Impresiones de depuración
@@ -160,7 +160,7 @@ public class MenuTrabajador extends javax.swing.JInternalFrame {
                 + "AND s.HOR_ASI = ?\n"
                 + "AND DATE(i.fec_hor_ing) = CURRENT_DATE";
 
-        try (PreparedStatement st = cn.prepareStatement(sql)) {
+        try (PreparedStatement st = cn.prepareStatement(sql.toLowerCase())) {
             st.setInt(1, idTrabajador);
             st.setString(2, Horario);
             st.setString(3, Horario);

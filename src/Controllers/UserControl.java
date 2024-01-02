@@ -25,7 +25,7 @@ public class UserControl {
         try {
             con.conectar();
             String sql = "INSERT INTO USUARIOS(CED_USU, NOM_USU, APE_USU, CON_USU, TIP_USU) "
-                    + "VALUES(?, ?, ?, ?, ?)";
+                    + "VALUES(?, ?, ?, ?, ?)".toLowerCase();
             String passwencryp = encriptar(passw);
 
             PreparedStatement ps = con.getCon().prepareStatement(sql);
@@ -48,7 +48,7 @@ public class UserControl {
         try {
             con.conectar();
             String sql = "INSERT INTO USUARIOS(CED_USU, NOM_USU, APE_USU, CON_USU, TIP_USU) "
-                    + "VALUES(?, ?, ?, ?, ?)";
+                    + "VALUES(?, ?, ?, ?, ?)".toLowerCase();
 
             PreparedStatement ps = con.getCon().prepareStatement(sql);
             ps.setString(1, ced);
@@ -69,7 +69,7 @@ public class UserControl {
 
         this.con.conectar();
         ArrayList<UserModel> listUsers = new ArrayList();
-        String sql = "SELECT ID_USU, CED_USU FROM USUARIOS ORDER BY ID_USU ASC";
+        String sql = "SELECT ID_USU, CED_USU FROM USUARIOS ORDER BY ID_USU ASC".toLowerCase();
         try {
             Statement psd = con.getCon().createStatement();
             ResultSet rs = psd.executeQuery(sql);
@@ -91,14 +91,14 @@ public class UserControl {
 
     public String getAdminSecret(String cedula) {
         this.con.conectar();
-        String sql = "SELECT CON_USU FROM USUARIOS WHERE CED_USU = " + cedula + ";";
+        String sql = "SELECT CON_USU FROM USUARIOS WHERE CED_USU = ".toLowerCase() + cedula + ";";
         String adminCredentials = "";
 
         try {
             PreparedStatement psd = con.getCon().prepareStatement(sql);
             ResultSet rs = psd.executeQuery();
             if (rs.next()) {
-                adminCredentials = rs.getString("CON_USU");
+                adminCredentials = rs.getString("CON_USU".toLowerCase());
             }
             adminCredentials = this.desencriptar(adminCredentials);
             if (adminCredentials.equals("")) {
@@ -116,14 +116,14 @@ public class UserControl {
 
     public String getAdminName(String cedula) {
         this.con.conectar();
-        String sql = "SELECT NOM_USU FROM USUARIOS WHERE CED_USU = " + cedula + ";";
+        String sql = "SELECT NOM_USU FROM USUARIOS WHERE CED_USU = ".toLowerCase() + cedula + ";";
         String name = "";
 
         try {
             PreparedStatement psd = con.getCon().prepareStatement(sql);
             ResultSet rs = psd.executeQuery();
             if (rs.next()) {
-                name = rs.getString("NOM_USU");
+                name = rs.getString("NOM_USU".toLowerCase());
             }
             return name;
         } catch (SQLException e) {
@@ -136,16 +136,16 @@ public class UserControl {
     public UserModel getUser(String id_user) {
         this.con.conectar();
         String sql = "SELECT CED_USU, NOM_USU, APE_USU, SUE_PAG_USU FROM USUARIOS "
-                + "WHERE ID_USU =" + id_user + ";";
+                + "WHERE ID_USU =" + id_user + ";".toLowerCase();
         UserModel user = new UserModel();
         try {
             Statement psd = con.getCon().createStatement();
             ResultSet rs = psd.executeQuery(sql);
             while (rs.next()) {
-                user.setCedula(rs.getString("CED_USU"));
-                user.setNombre(rs.getString("NOM_USU"));
-                user.setApellido(rs.getString("APE_USU"));
-                user.setSueldo_actual(rs.getDouble("SUE_PAG_USU"));
+                user.setCedula(rs.getString("CED_USU".toLowerCase()));
+                user.setNombre(rs.getString("NOM_USU".toLowerCase()));
+                user.setApellido(rs.getString("APE_USU".toLowerCase()));
+                user.setSueldo_actual(rs.getDouble("SUE_PAG_USU".toLowerCase()));
             }
 
         } catch (SQLException e) {
@@ -159,7 +159,7 @@ public class UserControl {
     public int getStateUser(String id_user) {
         this.con.conectar();
         int state = 0;
-        String sql = "SELECT EST_USU FROM USUARIOS WHERE CED_USU =" + id_user + ";";
+        String sql = "SELECT EST_USU FROM USUARIOS WHERE CED_USU =".toLowerCase() + id_user + ";";
 
         try {
             Statement psd = con.getCon().createStatement();
@@ -185,13 +185,13 @@ public class UserControl {
             String sql;
             PreparedStatement ps;
             if (contrasenia.equals("")) {
-                sql = "UPDATE USUARIOS SET NOM_USU=?, APE_USU=? WHERE CED_USU=?";
+                sql = "UPDATE USUARIOS SET NOM_USU=?, APE_USU=? WHERE CED_USU=?".toLowerCase();
                 ps = con.getCon().prepareStatement(sql);
                 ps.setString(1, nombre);
                 ps.setString(2, apellido);
                 ps.setString(3, cedula);
             } else {
-                sql = "UPDATE USUARIOS SET NOM_USU=?, APE_USU=?, CON_USU=? WHERE CED_USU=?";
+                sql = "UPDATE USUARIOS SET NOM_USU=?, APE_USU=?, CON_USU=? WHERE CED_USU=?".toLowerCase();
                 ps = con.getCon().prepareStatement(sql);
                 String passwencryp = encriptar(contrasenia);
                 ps.setString(1, nombre);
@@ -217,7 +217,7 @@ public class UserControl {
     public void deleteUser(String cedula) {
         try {
             con.conectar();
-            String sql = "UPDATE USUARIOS SET EST_USU=3 WHERE CED_USU=?";
+            String sql = "UPDATE USUARIOS SET EST_USU=3 WHERE CED_USU=?".toLowerCase();
             PreparedStatement ps = con.getCon().prepareStatement(sql);
             ps.setString(1, cedula);
             System.out.println(sql);
@@ -238,7 +238,7 @@ public class UserControl {
     public void deleteTrue(String cedula) {
         try {
             con.conectar();
-            String sql = "DELETE USUARIOS WHERE ID_USU=?";
+            String sql = "DELETE USUARIOS WHERE ID_USU=?".toLowerCase();
             PreparedStatement ps = con.getCon().prepareStatement(sql);
             ps.setString(1, cedula);
             int eliminacion = ps.executeUpdate();
@@ -303,7 +303,7 @@ public class UserControl {
     public ArrayList<UserModel> getTableUser() {
         this.con.conectar();
         ArrayList<UserModel> userList = new ArrayList<>();
-        String sql = "SELECT CED_USU, NOM_USU, APE_USU, SUE_PAG_USU, TIP_USU FROM USUARIOS WHERE NOT EST_USU=3;";
+        String sql = "SELECT CED_USU, NOM_USU, APE_USU, SUE_PAG_USU, TIP_USU FROM USUARIOS WHERE NOT EST_USU=3;".toLowerCase();
         try {
             Statement statement = con.getCon().createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
@@ -330,7 +330,7 @@ public class UserControl {
         try {
 
             con.conectar();
-            String sql = "select * from usuarios";
+            String sql = "select * from usuarios".toLowerCase();
             Statement stmt = con.getCon().createStatement();
             users = stmt.executeQuery(sql);
 
