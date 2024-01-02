@@ -19,9 +19,9 @@ public class ArchivosControl {
     public void insertFile(String file_name, byte[] file_content) {
         try {
             con.conectar();
-            String sql = "INSERT INTO archivos (file_name, file_content) VALUES (?, ?)";
+            String sql = "INSERT INTO archivos (file_name, file_content) VALUES (?, ?)".toLowerCase();
 
-            PreparedStatement ps = con.getCon().prepareStatement(sql);
+            PreparedStatement ps = con.getCon().prepareStatement(sql.toLowerCase());
             ps.setString(1, file_name);
             ps.setBytes(2, file_content);
             int i = ps.executeUpdate();
@@ -30,6 +30,7 @@ public class ArchivosControl {
             }
             con.desconectar();
         } catch (SQLException e) {
+            System.out.println("error aca");
             JOptionPane.showMessageDialog(null, e);
         }
     }
@@ -37,9 +38,9 @@ public class ArchivosControl {
     public void updateFile(String file_name, byte[] file_content) {
         try {
             con.conectar();
-            String sql = "UPDATE archivos SET file_content = ? WHERE file_name = ?";
+            String sql = "UPDATE archivos SET file_content = ? WHERE file_name = ?".toLowerCase();
 
-            PreparedStatement ps = con.getCon().prepareStatement(sql);
+            PreparedStatement ps = con.getCon().prepareStatement(sql.toLowerCase());
             ps.setBytes(1, file_content);
             ps.setString(2, file_name);
 
@@ -49,13 +50,14 @@ public class ArchivosControl {
             }
             con.desconectar();
         } catch (SQLException e) {
+            System.out.println("error en el update");
             JOptionPane.showMessageDialog(null, e);
         }
     }
 
     public String getFileName(String file_name) {
         this.con.conectar();
-        String sql = "SELECT file_name FROM archivos WHERE file_name ='" + file_name + "';";
+        String sql = "SELECT file_name FROM archivos WHERE file_name ='".toLowerCase() + file_name + "';";
         String name = "";
         try {
             Statement psd = con.getCon().createStatement();
@@ -63,10 +65,13 @@ public class ArchivosControl {
             while (rs.next()) {
                 name = rs.getString("file_name");
             }
-
+            
         } catch (SQLException e) {
+            System.out.println("error en el getname");
             System.out.println(e);
         } finally {
+            
+            con.desconectar();
             return name;
         }
 
@@ -74,7 +79,7 @@ public class ArchivosControl {
 
     public byte[] getFileContent(String file_name) {
         this.con.conectar();
-        String sql = "SELECT file_content FROM archivos WHERE file_name ='" + file_name + "';";
+        String sql = "SELECT file_content FROM archivos WHERE file_name ='".toLowerCase() + file_name + "';".toLowerCase();
         byte[] content = null;
         try {
             Statement psd = con.getCon().createStatement();
@@ -82,10 +87,13 @@ public class ArchivosControl {
             while (rs.next()) {
                 content = rs.getBytes("file_content");
             }
-
+            
         } catch (SQLException e) {
+            System.out.println("error en el get content");
             System.out.println(e);
         } finally {
+            
+            con.desconectar();
             return content;
         }
 
@@ -93,7 +101,7 @@ public class ArchivosControl {
 
     public ArrayList<File> getImages() {
         this.con.conectar();
-        String sql = "SELECT file_name, file_content FROM archivos WHERE file_name LIKE '%.jpg'";
+        String sql = "SELECT file_name, file_content FROM archivos WHERE file_name LIKE '%.jpg'".toLowerCase();
         ArrayList<File> fileList = new ArrayList<>();
         try {
             Statement psd = con.getCon().createStatement();
@@ -109,10 +117,12 @@ public class ArchivosControl {
                 // Añadir el archivo a la lista
                 fileList.add(tempFile);
             }
-
+            
         } catch (SQLException e) {
+            System.out.println("error en el getImage");
             System.out.println(e);
         } finally {
+            con.desconectar();
             return fileList;
         }
 

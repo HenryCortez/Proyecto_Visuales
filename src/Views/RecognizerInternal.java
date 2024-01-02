@@ -7,8 +7,6 @@ import Models.UserModel;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -16,11 +14,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import javax.imageio.ImageIO;
 import javax.swing.JDesktopPane;
-import javax.swing.JOptionPane;
-import javax.swing.Timer;
 import org.bytedeco.javacpp.BytePointer;
 import org.bytedeco.javacpp.DoublePointer;
 import org.bytedeco.javacpp.IntPointer;
@@ -67,7 +64,7 @@ public class RecognizerInternal extends javax.swing.JInternalFrame {
         this.Escritorio = Escritorio;
         this.centrarVentana();
         readClassifier();
-        recognizer.setThreshold(62);
+        recognizer.setThreshold(70);
         startCamera();
         this.Escritorio = Escritorio;
 
@@ -113,84 +110,7 @@ public class RecognizerInternal extends javax.swing.JInternalFrame {
     return false;
 }
     
-   //metodo para asistencia y ver registros//
-    /*public boolean reconocer(int idReconocido) throws InterruptedException {
-    conteoIds.put(idReconocido, conteoIds.getOrDefault(idReconocido, 0) + 1);
-
-        int totalIntentos = conteoIds.values().stream().mapToInt(Integer::intValue).sum();
-        if (totalIntentos >= MAX_INTENTOS) {
-
-            int idMasFrecuente = encontrarIdMasFrecuente();
-
-        if (conteoIds.get(idMasFrecuente) >= UMBRAL) {
-            System.out.println("Identificación confirmada para ID: " + idMasFrecuente);
-            UserModel usu = usc.getUser(String.valueOf(idMasFrecuente));
-            int estadoUsuario = usc.getStateUser(String.valueOf(idMasFrecuente));
-
-            // Agregar lógica basada en el estado del usuario
-            if (estadoUsuario == 3) {
-                System.out.println("El trabajador ya no está disponible");
-                conteoIds.clear();
-                return -1; // Trabajador no disponible
-            }
-
-            try {
-                // Muestra el cuadro de diálogo para elegir entre "Registros" y "Asistencias"
-                String[] opciones = {"Registros", "Asistencias"};
-                int seleccion = JOptionPane.showOptionDialog(
-                        RecognizerInternal.this,
-                        "¿Qué acción deseas realizar?",
-                        "Selecciona una opción",
-                        JOptionPane.DEFAULT_OPTION,
-                        JOptionPane.QUESTION_MESSAGE,
-                        null,
-                        opciones,
-                        opciones[0]
-                );
-
-                // Verifica la opción seleccionada
-                if (seleccion == 0) {
-                    String cedula = usu.getCedula();
-                    String nombre = usu.getNombre();
-                    String apellido = usu.getApellido();
-
-                    // Abrir ReportesEmpleados con los datos
-                    ReportesEmpleados reportesFrame = new ReportesEmpleados(Escritorio, cedula, nombre, apellido);
-                    Escritorio.add(reportesFrame);
-                    reportesFrame.setVisible(true);
-
-                } else if (seleccion == 1) {
-                    // Asistencias (código existente)
-                    int resultadoIngreso = asis.insertIngreso(cedula);
-                    if (resultadoIngreso == 0) {
-                        JOptionPane.showMessageDialog(null, "Ya ingresó");
-                    } else if (resultadoIngreso == -1) {
-                        JOptionPane.showMessageDialog(null, "No puede acceder en este momento");
-                    }
-
-                    int resultadoSalida = asis.insertSalida(cedula);
-                    if (resultadoSalida == 0) {
-                        JOptionPane.showMessageDialog(null, "Ya salió");
-                    } else if (resultadoSalida == -1) {
-                        JOptionPane.showMessageDialog(null, "No puede acceder en este momento");
-                    }
-
-                    stopCamera();
-                }
-            } catch (Exception e) {
-                // Manejar la excepción
-            } finally {
-                stopCamera();
-            }
-            conteoIds.clear();
-            return 0; // Identificación no concluyente
-        }
-        conteoIds.clear();
-        return 1; // Identificación exitosa
-    }
-    return -2; // No se ha alcanzado el límite de intentos
-}
-    */
+ 
     public void readClassifier() {
         File tempFile = null;
         FileOutputStream fos = null;
@@ -412,6 +332,7 @@ public class RecognizerInternal extends javax.swing.JInternalFrame {
                     UserModel usu = usc.getUser(String.valueOf(id));
                     jlblCedula.setText(usu.getCedula());
                     jlblDir.setText(usu.getNombre() + " " + usu.getApellido());
+                    
                 } catch (Exception e) {
                 }
             }

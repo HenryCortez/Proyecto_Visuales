@@ -1,24 +1,15 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JInternalFrame.java to edit this template
- */
+
 package Views;
 
 import Controllers.UserControl;
-import Models.Conexion;
 import java.awt.Dimension;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+
 import javax.swing.JDesktopPane;
 import javax.swing.JOptionPane;
 
-/**
- *
- * @author henry
- */
+
 public class LoginInternal extends javax.swing.JInternalFrame {
 
     JDesktopPane Escritorio;

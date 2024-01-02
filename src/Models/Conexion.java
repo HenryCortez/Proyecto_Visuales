@@ -16,7 +16,8 @@ public class Conexion {
     
     public Connection conectar(){
         try {
-            this.con = DriverManager.getConnection("jdbc:mysql://viaduct.proxy.rlwy.net:13119/railway", "root", "gE4h51HaD-5AE1B-CEh1G2gEBF-5HEeb");
+           // this.con = DriverManager.getConnection("jdbc:mysql://viaduct.proxy.rlwy.net:13119/railway?socketTimeout=1800000", "root", "gE4h51HaD-5AE1B-CEh1G2gEBF-5HEeb");
+           this.con = DriverManager.getConnection("jdbc:mysql://10.79.1.230:3308/app_visual", "david", "root");
         } catch (SQLException e) {
             System.out.println("No se conecto"+e);
             return null;

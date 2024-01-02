@@ -4,9 +4,12 @@ import Controllers.UserControl;
 import Models.Conexion;
 import java.awt.Dimension;
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JDesktopPane;
 import javax.swing.JInternalFrame;
@@ -55,7 +58,7 @@ public class ReportesAdmin extends javax.swing.JInternalFrame {
         this.setLocation(width, height);
     }
     //reporte de multas
-    public void reporteAtrasos(){
+    public void reporteAtrasos() throws SQLException{
     if (this.idUser != null) {
     try {
         Conexion cc = new Conexion();
@@ -70,7 +73,7 @@ public class ReportesAdmin extends javax.swing.JInternalFrame {
         parametros.put("id_user", this.idUser);
         JasperReport reporte = JasperCompileManager.compileReport("src/Views/reportAdminRetrasos.jrxml");
         JasperPrint print = JasperFillManager.fillReport(reporte, parametros, cn);
-
+        cn.close();
         // Mostrar el reporte en un InternalFrame
         JInternalFrame internalFrame = new JInternalFrame("Informe de multas", true, true, true, true);
         internalFrame.setSize(600, 400);
@@ -88,7 +91,7 @@ public class ReportesAdmin extends javax.swing.JInternalFrame {
 }
     }
         //reporte de sueldos
-    public void reporteSueldos(){
+    public void reporteSueldos() throws SQLException{
     if (this.idUser != null) {
     try {
         
@@ -105,7 +108,7 @@ public class ReportesAdmin extends javax.swing.JInternalFrame {
         System.out.println(this.nomUser + " " + this.idUser+ this.fechaF);
         JasperReport reporte = JasperCompileManager.compileReport("src/Views/reportAdminSueldos.jrxml");
         JasperPrint print = JasperFillManager.fillReport(reporte, parametros, cn);
-
+        cn.close();
         // Mostrar el reporte en un InternalFrame
         JInternalFrame internalFrame = new JInternalFrame("Informe de multas", true, true, true, true);
         internalFrame.setSize(600, 400);
@@ -283,7 +286,11 @@ public class ReportesAdmin extends javax.swing.JInternalFrame {
 
     private void jbtRetrasosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtRetrasosActionPerformed
     if (camposReporteAtrasosLlenos()) {
-        this.reporteAtrasos();
+        try {
+            this.reporteAtrasos();
+        } catch (SQLException ex) {
+            Logger.getLogger(ReportesAdmin.class.getName()).log(Level.SEVERE, null, ex);
+        }
     } else {
         JOptionPane.showMessageDialog(this, "Por favor, ingrese todos los datos necesarios.", "Datos incompletos", JOptionPane.WARNING_MESSAGE);
     }
@@ -301,7 +308,11 @@ public class ReportesAdmin extends javax.swing.JInternalFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         if (camposReporteSueldosLlenos()) {
-        this.reporteSueldos();
+            try {
+                this.reporteSueldos();
+            } catch (SQLException ex) {
+                Logger.getLogger(ReportesAdmin.class.getName()).log(Level.SEVERE, null, ex);
+            }
     } else {
         JOptionPane.showMessageDialog(this, "Por favor, ingrese todos los datos necesarios.", "Datos incompletos", JOptionPane.WARNING_MESSAGE);
     }

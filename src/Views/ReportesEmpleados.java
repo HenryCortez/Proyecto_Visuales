@@ -9,6 +9,9 @@ import javax.swing.JOptionPane;
 import java.util.HashMap;
 import java.util.Map;
 import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JInternalFrame;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
@@ -179,11 +182,12 @@ public class ReportesEmpleados extends javax.swing.JInternalFrame {
 
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
- mostrarIReport();
-    /*    System.out.println(txtCedula.getText().toString());
-         System.out.println(txtNombre.getText().toString());
-         System.out.println(jFormattedEdder1.getText().toString());
         try {
+            mostrarIReport();
+            /*    System.out.println(txtCedula.getText().toString());
+            System.out.println(txtNombre.getText().toString());
+            System.out.println(jFormattedEdder1.getText().toString());
+            try {
             Conexion cc = new Conexion();
             Connection cn = cc.conectar();
 
@@ -204,14 +208,16 @@ public class ReportesEmpleados extends javax.swing.JInternalFrame {
 
             // Mostrar el reporte
             JasperViewer.viewReport(print, false);
-        } catch (JRException ex1) {
+            } catch (JRException ex1) {
             System.out.println(ex1);
-    } */
+        } */} catch (SQLException ex) {
+            Logger.getLogger(ReportesEmpleados.class.getName()).log(Level.SEVERE, null, ex);
+        }
        
     }//GEN-LAST:event_jButton1ActionPerformed
     
 
-    public void mostrarIReport(){
+    public void mostrarIReport() throws SQLException{
      try {
         Conexion cc = new Conexion();
         Connection cn = cc.conectar();
@@ -230,7 +236,7 @@ public class ReportesEmpleados extends javax.swing.JInternalFrame {
         // Compilar y llenar el reporte
         JasperReport reporte = JasperCompileManager.compileReport("src/Views/reportEmpleado.jrxml");
         JasperPrint print = JasperFillManager.fillReport(reporte, parametros, cn);
-
+        cn.close();
         // Mostrar el reporte en un InternalFrame
         JInternalFrame internalFrame = new JInternalFrame("Informe del Empleado", true, true, true, true);
         internalFrame.setSize(600, 400);

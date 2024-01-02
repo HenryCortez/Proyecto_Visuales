@@ -31,7 +31,7 @@ public class AsistenciaControl {
         System.out.println(horario);
         con.conectar();
         String sql = "INSERT INTO INGRESOS(ID_USU, FEC_HOR_ING, HOR_ASI) "
-                + "VALUES(?, NOW(), ?)";
+                + "VALUES(?, NOW(), ?)".toLowerCase();
 
         PreparedStatement ps = con.getCon().prepareStatement(sql);
         ps.setString(1, id_usu);
@@ -68,7 +68,7 @@ public class AsistenciaControl {
     try {
         con.conectar();
         String sql = "INSERT INTO SALIDAS(ID_USU_SAL, FEC_HOR_SAL, HOR_ASI) "
-                + "VALUES(?, NOW(), ?)";
+                + "VALUES(?, NOW(), ?)".toLowerCase();
 
         PreparedStatement ps = con.getCon().prepareStatement(sql);
         ps.setString(1, id_usu);
@@ -91,7 +91,7 @@ public class AsistenciaControl {
     public String getHorario(String id_usu){
         this.con.conectar();
         String horario = null;
-        String sql = "SELECT HOR_ASI FROM INGRESOS WHERE ID_USU = '"+id_usu+"' ORDER BY ID_ASI DESC LIMIT 1;";
+        String sql = "SELECT HOR_ASI FROM INGRESOS WHERE ID_USU = '"+id_usu+"' ORDER BY ID_ASI DESC LIMIT 1;".toLowerCase();
         try {
             Statement psd = con.getCon().createStatement();
             ResultSet rs = psd.executeQuery(sql);
@@ -109,7 +109,7 @@ public class AsistenciaControl {
 
     public Timestamp getNow() {
         this.con.conectar();
-        String sql = "SELECT time(NOW());";
+        String sql = "SELECT time(NOW());".toLowerCase();
         Timestamp time = null;
         try {
             Statement psd = con.getCon().createStatement();

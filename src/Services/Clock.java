@@ -19,12 +19,12 @@ import javax.swing.JLabel;
  * @author henry
  */
 public class Clock implements Runnable{
-
+    Conexion conex = new Conexion();
     private final Connection con;
     JLabel clock;
-    public Clock(Connection connection, JLabel clock) {
+    public Clock( JLabel clock) {
         
-       this.con = connection;
+       this.con = conex.conectar();
        this.clock = clock;
     }
     
@@ -39,9 +39,10 @@ public class Clock implements Runnable{
                 String horaFormateada = formatearHora(horaDB, timeFormat);
                 // Imprimir la hora
                 clock.setText(horaFormateada);
-
+               
                 // Esperar un segundo
                 TimeUnit.SECONDS.sleep(1);
+                
             } catch (InterruptedException | SQLException e) {
                 e.printStackTrace();
                 Thread.currentThread().interrupt();
@@ -54,10 +55,12 @@ public class Clock implements Runnable{
         try (PreparedStatement statement = con.prepareStatement(sql);
              ResultSet resultSet = statement.executeQuery()) {
             if (resultSet.next()) {
+                
                 return resultSet.getTimestamp("hora");
             } else {
                 throw new SQLException("No se pudo obtener la hora de la base de datos.");
             }
+          
         }
     }
     private String formatearHora(Timestamp timestamp, SimpleDateFormat format) {
