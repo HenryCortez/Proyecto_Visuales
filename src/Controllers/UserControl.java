@@ -1,3 +1,4 @@
+
 package Controllers;
 
 import Models.Conexion;
@@ -25,10 +26,10 @@ public class UserControl {
         try {
             con.conectar();
             String sql = "INSERT INTO USUARIOS(CED_USU, NOM_USU, APE_USU, CON_USU, TIP_USU) "
-                    + "VALUES(?, ?, ?, ?, ?)".toLowerCase();
+                    + "VALUES(?, ?, ?, ?, ?)";
             String passwencryp = encriptar(passw);
 
-            PreparedStatement ps = con.getCon().prepareStatement(sql);
+            PreparedStatement ps = con.getCon().prepareStatement(sql.toLowerCase());
             ps.setString(1, ced);
             ps.setString(2, nom);
             ps.setString(3, ape);
