@@ -80,6 +80,8 @@ public class CaptureInternal extends javax.swing.JInternalFrame {
         jPanel2 = new javax.swing.JPanel();
         jlblCounter = new javax.swing.JLabel();
         jbtnCapture = new javax.swing.JButton();
+        jPanel3 = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
 
         setClosable(true);
 
@@ -87,62 +89,86 @@ public class CaptureInternal extends javax.swing.JInternalFrame {
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(0, 0, 0));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Toma 25 fotos");
         jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 20, 330, 40));
 
-        jlblFoto.setForeground(new java.awt.Color(0, 0, 0));
         jlblFoto.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jlblFoto.setToolTipText("");
-        jlblFoto.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        jPanel1.add(jlblFoto, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 70, 400, 370));
+        jlblFoto.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
+        jPanel1.add(jlblFoto, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 90, 420, 350));
 
-        jPanel2.setBackground(new java.awt.Color(204, 204, 204));
+        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel2.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jlblCounter.setBackground(new java.awt.Color(102, 102, 255));
-        jlblCounter.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        jlblCounter.setForeground(new java.awt.Color(0, 0, 0));
+        jlblCounter.setBackground(new java.awt.Color(255, 255, 255));
+        jlblCounter.setFont(new java.awt.Font("Segoe UI Semilight", 2, 18)); // NOI18N
         jlblCounter.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jlblCounter.setText("00");
+        jlblCounter.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
         jlblCounter.setOpaque(true);
-        jPanel2.add(jlblCounter, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 10, 110, 40));
+        jPanel2.add(jlblCounter, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 10, 110, 40));
 
-        jbtnCapture.setBackground(new java.awt.Color(42, 204, 106));
-        jbtnCapture.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jbtnCapture.setForeground(new java.awt.Color(0, 0, 0));
-        jbtnCapture.setText("Capture");
+        jbtnCapture.setBackground(new java.awt.Color(0, 0, 0));
+        jbtnCapture.setFont(new java.awt.Font("Segoe UI Semilight", 2, 18)); // NOI18N
+        jbtnCapture.setForeground(new java.awt.Color(255, 255, 255));
+        jbtnCapture.setText("Capturar");
         jbtnCapture.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jbtnCapture.setOpaque(true);
         jbtnCapture.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbtnCaptureActionPerformed(evt);
             }
         });
-        jPanel2.add(jbtnCapture, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 60, 110, 60));
+        jPanel2.add(jbtnCapture, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 60, 110, 40));
 
-        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 460, 420, 130));
+        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 450, 420, 110));
+
+        jPanel3.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel3.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
+
+        jLabel2.setFont(new java.awt.Font("Segoe UI Semilight", 2, 24)); // NOI18N
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel2.setText("Capturando  Imágenes");
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(94, 94, 94)
+                .addComponent(jLabel2)
+                .addContainerGap(92, Short.MAX_VALUE))
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(14, 14, 14)
+                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(12, Short.MAX_VALUE))
+        );
+
+        jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 420, 70));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 440, Short.MAX_VALUE)
+            .addGap(0, 452, Short.MAX_VALUE)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 440, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 0, Short.MAX_VALUE)))
+                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 620, Short.MAX_VALUE)
+            .addGap(0, 591, Short.MAX_VALUE)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 620, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 0, Short.MAX_VALUE)))
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 579, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
 
         pack();
@@ -155,8 +181,10 @@ public class CaptureInternal extends javax.swing.JInternalFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JButton jbtnCapture;
     private javax.swing.JLabel jlblCounter;
     private javax.swing.JLabel jlblFoto;
@@ -314,7 +342,7 @@ public class CaptureInternal extends javax.swing.JInternalFrame {
         new Thread() {
             @Override
             public void run() {
-                webSource = new VideoCapture(1);
+                webSource = new VideoCapture(0);
 
                 myTread = new DaemonThread();
                 Thread t = new Thread(myTread);

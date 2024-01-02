@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reportAdminRetrasos_subreport2" language="groovy" pageWidth="595" pageHeight="842" columnWidth="595" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="61bb0d7a-d05d-4493-a9f0-fad11f02e3d1">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="id_user2" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="fecha2" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select m.NUM_MUL, s.FEC_HOR_SAL as fecha, floor(m.VAL_MUL / 0.25) as minutos from multas m, salidas s
+where m.ID_SAL = s.ID_SAL 
+and s.ID_USU_SAL = $P{id_user2}
+AND DATE_FORMAT(s.FEC_HOR_SAL, '%Y-%m') = $P{fecha2}]]>
+	</queryString>
+	<field name="NUM_MUL" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="fecha" class="java.time.LocalDateTime"/>
+	<field name="minutos" class="java.lang.Long"/>
+	<variable name="sumM" class="java.lang.Long" calculation="Sum">
+		<variableExpression><![CDATA[$F{minutos}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="33" splitType="Stretch">
+			<staticText>
+				<reportElement x="259" y="0" width="61" height="20" uuid="a3ba07a2-c047-41e9-8cd8-c7c315741258"/>
+				<textElement>
+					<font size="15" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Salidas]]></text>
+			</staticText>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="21" splitType="Stretch">
+			<staticText>
+				<reportElement x="26" y="0" width="68" height="20" uuid="ecb93bb2-677d-4a93-a7f2-058744b8e2f7"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nº MULTA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="259" y="0" width="56" height="20" uuid="c538c173-f4c8-4fdd-8521-01e8137d1426"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[FECHA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="392" y="0" width="134" height="20" uuid="2fb9db64-db8c-46fb-ac1d-fa517a0f9b71"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[MINUTOS DE ATRASO]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="21" splitType="Stretch">
+			<textField>
+				<reportElement x="221" y="0" width="147" height="20" uuid="aefb978e-41ed-4579-ab2b-5704bb9c8cb7"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[""+$F{fecha}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="404" y="0" width="100" height="20" uuid="88e42dc9-9eb1-42bc-a952-e2247f77992e"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{minutos}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="26" y="1" width="94" height="20" uuid="589c9791-070d-4063-b128-8ba6760ff980"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NUM_MUL}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<summary>
+		<band height="131" splitType="Stretch">
+			<staticText>
+				<reportElement x="368" y="10" width="112" height="20" uuid="f3fda0e4-3bf5-4013-9682-07933702dccb"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total de minutos]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="480" y="10" width="75" height="20" uuid="413bb79f-d340-4003-b8b0-63aa2815f64a"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{sumM}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

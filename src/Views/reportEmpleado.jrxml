@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="cfe0e2f9-ebbd-48aa-b2ed-fa97745ff6f7">
+	<property name="ireport.zoom" value="0.6830134553650705"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="id_user" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="fecha" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="nombreC" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\Users\\sebas_j2dhfxw\\Documents\\Proyecto_Visuales\\src\\Views\\"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+  i.ID_ASI,
+  i.FEC_HOR_ING,
+  s.ID_SAL,
+  s.FEC_HOR_SAL,
+  FLOOR(COALESCE((SELECT SUM(m2.VAL_MUL) FROM multas m2 WHERE m2.ID_ASI = i.ID_ASI OR m2.ID_SAL = s.ID_SAL), 0)) AS Min_Ret
+FROM
+  ingresos i
+JOIN
+  salidas s ON i.ID_USU = s.ID_USU_SAL
+LEFT JOIN
+  multas m ON (m.ID_ASI = i.ID_ASI OR m.ID_SAL = s.ID_SAL)
+WHERE
+  i.ID_USU = $P{id_user}
+  AND i.HOR_ASI LIKE 'MATUTINO'
+  AND s.HOR_ASI LIKE 'MATUTINO'
+  AND i.FEC_HOR_ING like concat($P{fecha}, '%')
+  AND s.FEC_HOR_SAL like concat($P{fecha}, '%')
+  group by ID_ASI , ID_SAL;]]>
+	</queryString>
+	<field name="ID_ASI" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="FEC_HOR_ING" class="java.time.LocalDateTime">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="ID_SAL" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="FEC_HOR_SAL" class="java.time.LocalDateTime">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Min_Ret" class="java.math.BigDecimal"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="40" splitType="Stretch">
+			<staticText>
+				<reportElement x="206" y="10" width="181" height="20" uuid="9ce18919-5b46-40fb-8975-e92ac6b88fe0"/>
+				<textElement>
+					<font size="15" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Reporte de Asistencia]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="66" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="84" height="20" uuid="e7378942-2f05-4a07-a298-f16a937982a3"/>
+				<textElement>
+					<font size="15" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Empleado:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="84" y="0" width="100" height="20" uuid="b69046eb-aea9-4c0d-ae39-937ba2dbbcbf"/>
+				<textElement>
+					<font size="15"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{nombreC}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="376" y="0" width="58" height="20" uuid="749f2745-60ba-41ad-a144-7ea2958d6dec"/>
+				<textElement>
+					<font size="15" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="440" y="0" width="115" height="20" uuid="47a96f03-9836-40f3-aabd-57988fb429ca"/>
+				<textElement>
+					<font size="15"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{fecha}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="46" width="137" height="20" uuid="b9cede74-599f-4f6f-8185-9e548803bd79"/>
+				<textElement>
+					<font size="15" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Jornada Matutina]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="27" splitType="Stretch">
+			<rectangle>
+				<reportElement x="286" y="0" width="269" height="26" uuid="d652db49-2104-4ed1-a4dd-a90ec48a28b7"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="0" y="0" width="286" height="26" uuid="71e0404f-32f2-461d-b564-5dbbdc8dfd55"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="70" y="0" width="136" height="20" uuid="ba5c7931-e8d6-40e8-829e-2dc75153a05b"/>
+				<textElement>
+					<font size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[FECHA DE INGRESO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="355" y="0" width="133" height="20" uuid="078e722c-f80b-4a8a-a4b0-4abdf0ca78b3"/>
+				<textElement>
+					<font size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[FECHA DE SALIDA]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="28" splitType="Stretch">
+			<rectangle>
+				<reportElement x="286" y="0" width="269" height="26" uuid="e7b692b1-a4ea-475e-a32e-d449fae42d38"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="0" y="0" width="286" height="26" uuid="95c3cb06-a475-49a4-948b-95eecade918a"/>
+			</rectangle>
+			<textField>
+				<reportElement x="70" y="0" width="161" height="20" uuid="96e3d222-779e-478c-9621-b04734f457f6"/>
+				<textElement>
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[""+$F{FEC_HOR_ING}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="355" y="0" width="148" height="20" uuid="30ed0ef3-ea6c-4255-9070-aeb27e4ef8c2"/>
+				<textElement>
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[""+$F{FEC_HOR_SAL}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="50">
+			<staticText>
+				<reportElement x="283" y="30" width="122" height="20" uuid="0a8c0dfb-d131-456a-bc8a-38ea6d60062b"/>
+				<textElement>
+					<font size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha de emisión:]]></text>
+			</staticText>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement x="405" y="30" width="150" height="20" uuid="dd99ff3e-27b2-46af-bb5b-4bd2078fb30f"/>
+				<textElement>
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="163">
+			<staticText>
+				<reportElement x="323" y="15" width="133" height="20" uuid="75f10070-010e-4a51-81b8-8c02949297ac"/>
+				<textElement>
+					<font size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Minutos de retraso:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="456" y="15" width="99" height="20" uuid="749e813b-fc88-40da-b930-f69354d46fbb"/>
+				<textElement>
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Min_Ret}]]></textFieldExpression>
+			</textField>
+			<subreport>
+				<reportElement x="0" y="63" width="555" height="100" uuid="b2d0862c-cba8-4dbb-942a-a859839b8aad"/>
+				<subreportParameter name="id_user1">
+					<subreportParameterExpression><![CDATA[$P{id_user}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="fecha1">
+					<subreportParameterExpression><![CDATA[$P{fecha}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "subreportEmpleado.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</summary>
+</jasperReport>
