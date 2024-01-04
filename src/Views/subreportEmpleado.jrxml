@@ -27,7 +27,8 @@ WHERE
   AND i.HOR_ASI LIKE 'VESPERTINO'
   AND s.HOR_ASI LIKE 'VESPERTINO'
   AND i.FEC_HOR_ING like concat($P{fecha1}, '%')
-  AND s.FEC_HOR_SAL like concat($P{fecha1}, '%');]]>
+  AND s.FEC_HOR_SAL like concat($P{fecha1}, '%')
+  group by ID_ASI , ID_SAL;]]>
 	</queryString>
 	<field name="ID_ASI" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="cfe0e2f9-ebbd-48aa-b2ed-fa97745ff6f7">
-	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.zoom" value="0.6830134553650705"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="30"/>
+	<property name="ireport.y" value="0"/>
 	<parameter name="id_user" class="java.lang.String">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
@@ -13,7 +13,7 @@
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
-		<defaultValueExpression><![CDATA["C:\\Users\\davay\\Documents\\NetBeansProjects\\Proyecto_Visuales\\src\\Views\\"]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA["C:\\Users\\sebas_j2dhfxw\\Documents\\Proyecto_Visuales\\src\\Views\\"]]></defaultValueExpression>
 	</parameter>
 	<queryString>
 		<![CDATA[SELECT
@@ -33,7 +33,8 @@ WHERE
   AND i.HOR_ASI LIKE 'MATUTINO'
   AND s.HOR_ASI LIKE 'MATUTINO'
   AND i.FEC_HOR_ING like concat($P{fecha}, '%')
-  AND s.FEC_HOR_SAL like concat($P{fecha}, '%');]]>
+  AND s.FEC_HOR_SAL like concat($P{fecha}, '%')
+  group by ID_ASI , ID_SAL;]]>
 	</queryString>
 	<field name="ID_ASI" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
@@ -184,7 +185,7 @@ WHERE
 				<textFieldExpression><![CDATA[$F{Min_Ret}]]></textFieldExpression>
 			</textField>
 			<subreport>
-				<reportElement x="0" y="63" width="555" height="100" uuid="11a08560-7abe-4e71-85fb-8f9b318f1fb1"/>
+				<reportElement x="0" y="63" width="555" height="100" uuid="b2d0862c-cba8-4dbb-942a-a859839b8aad"/>
 				<subreportParameter name="id_user1">
 					<subreportParameterExpression><![CDATA[$P{id_user}]]></subreportParameterExpression>
 				</subreportParameter>
